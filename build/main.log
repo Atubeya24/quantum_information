@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.141592653-p4.1.2-u2.00-250202-2.6 (utf8.uptex) (TeX Live 2025) (preloaded format=uplatex 2025.11.1)  8 AUG 2026 09:46
+This is e-upTeX, Version 3.141592653-p4.1.2-u2.00-250202-2.6 (utf8.uptex) (TeX Live 2025) (preloaded format=uplatex 2025.11.1)  9 AUG 2026 19:14
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -733,58 +733,70 @@ File: renyi_entropy_of_bell.eps Graphic file (type eps)
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 File: renyi_of_Ising.eps Graphic file (type eps)
-<renyi_of_Ising.eps> [74] [75] [76] [77] [78] [79] [80]
+<renyi_of_Ising.eps> [74]
+LaTeX Font Info:    Font shape `JT2/mc/m/n' will be
+(Font)              scaled to size 7.69775pt on input line 2210.
+LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
+(Font)              scaled to size 7.69775pt on input line 2210.
+LaTeX Font Info:    Font shape `JT2/mc/m/n' will be
+(Font)              scaled to size 5.77332pt on input line 2210.
+LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
+(Font)              scaled to size 5.77332pt on input line 2210.
+ [75]
+LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
+(Font)              No change on input line 2220.
+LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
+(Font)              No change on input line 2220.
+File: Max-cut.eps Graphic file (type eps)
+ <Max-cut.eps> [76] [77]
+File: setup_maxcut.eps Graphic file (type eps)
+ <setup_maxcut.eps> [78] [79] [80] [81] [82] [83]
 File: shor-code.eps Graphic file (type eps)
- <shor-code.eps> [81] [82] [83] [84] [85]
+ <shor-code.eps> [84] [85] [86] [87] [88]
 File: z1z2error_obs.eps Graphic file (type eps)
- <z1z2error_obs.eps> [86] [87] [88]
-LaTeX Font Info:    Font shape `JT2/mc/m/n' will be
-(Font)              scaled to size 7.69775pt on input line 2649.
-LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
-(Font)              scaled to size 7.69775pt on input line 2649.
-LaTeX Font Info:    Font shape `JT2/mc/m/n' will be
-(Font)              scaled to size 5.77332pt on input line 2649.
-LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
-(Font)              scaled to size 5.77332pt on input line 2649.
- [89] [90] [91]
+ <z1z2error_obs.eps> [89] [90] [91] [92] [93] [94]
 File: error_obs.eps Graphic file (type eps)
- <error_obs.eps> [92]
+ <error_obs.eps> [95]
 File: stabilizer演算形式のエラー訂正.eps Graphic file (type eps)
- <stabilizer演算形式のエラー訂正.eps> [93] [94] [95] [96] [97] [98] [99] [100] [101] [102] [103]
-Overfull \hbox (3.84937pt too wide) in paragraph at lines 3140--3142
+ <stabilizer演算形式のエラー訂正.eps>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[96] [97] [98] [99] [100] [101] [102] [103] [104] [105] [106]
+Overfull \hbox (3.84937pt too wide) in paragraph at lines 3234--3236
 \JY2/mc/m/n/10 これを書くためには 、 初期状態に対し 、 符号空間へ \OT1/cmr/m/n/10 map \JY2/mc/m/n/10 するような \OT1/cmr/m/n/10 Projection$^^E$
  []
 
-[104] [105] [106] [107] [108]
+[107] [108] [109] [110] [111] [112]
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3348.
+(Font)              No change on input line 3442.
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3348.
- [109] [110] [111] [112] [113] [114] [115] [116] [117] [118] [119]
-Overfull \hbox (21.89049pt too wide) detected at line 3731
+(Font)              No change on input line 3442.
+ [113] [114] [115] [116] [117] [118] [119] [120] [121] [122] [123]
+Overfull \hbox (21.89049pt too wide) detected at line 3825
 []
  []
 
-[120] [121]
-Overfull \hbox (78.3167pt too wide) detected at line 3790
+[124] [125]
+Overfull \hbox (78.3167pt too wide) detected at line 3884
 []
  []
 
 
-Overfull \hbox (9.90082pt too wide) detected at line 3802
+Overfull \hbox (9.90082pt too wide) detected at line 3896
 []
  []
 
-[122] [123] [124] [125] [126] [127] [128]
+[126] [127] [128] [129] [130] [131]
 
-LaTeX Warning: Empty `thebibliography' environment on input line 4026.
+LaTeX Warning: Empty `thebibliography' environment on input line 4120.
 
 
-Underfull \hbox (badness 7433) in paragraph at lines 4011--4026
+Underfull \hbox (badness 7433) in paragraph at lines 4105--4120
 []\OT1/cmr/m/n/10 12.A Mini-Introduction To In-for-ma-tion The-ory  \JY2/mc/m/n/10 ・ \OT1/cmr/m/n/10 Ed-ward Wit-ten
  []
 
-[129
+[132
 
 ] (build/main.aux)
  ***********
@@ -801,12 +813,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 21821 strings out of 468387
- 470979 string characters out of 5443426
- 920796 words of memory out of 5000000
- 50191 multiletter control sequences out of 15000+600000
+ 21839 strings out of 468387
+ 471315 string characters out of 5443426
+ 923796 words of memory out of 5000000
+ 50207 multiletter control sequences out of 15000+600000
  639774 words of font info for 98 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 98i,25n,118p,1279b,1061s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 98i,25n,118p,1279b,1057s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on build/main.dvi (129 pages, 1175844 bytes).
+Output written on build/main.dvi (132 pages, 1202964 bytes).

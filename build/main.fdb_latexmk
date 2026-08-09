@@ -1,21 +1,22 @@
 # Fdb version 4
-["dvipdf"] 1786150021.4846 "build/main.dvi" "build/main.pdf" "build/main" 1786150037.75862 0
-  "build/main.dvi" 1786150021 1175844 3e29d6290de7f5b68b00b4beb134b30d "latex"
+["dvipdf"] 1786270449.87877 "build/main.dvi" "build/main.pdf" "build/main" 1786270465.42719 0
+  "build/main.dvi" 1786270449 1202964 c6d1723b40583a0cda3b39928052acaf "latex"
   (generated)
   "build/main.pdf"
   (rewritten before read)
-["latex"] 1786150016.05882 "c:/Users/atube/Desktop/quantum_information/main.tex" "build/main.dvi" "main" 1786150037.74254 0
+["latex"] 1786270445.38346 "c:/Users/atube/Desktop/quantum_information/main.tex" "build/main.dvi" "main" 1786270465.41738 0
   "Grover.eps" 1783498627 9566999 f33173e7592798db015d059aaf24924d ""
   "Hadamard_im.eps" 1783498666 364505 038f91777be53f7c007e3a851aae2e84 ""
   "Hadamard_re.eps" 1783498691 146846 790a84186844b0a9bd8d70f2daf6c809 ""
   "J_dependence_of_energy.eps" 1783498775 776798 bcb3fe19a727e189d58c2a8ed1df27c4 ""
+  "Max-cut.eps" 1786270224 25769680 8ff9f0f7ab54e749d2975e9cae790e39 ""
   "Q_fourier_nqubits.eps" 1783498851 183256 2bd51b40b730408f52e3b81ff376f3ce ""
   "QuantumPhaseEstimationCircuit.eps" 1783498946 824004 0923941ab502582badb890f3ac0bbd2e ""
   "T_dependence_of_missing.eps" 1783499131 1538856 03f9feda8eb1a5707811484c3464c20d ""
   "bell_generate.eps" 1783498545 260551 6fe543589d94b7ee95cf677806b5e15e ""
-  "build/main.aux" 1786150021 15359 8bbfd89e28166e54c3da6402d9b21733 "latex"
-  "build/main.toc" 1786150021 7265 34e13b51e6f909db5c96ff3f9e8fe10d "latex"
-  "c:/Users/atube/Desktop/quantum_information/main.tex" 1786150008 343869 7be2360fbdde4128d7fb82188e953470 ""
+  "build/main.aux" 1786270449 16310 c634f3ffa4cc24cdb9c3e3596f51a08d "latex"
+  "build/main.toc" 1786270449 7538 e26ae5fbede1c95e4910287b71c2c41a "latex"
+  "c:/Users/atube/Desktop/quantum_information/main.tex" 1786270426 351972 0971db76f0121495be2111f5de00ca7f ""
   "c:/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1761981691 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1761979674 1004 54797486969f23fa377b128694d548df ""
   "c:/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1761979674 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -170,10 +171,11 @@
   "c:/texlive/2025/texmf.cnf" 1761986549 713 e69b156964470283e0530f5060668171 ""
   "error_obs.eps" 1783498591 3403356 440a80fb2f8974d97df7ee96a2849aab ""
   "magnetization.eps" 1783498818 1517854 9a7cc04190c1c3c4d51c2053387f03d3 ""
-  "main.tex" 1786150008 343869 7be2360fbdde4128d7fb82188e953470 ""
+  "main.tex" 1786270426 351972 0971db76f0121495be2111f5de00ca7f ""
   "quantum_circuit.eps" 1783498908 395896 4947bc5fbaa4253e50fa1a99fbc2d1bb ""
   "renyi_entropy_of_bell.eps" 1783499004 11864 34a074e5567f810553d9db032a807735 ""
   "renyi_of_Ising.eps" 1783499047 786248 87464cecde7061be4c9f2a236bd998c5 ""
+  "setup_maxcut.eps" 1786270228 3524810 a98ece8398b4d7d7473a32862aa6f7fb ""
   "shor-code.eps" 1783499073 4784797 ac42801d596d5d4991652a9173458dcc ""
   "stabilizer演算形式のエラー訂正.eps" 1783499104 1765001 f949ba96df96b2c5d605833a1aadd996 ""
   "vacuum_estimation.eps" 1783499174 1488995 d2e95296bbd245aa121027e1ce04c85c ""
