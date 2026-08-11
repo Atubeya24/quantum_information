@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.141592653-p4.1.0-u1.29-230214-2.6 (utf8.uptex) (TeX Live 2023) (preloaded format=uplatex 2023.6.27)  11 AUG 2026 14:12
+This is e-upTeX, Version 3.141592653-p4.1.0-u1.29-230214-2.6 (utf8.uptex) (TeX Live 2023) (preloaded format=uplatex 2023.6.27)  11 AUG 2026 14:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -503,6 +503,15 @@ LaTeX Warning: Unused global option(s):
 LaTeX Warning: Label `fig:stabilizer-circuit' multiply defined.
 
 
+LaTeX Warning: Label `fig_outlook' multiply defined.
+
+
+LaTeX Warning: Label `fig_outlook' multiply defined.
+
+
+LaTeX Warning: Label `fig_outlook' multiply defined.
+
+
 LaTeX Warning: Label `Jordan' multiply defined.
 
 )
@@ -816,41 +825,47 @@ File: stabilizer演算形式のエラー訂正.eps Graphic file (type eps)
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[117] [118] [119] [120] [121] [122] [123] [124] [125] [126] [127]
-Overfull \hbox (3.84937pt too wide) in paragraph at lines 4110--4112
+[117] [118] [119] [120]
+File: first.eps Graphic file (type eps)
+ <first.eps>
+File: ladder.eps Graphic file (type eps)
+ <ladder.eps> [121] [122] [123] [124]
+File: error_propagate.eps Graphic file (type eps)
+ <error_propagate.eps> [125] [126] [127] [128] [129] [130]
+Overfull \hbox (3.84937pt too wide) in paragraph at lines 4211--4213
 \JY2/mc/m/n/10 これを書くためには 、 初期状態に対し 、 符号空間へ \OT1/cmr/m/n/10 map \JY2/mc/m/n/10 するような \OT1/cmr/m/n/10 Projection$^^E$
  []
 
-[128] [129] [130] [131] [132] [133]
+[131] [132] [133] [134] [135] [136]
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 4318.
+(Font)              No change on input line 4419.
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 4318.
- [134] [135] [136] [137] [138] [139] [140] [141] [142] [143] [144]
-Overfull \hbox (21.89049pt too wide) detected at line 4701
+(Font)              No change on input line 4419.
+ [137] [138] [139] [140] [141] [142] [143] [144] [145] [146] [147]
+Overfull \hbox (21.89049pt too wide) detected at line 4802
 []
  []
 
-[145] [146]
-Overfull \hbox (78.3167pt too wide) detected at line 4760
+[148] [149]
+Overfull \hbox (78.3167pt too wide) detected at line 4861
 []
  []
 
 
-Overfull \hbox (9.90082pt too wide) detected at line 4772
+Overfull \hbox (9.90082pt too wide) detected at line 4873
 []
  []
 
-[147] [148] [149] [150] [151] [152]
+[150] [151] [152] [153] [154] [155] [156]
 
-LaTeX Warning: Empty `thebibliography' environment on input line 4996.
+LaTeX Warning: Empty `thebibliography' environment on input line 5097.
 
 
-Underfull \hbox (badness 7433) in paragraph at lines 4981--4996
+Underfull \hbox (badness 7433) in paragraph at lines 5082--5097
 []\OT1/cmr/m/n/10 12.A Mini-Introduction To In-for-ma-tion The-ory  \JY2/mc/m/n/10 ・ \OT1/cmr/m/n/10 Ed-ward Wit-ten
  []
 
-[153
+[157
 
 ] (build/main.aux)
  ***********
@@ -867,12 +882,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 21879 strings out of 476378
- 470320 string characters out of 5796924
- 1876605 words of memory out of 5000000
- 42286 multiletter control sequences out of 15000+600000
+ 21906 strings out of 476378
+ 470815 string characters out of 5796924
+ 1872605 words of memory out of 5000000
+ 42310 multiletter control sequences out of 15000+600000
  525440 words of font info for 92 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 91i,25n,99p,1293b,1038s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 91i,25n,99p,1293b,1028s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on build/main.dvi (153 pages, 1423136 bytes).
+Output written on build/main.dvi (157 pages, 1458608 bytes).

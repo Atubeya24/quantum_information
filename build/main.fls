@@ -346,4 +346,16 @@ INPUT ./stabilizer演算形式のエラー訂正.eps
 INPUT ./stabilizer演算形式のエラー訂正.eps
 INPUT ./stabilizer演算形式のエラー訂正.eps
 INPUT stabilizer演算形式のエラー訂正.eps
+INPUT ./first.eps
+INPUT ./first.eps
+INPUT ./first.eps
+INPUT first.eps
+INPUT ./ladder.eps
+INPUT ./ladder.eps
+INPUT ./ladder.eps
+INPUT ladder.eps
+INPUT ./error_propagate.eps
+INPUT ./error_propagate.eps
+INPUT ./error_propagate.eps
+INPUT error_propagate.eps
 INPUT build/main.aux
