@@ -71,6 +71,20 @@
   title={定義：#1}
 }
 
+% ===== problem =====
+\newtcolorbox{problembox}[1]{
+  enhanced,
+  breakable,
+  colback=goalbg,
+  colframe=goalred,
+  boxrule=0.8pt,
+  arc=1.5mm,
+  left=2mm,right=2mm,top=1.5mm,bottom=1.5mm,
+  fonttitle=\bfseries,
+  title={問題：#1}
+}
+
+
 % ===== result =====
 \newtcolorbox{resultbox}[1]{
   enhanced,
@@ -2295,6 +2309,868 @@ max-cut問題の解を与えるためには、すべての点での{0,1}を総�
 \end{align*}
 \end{resultbox}
 確かに、小数第1位までの精度で正しい結果を与えている。
+
+\section{量子特異値変換}
+ここまで、量子優位性が期待されている代表的なアルゴリズムとして、「位相推定」、「Groverのアルゴリズム」、「ハミルトニアンシミュレーション」を見てきた。無論、これら以外にも、多数の量子アルゴリズムが提案されている。\\
+\\
+しかし、これらのアルゴリズムは、それぞれ個別に考案されたものであり、その構成原理が必ずしも明確に統一されているわけではない。新たな量子アルゴリズムを「より効率的に」設計する際には、「そもそも量子計算で何ができるか？」ということを知ることが求められる。この視点から、量子アルゴリズムをより構成論的・統一的に構築する視点が求められる。\\
+そこで本章では、多くの量子アルゴリズムを包括的に理解できる枠組みである、量子特異値変換（Quantum Singular Value Transformation; QSVT）について解説する。QSVTを理解することで、既存の量子アルゴリズムを統一的な観点から捉えられるだけでなく、新たな量子アルゴリズムを設計するための基本的な指針を得ることができる。\\
+\\
+なお、最初に述べておくが、この章にも直感的な描像は、導入を除いて存在しない。故に、「なぜ書いた人はこれを思いついたのか？」という理由を探ることは多分無駄である。「原論文の著者は天才だったんだな」と思いつつ見てほしい。
+
+\subsection{アイデア}
+量子特異値変換の最大の利点は、多様な量子アルゴリズムを「固有値に対する関数変換」という共通の視点から理解できる点にある。\\
+
+その考え方を理解するために、まずは量子アルゴリズムが本質的にどのような操作を実現しているのかを確認していく。
+\begin{setupbox}{ハミルトニアンシミュレーション}
+ハミルトニアンシミュレーションとは、以下を行う回路である。
+\begin{align*}
+    \ket{\psi}\to e^{-iHt}\ket{\psi}
+\end{align*}
+\end{setupbox}
+\begin{setupbox}{Groverのアルゴリズム}
+Groverのアルゴリズムとは、以下のreflectionを複数回作用させる回路である。
+\begin{align*}
+    \Pi=I-\sum_{x}2\ket{x}\bra{x}
+\end{align*}
+特に、最適化問題などでは、解空間を、ハミルトニアンを基底状態に写像することが多い。この場合、reflectionは以下の通りである。
+\begin{align*}
+    \Pi= \sum sign(\hat{H}-\mu I)\ket{E}\bra{E}
+\end{align*}
+\end{setupbox}
+これらの例から分かるように、少なくとも本論で今まで扱った量子アルゴリズムは、ハミルトニアンの固有状態を保ったまま、固有値に対して関数変換を施す操作として理解することができる。
+\begin{resultbox}{量子回路の共通操作}
+\begin{align*}
+    \ket{E}\bra{E}\to f(E)\ket{E}\bra{E}
+\end{align*}
+\end{resultbox}
+故に、このような関数群を実装する一般的な方法が存在すれば、それは上記で紹介した量子アルゴリズムを包括する統一的な枠組みとなることが期待される。\\
+\\
+量子特異値変換（Quantum Singular Value Transformation; QSVT）とは、あるクラスの関数群に対して、特定の手順を踏むことで上記の応答を行う回路を実装する手法である。\\
+\\
+ただし、一点注意事項が存在する。QSVTは、あくまでハミルトニアンの多項式関数を実装するための方法論にすぎないので、それ以外の、量子の別側面に着目するアルゴリズムとの関係は確約されてない。位相推定は、固有値に応じた変換を状態へ施すのではなく、固有位相を補助レジスタへ読み出すことを目的とする。この意味で、通常の位相推定はQSVTが直接統一するアルゴリズムとは関係がないとまでは言わないが、ある種目的が異なる。
+
+\subsubsection{Block-encoding}
+以下では、その具体的な実装手順について順に見ていく。\\
+\\
+ここでは、多項式近似の実装の共通言語となる、「Block-encoding」について定義する。
+\begin{defbox}{Block-encoding}
+Block-encodingとは、ある行列Aを、以下のように、Ancillaを加えたユニタリ回路Uの一部に埋め込むことである\footnote{ただし、ユニタリ行列に埋め込むための条件として、色々な条件が存在する。例えば$|H|\leq 1$。後でこの条件を証明するが、今は仮定として暗に置く。}。
+\begin{align*}
+    U=\begin{pmatrix}
+        H & \cdot \\
+        \cdot & \cdot
+    \end{pmatrix}
+\end{align*}
+もしくは、同等の表現方法として、Ancilla\footnote{以下では、Block-encoding由来のAncillaを$\ket{}_{a}$と記述する。ブラベクトルは省略}を用いた以下の表現方法が挙げられる。
+\begin{align*}
+    H=\bra{0}U\ket{0}_{a}
+\end{align*}
+\end{defbox}
+この行列Hが、例えばハミルトニアンシミュレーションの場合、ハミルトニアンに相当する。\footnote{ハミルトニアンはあくまでエルミートな行列なので、こんなユニタリの中に埋め込むのは無理やんけと思われるかもしれないが、結果としては、規格化さえすれば大丈夫である。詳しくはハミルトニアンシミュレーションの項で見る。}\\
+このBlock-encodingを用いた手法を考えることで、ユニタリであるという制約に縛られることなく、より広いクラスの関数を実装できる。\\
+\\
+問題は、Block-encodingの形で行列Aが与えられた際に、どのようにしてその多項式を位相として吐き出す回路を実装できるかである。単純な例から話を進める。例えば、まずは多項式実装の一番目に簡単な例として、以下のような回路の実装方法を考える。
+\begin{problembox}{Aを作用させる回路}
+AのBlock-encoding回路Uが与えられたとして、以下のような回路は実装可能？
+\begin{align*}
+    \ket{\psi}\bra{\psi}\to H\ket{\psi}\bra{\psi}
+\end{align*}
+\end{problembox}
+これは、以下の手続きにより簡単に実装可能。
+\begin{setupbox}{回路の実装}
+\begin{enumerate}
+    \item 初期状態を用意(ただし、２つ目のketはancillaを表す)
+    \begin{align*}
+        \ket{\psi}\ket{0}_{a}
+    \end{align*}
+    \item ユニタリ行列Uを作用
+    \begin{align*}
+        U\ket{\psi}\ket{0}_{a}=H\ket{\psi}\ket{0}_{a}+\sqrt{1-||H\ket{\psi}||^{2}}\ket{\psi^{\perp}}
+    \end{align*}
+    \item Ancillaのみを観測して、結果が0であるものをpost-selection
+    \begin{align*}
+        \ket{f}=\bra{0}U\ket{0}_{a}\ket{\psi}=H\ket{\psi}
+    \end{align*}
+\end{enumerate}
+\end{setupbox}
+これは自明すぎてあまり面白くない。問題は、次のような、二番目に単純な回路の構築方法である。
+\begin{problembox}{$H^{2}$を作用させる回路}
+    HのBlock-encoding回路Uが与えられたとして、以下のような回路は実装可能？
+\begin{align*}
+    \ket{\psi}\bra{\psi}\to H^{2}\ket{\psi}\bra{\psi}
+\end{align*}
+\end{problembox}
+これを行うためにナイーブに思いつく方法としては、Uを2回かけることが挙げられる。この場合どうなるかを見てみて、何が実装の際に問題なのかを把握する。
+\\
+ただし、以下より簡単のため、初期状態としてHの固有状態$\ket{\lambda}$を作用させるケースを考える。
+\begin{setupbox}{Uを2回作用させる回路}
+    \begin{enumerate}
+        \item 一回目のUの作用\\
+        \begin{align*}
+            U\ket{\lambda}\ket{0}_{a}=H\ket{\lambda}\ket{0}_{a}+\sqrt{1-\lambda^{2}}\ket{\lambda^{\perp}}
+        \end{align*}
+        \item 二回目のUの作用\\
+        ここでは、一回目の作用で出てきた項それぞれへの作用を考える。
+        \begin{align*}
+           U (H\ket{\lambda}\ket{0}_{a})=H^{2}\ket{\lambda}\ket{0}_{a}+\sqrt{1-|\lambda|^{2}}\ket{\lambda^{\perp}}
+        \end{align*}
+        第２項目は以下の通りである。
+        \begin{align*}
+            U\ket{\lambda^{\perp}}=\sum_{\lambda'}a_{\lambda}^{\lambda'}\ket{\lambda'}\ket{0}_{a}+b\ket{\lambda'^{\perp}}
+        \end{align*}
+        \item ポストセレクション\\
+        ancillaで0を観測した状態を終状態とすると、以下のようになる。
+        \begin{align*}
+            \ket{f}=H^{2}\ket{\lambda}\ket{0}_{a}+\sum_{\lambda'}a_{\lambda}^{\lambda'}\ket{\lambda'}\ket{0}_{a}
+        \end{align*}
+    \end{enumerate}
+\end{setupbox}
+２回目のUを当てた際、一般的には直交補空間から戻り項が出現し、その結果「余分な因子」が出現するため、上記のナイーブな適用では目的の回路を構成できない。\\
+\\
+結論からの逆算になってしまうが、上記で出てきた問題の種類として、避けなければならない問題と避けなくても良い問題の2種類が存在する。
+\begin{enumerate}
+    \item 避けなければならない問題\\
+    ポストセレクション後の状態として、問題なのが「あらゆる固有値の足し合わせ」となっている点である。この部分は直交補空間、つまりBlock-encodingの未知の部分に依存する項となる為、この項が存在してしまうと問題がケースバイケースとなって制御不能となる。この為、Uでエネルギー固有空間がleakする問題は、絶対に避けなければならない。
+    \item 避けなくても良い問題\\
+    逆に避けなくても良いのはUを2回かけても答えが$H^{2}$にならない問題そのものである。極論、求めたい関数近似は冪乗の形で書けるものでなくても良いため、あーアプローチが悪かったなー別のがいいかもなーくらいの感覚でいい。
+\end{enumerate}
+少なくとも、Block-encodingからダイレクトで与えられたUは、上記の2乗の計算から「避けなければならない問題」を含んでいる。この問題を回避するために、Block-encoding回路Uを「改造」しなければならない。この改造した回路のことを、原論文に習い「iterate W」と呼ぶことにする。以下では、iterateの上手い構成方法、「Qubitization」を与える。
+
+\subsubsection{iterate Wの構成(Qubitization)}
+まずは、iterate Wを構築する際にほしい性質を述べる。これは上記の解析、および問題提起から、以下のような性質が挙げられる。
+\begin{enumerate}
+    \item WはHのBlock encodingである。
+    \item WはHilbert空間$H_{\lambda}=<\ket{\lambda}\ket{0}_{a},W\ket{\lambda}\ket{0}_{a}>$の下で閉じている。
+\end{enumerate}
+これを満たすようなiterate Wとして、例えば以下が与えられる。
+\begin{resultbox}{iterate Wの具体的な形}
+    \begin{align*}
+        \hat{W}\equiv \bigoplus_{\lambda} \begin{pmatrix}
+            \lambda & -\sqrt{1-\lambda^{2}}\\
+            \sqrt{1-\lambda^{2}} & \lambda
+        \end{pmatrix} =exp(-iYarccos(\lambda))
+    \end{align*}
+    ただし、この２次元行列は、以下のHilbert空間上に与えられる。
+    \begin{align*}
+        H_{\lambda}=<\ket{\lambda}\ket{0}_{a},\ket{\lambda^{\perp}}>
+    \end{align*}
+\end{resultbox}
+上記のiterate Wが上記の性質を満たすことを見る。
+\begin{proofbox}
+\begin{enumerate}
+    \item Block-encodingについて
+    \begin{align*}
+        \bra{\lambda}\bra{0}W\ket{\lambda}\ket{0}_{a}=\lambda
+    \end{align*}
+    全ての$\ket{\lambda}$に対して上記が成立するため、
+    \begin{align*}
+        \bra{0}W\ket{0}_{a}=\lambda\ket{\lambda}\bra{\lambda}=H
+    \end{align*}
+    \item 閉じているか否か
+    \begin{align*}
+        W^{2}&=\bigoplus_{\lambda} \begin{pmatrix}
+            2\lambda^{2}-1 & -2\lambda\sqrt{1-\lambda^{2}}\\
+            2\lambda\sqrt{1-\lambda^{2}} & 2\lambda^{2}-1
+        \end{pmatrix} \\
+        &=\bigoplus_{\lambda} 2\lambda\begin{pmatrix}
+            \lambda & -\sqrt{1-\lambda^{2}}\\
+            \sqrt{1-\lambda^{2}} & \lambda
+        \end{pmatrix}
+        -I
+    \end{align*}
+    故に、以下が成立。
+    \begin{align*}
+    W^{2}\ket{\lambda}\ket{0}_{a}=2\lambda(W\ket{\lambda}\ket{0}_{a})-\ket{\lambda}\ket{0}_{a}\in <\ket{\lambda}\ket{0}_{a},W\ket{\lambda}\ket{0}_{a}>
+    \end{align*}
+\end{enumerate}
+\end{proofbox}
+また、仮にWを掛けた際の直交成分が以下のように記述できたとする。ここはAncilla数依存だったり他のスペクトルが混ざったりするため、こう書ける保証はないが、今後は、簡単のために、このように書けると仮定する（書けない場合は単に表記を変更するだけでいい）。
+\begin{align*}
+    \ket{\lambda^{\perp}}=\ket{\lambda}\ket{1}_{a}
+\end{align*}
+この時、iterate Wは以下のように記述可能。
+\begin{resultbox}{iterate Wの別記法}
+    \begin{align*}
+        \bra{0}W\ket{0}_{a}&=H\\
+        \bra{1}W\ket{0}_{a}&=-\sqrt{1-H^{2}}\\
+        \bra{0}W\ket{1}_{a}&=\sqrt{1-H^{2}}\\
+        \bra{1}W\ket{1}_{a}&=H
+    \end{align*}
+\end{resultbox}
+一般には、上記のようなiterateを構成するためには、固有値$\lambda$を知る必要があるため、位相推定のようなアルゴリズムが必要なので難しいと思われるかもしれない。しかし、実はその問題を回避しつつ具体的な回路を構成することが可能であることが示された。この手法のことを、「Qubitization」と呼ぶ。\\
+\\
+Qubitizationに関する一般的な主張として、以下のようなstatementが成立する。
+\begin{theorembox}{Qubitizationの成立条件}
+Assumption:
+    \begin{enumerate}
+        \item HのBlock-encoding回路Uが存在
+        \item controll-U及びその逆行列が存在
+        \item Ancillaが追加で1つ存在
+        \item O(log($dim H$))分のQbit
+    \end{enumerate}
+    Result:\\
+    iterate Wが実装可能
+\end{theorembox}
+この章の残りでは、上記の定理を、以下のセットアップに沿って証明する。
+\begin{setupbox}{Qubitization構成チャート}
+    \begin{enumerate}
+        \item $W=\big((2\ket{0}_{a}\bra{0}-I)_{ancilla}\otimes I\big)S U$とした際のSの条件を考察
+        \item 上記の条件を満たさないUに関しても新しくAncillaを追加することで、1で導いた条件を満たすBlock-encoding行列U'を構成できることを示す。
+        \item 構成の際の計算量の確認
+        \item $W=SU'$によりiterateを構成可能
+    \end{enumerate}
+\end{setupbox}
+この時、WがiterateであるためのS'の必要十分条件は、以下の通りである。
+\begin{resultbox}{iterate構成の必要十分条件}
+    \begin{align*}
+        \bra{0}SU\ket{0}_{a}&=H\\
+        \bra{0}(SU)^{2}\ket{1}_{a}&=I
+    \end{align*}
+\end{resultbox}
+\begin{proofbox}
+    iterateの行列表示を再掲する。
+    \begin{resultbox}{iterate Wの別記法}
+    \begin{align*}
+        \bra{0}W\ket{0}_{a}&=H\\
+        \bra{1}W\ket{0}_{a}&=-\sqrt{1-H^{2}}\\
+        \bra{0}W\ket{1}_{a}&=\sqrt{1-H^{2}}\\
+        \bra{1}W\ket{1}_{a}&=H
+    \end{align*}
+\end{resultbox}
+要はWにSの用いた解を代入して上記を満たす条件を探れば良い。\\
+    \\
+    まずは、iterateの具体系より、少なくとも以下が言える。
+    \begin{align*}
+        W\ket{\lambda}\ket{0}_{a}=\lambda\ket{\lambda}\ket{0}_{a}+\sqrt{1-\lambda^{2}}\ket{\lambda^{\perp}}
+    \end{align*}
+    故に、以下も言える。
+    \begin{align*}
+        \ket{\lambda}\ket{1}_{a}&=\frac{W-\lambda}{\sqrt{1-\lambda^{2}}}\ket{\lambda}\ket{0}_{a}\\
+        &=\frac{\big(I\otimes (2\ket{0}_{a}\bra{0}-I)_{ancilla}\big)S U-\lambda}{\sqrt{1-\lambda^{2}}}\ket{\lambda}\ket{0}_{a}\\
+        &=\frac{1}{\sqrt{1-\lambda^{2}}}\big((2\bra{0}SU\ket{0}_{a}-\lambda)\ket{\lambda}\ket{0}_{a}-SU\ket{\lambda}\ket{0}_{a}\big)
+    \end{align*}
+    ここから、特にiterateの内積の上２式を与える必要十分条件が、題意であることを示す。\\
+    \begin{enumerate}
+        \item $\bra{0}W\ket{0}_{a}=H$の条件\\
+        上記で得られたWの作用に$\bra{0}$を作用させると、
+        \begin{align*}
+            \bra{0}W\ket{0}_{a}\ket{\lambda}=H\ket{\lambda}
+        \end{align*}
+        全ての$\ket{\lambda}$に対して同様に作用するためには、
+        \begin{align*}
+            \bra{0}W\ket{0}_{a}=\bra{0}SU\ket{0}_{a}=H
+        \end{align*}
+        これらは全て同値変形であるため、上記の式は必要十分条件である。\\
+        またこの際、得られたSUを改めて代入して、
+        \begin{align*}
+        \ket{\lambda}\ket{1}_{a}=\frac{1}{\sqrt{1-\lambda^{2}}}\big(\lambda\ket{\lambda}\ket{0}_{a}-SU\ket{\lambda}\ket{0}_{a}\big)
+    \end{align*}
+        \item $\bra{1}W\ket{0}_{a}=-\sqrt{1-H^{2}}$の条件\\
+        上記で得られた$\ket{\lambda}\ket{1}_{a}$の表式にWを作用させると、いろいろ計算して、
+        \begin{align*}
+            &W\ket{\lambda}\ket{1}_{a}=\frac{\lambda^{2}-\bra{0}(SU)^{2}\ket{1}_{a}}{\sqrt{1-\lambda^{2}}}\ket{\lambda}\ket{0}_{a}\\
+            \iff &\bra{0}W\ket{1}_{a}\ket{\lambda}=\frac{\lambda^{2}-\bra{0}(SU)^{2}\ket{1}_{a}}{\sqrt{1-\lambda^{2}}}\ket{\lambda}
+        \end{align*}
+        これとiterate Wを$\ket{\lambda}$に作用させた際の挙動を比較すると、
+        \begin{align*}
+            \frac{\lambda^{2}-\bra{0}(SU)^{2}\ket{0}_{a}}{\sqrt{1-\lambda^{2}}}=-\sqrt{1-\lambda^{2}}\iff \bra{0}(SU)^{2}\ket{0}_{a}=1
+        \end{align*}
+        これらの式も全て同値変形であるため、必要十分条件である。\\
+        \\
+        あとはこれらを代入すると、残りの関係式も満たせることが確認可能。
+        \end{enumerate}
+\end{proofbox}
+次に、上記を満たすようなiterateの構成を行う。 実は全てのUについて上記を満たすようなSが存在するとは限らない。しかし、Uの方にも多少改造を行った行列U'を作成することで、ありとあらゆるBlock-encoding行列Uに対して上記のようなSを構成することが可能である。\\
+以下では、そのような回路S,U'をexplicitに記述する。
+\begin{resultbox}{iterate Wの構成(Qubitization)}
+まずは、Ancilla1個を追加で加え\footnote{Block-encodingのAncillaとの混同を避けるため、このAncillaを「b」と表記する。元のBlock-encoding由来のAncillaは今まで通り「a」と記述}、以下のような回路を定義する。これは、Uが与えられているといつでも可能である。
+\begin{align*}
+    U_{CNOT}&\equiv\ket{0}\bra{0}_{b}\otimes I+ \ket{1}\bra{1}_{b}\otimes U\\
+    U^{\dagger}_{CNOT}&\equiv\ket{0}\bra{0}_{b}\otimes I + \ket{1}\bra{1}_{b}\otimes U^{\dagger}
+\end{align*}
+この時、改造回路U'を以下の形で与える。
+\begin{align*}
+    U'\equiv U_{CNOT}X_{b}U^{\dagger}_{CNOT}X_{b}=\ket{0}\bra{0}_{b}\otimes U^{\dagger}+ \ket{1}\bra{1}_{b}\otimes U
+\end{align*}
+また、Sを以下のように与える。
+    \begin{align*}
+        S=X_{b}\otimes I
+    \end{align*}
+この時、以下の表式が成立する。
+\begin{align*}
+    \bra{G}SU'\ket{G}=H,\quad \bra{G}(SU')^{2}\ket{G}=I
+\end{align*}
+ただし、$\ket{G}$は2つのAncilla上で定義される以下のstateである。
+\begin{align*}
+    \ket{0}_{a}\to \ket{G}\equiv\frac{\ket{0}_{b}+\ket{1}_{b}}{\sqrt{2}}\ket{0}_{a}
+\end{align*}
+故に、S,controll-U及び一個の追加のAncillaを用いてiterate Wを実装可能である。
+\end{resultbox}
+\begin{proofbox}
+    性質の欄で色々書いたが、要は以下を示せれば良い。
+    \begin{align*}
+    \bra{G}SU'\ket{G}=H,\quad \bra{G}(SU')^{2}\ket{G}=I
+    \end{align*}
+    これを示すために、いくつか準備を行う。これらは、非常に単純な計算で言える。
+    \begin{align*}
+        S\ket{G}=X_{b}\otimes I\ket{G}=\ket{G}
+    \end{align*}
+    \begin{align*}
+        U'SU'&=(\ket{0}\bra{1}_{b}\otimes U+\ket{1}\bra{0}_{b}\otimes U^{\dagger})(\ket{0}\bra{0}_{b}\otimes U+\ket{1}\bra{1}_{b}\otimes U^{\dagger})\\
+        &=\ket{0}\bra{1}_{b}\otimes UU^{\dagger}+\ket{1}\bra{0}_{b}\otimes U^{\dagger}U\\
+        &=(\ket{0}\bra{1}_{b}+\ket{1}\bra{0}_{b} )\otimes I
+    \end{align*}
+    これから、上記の２式を示す。
+    \begin{enumerate}
+        \item $\bra{G}SU'\ket{G}=H$の証明
+        \begin{align*}
+            \bra{G}SU'\ket{G}&=\bra{G}U'\ket{G}\\
+            &=\frac{1}{2}\bra{0}U\ket{0}_{a}+\frac{1}{2}\bra{0}U^{\dagger}\ket{0}_{a}\\
+            &=\frac{1}{2}(H+H^{\dagger})\\
+            &=H
+        \end{align*}
+        \item $\bra{G}(SU')^{2}\ket{G}=I$の証明
+        \begin{align*}
+            \bra{G}(SU')^{2}\ket{G}&=\bra{G}U'SU')\ket{G}\\
+            &=\bra{G}(\ket{0}\bra{1}_{b}+\ket{1}\bra{0}_{b} )\otimes I\ket{G}\\
+            &=\frac{1}{2}I\times 2\\
+            &=I
+        \end{align*}
+        ただし、第２式でのIはAncilla-aを含み、第３式以降のIはAncilla-aを含まない単位行列であることに注意
+    \end{enumerate}
+    以上より、$W=SU'$は、iterateにほしい条件を必要十分に含む。
+\end{proofbox}
+なお、この構成法によるiterate Wからハミルトニアンを取り出す場合、ancillaのポストセレクションは、
+\begin{align*}
+    \ket{0}\to \ket{G}
+\end{align*}
+に変更して行わなければならないことに注意\footnote{ちなみに、ハミルトニアンがある条件を満たすような簡単なものである場合は、追加のAncillaを使わなくてもiterateを実装できる。詳しくは原論文参照。}。
+\subsubsection{Iterateによる関数実装(Quantum Signal Processing)}
+iterate Wを構成できたので、話を本題に戻す。本題は、以下の通りである。
+\begin{problembox}{QSVTの問題再掲}
+    構成したiterate Wを用いて、どうやって関数実装を行う？
+\end{problembox}
+ここから先は、「Quantum Signal Processing」と呼ばれる、iterate Wを用いて関数を実装するアイデアを紹介する。\\
+\\
+最初に、いちいちarccosを書くのは長ったらしいので、この章より以下のような記号を定義する。
+\begin{align*}
+    \theta_{\lambda}\equiv arccos(\lambda)
+\end{align*}
+この時、iterateに回転を加えた「回転iterate」を定義する。
+\begin{defbox}{回転iterate}
+    \begin{align*}
+        W_{\phi}\equiv  \bigoplus_{\lambda} \begin{pmatrix}
+            \lambda & -ie^{-i\phi}\sqrt{1-\lambda^{2}}\\
+            -ie^{i\phi}\sqrt{1-\lambda^{2}} & \lambda
+        \end{pmatrix} =Z_{\phi-\frac{\pi}{2}} WZ_{-\phi+\frac{\pi}{2}}
+    \end{align*}
+    ただし、ZはHilbert空間$
+        H_{\lambda}=<\ket{\lambda}\ket{G},\ket{\lambda^{\perp}}>
+    $上の回転である\footnote{直交補空間がAncillaの違いで記述できる場合、ZはAncilla上のZ軸回転と言える。実用的には大体そんな感じ。}。
+\end{defbox}
+また、回転iterateの積を以下のように定義する。
+\begin{defbox}{回転iterateの積}
+    \begin{align*}
+        W_{\vec{\phi}}[\theta_{\lambda}]&=W_{\phi_{1}}W_{\phi_{2}}\cdots W_{\phi_{L}}\\
+        &\equiv \bigoplus_{\lambda} 
+        A_{\vec{\phi}}[2\theta_{\lambda}]I+
+        iB_{\vec{\phi}}[2\theta_{\lambda}]Z+iC_{\vec{\phi}}[2\theta_{\lambda}]X+iD_{\vec{\phi}}[2\theta_{\lambda}]Y
+    \end{align*}
+\end{defbox}
+この時重要なのは、この回転iterateの積を回路に載せてPost-selectionを行うことにより、以下の結果が得られることである。
+\begin{theorembox}{Quantum Signal Processing(QSP)}
+    \begin{align*}
+        \bra{G}W_{\vec{\phi}}(\theta_{\lambda})\ket{G}\ket{\lambda}=(A_{\vec{\phi}}[2\theta_{\lambda}]+
+        iB_{\vec{\phi}}[2\theta_{\lambda}])\ket{\lambda}
+    \end{align*}
+    別の言い方をすれば、Post-selectionを行うことにより、以下の回路がBlock-encoding行列が与えられた際に実装可能となる。
+    \begin{align*}
+        \ket{\lambda}\bra{\lambda}\to (A_{\vec{\phi}}[2\theta_{\lambda}]+
+        iB_{\vec{\phi}}[2\theta_{\lambda}])\ket{\lambda}\bra{\lambda}
+    \end{align*}
+\end{theorembox}
+\begin{proofbox}
+    今までの結果を全て追うだけなので省略
+\end{proofbox}
+この帰結により、今や(少なくともQSVTを用いた)量子アルゴリズムの実装が、以下の問題に帰着できることになった。
+\begin{problembox}{QSVTを用いたアルゴリズムの実装}
+    \begin{enumerate}
+        \item どんな関数f(H)を作用させたい？
+        \item 求める関数を$f(\lambda)=A(\lambda)+iB(\lambda)$とおいた際に、以下を実現する$\vec{\phi}=(\phi_{1},\phi_{2}\cdots \phi_{L})$を求めることができる？あるいは存在すると実証できる？
+        \begin{align*}
+            A(\lambda)&=A_{\vec{\phi}}[2\theta_{\lambda}]\\
+            B(\lambda)&=B_{\vec{\phi}}[2\theta_{\lambda}]
+        \end{align*}
+        \item 厳密に求められない場合、近似値なら出せる？
+    \end{enumerate}
+\end{problembox}
+ここから先は、ひたすらこの問題を解いていく作業となる。\\
+\subsubsection{QSP実装条件}
+各々のアルゴリズムを見る前に、上記の手続きを行った際に、$\phi$を変えることによって、どのような関数を実装できるか、及び求めたい関数から逆算して$\phi$の値を探り当てる方法はあるか？といった一般論を与えておくことにする。\\
+\\
+まず、Wの具体系についての情報を与えることにする。
+\\
+有名な結果として、以下が存在する。
+\begin{theorembox}{QSP実装条件}
+    特定のL次の自由度をもつ\footnote{ここでいうL次の自由度とは、関数空間の中で適当にL個選んで表現される式のことである。基底は三角関数であっても、多項式であっても、チェビシェフ多項式であっても良い。}式(A,B)について、$A(\lambda)=A_{\vec{\phi}}[2\theta_{\lambda}],
+            B(\lambda)=B_{\vec{\phi}}[2\theta_{\lambda}]$を満たすようなL個のパラメータ$\vec{\phi}=(\phi_{1},\phi_{2}\cdots \phi_{L})$が存在するための必要十分条件は、(A,B)が以下の条件を満たすことである。
+    \begin{enumerate}
+        \item A,Bは実数であり、かつ
+        \begin{enumerate}
+            \item Lが偶数の時\\
+            $A(\lambda),B(\lambda)$はL次以下の偶多項式
+            \item Lが奇数の時\\
+            $A(\lambda),B(\lambda)$はL次以下の奇多項式
+        \end{enumerate}
+        \item $A(\lambda=1)=A(\theta_{\lambda}=0)=1$
+        \item $-1\leq \lambda \leq 1\implies A(\lambda)^{2}+B^{2}(\lambda)\leq 1$
+        \item $1\leq |\lambda|\implies A(\lambda)^{2}+B^{2}(\lambda)\geq 1
+        $
+        \item $(if\, L\in 2Z)\quad \lambda \geq 0 \implies A(i\lambda)^{2}+B(i\lambda)^{2}\geq 1$
+    \end{enumerate}
+\end{theorembox}
+\begin{proofbox}
+    ここでは、まず上の条件が必要条件であることを示す。十分条件性は、A,Bから$\phi$の値を逆算するアルゴリズムを具体的に構成する時に示す。
+    \begin{enumerate}
+        \item (条件1)について\\
+        帰納法的に、以下が成立することを示せば良い。
+        \begin{align*}
+            W_{\vec{\phi}}=\begin{cases}
+                \begin{pmatrix}
+                odd_{1}+iodd_{2} & ie^{ia}\times even_{a}\\
+                ie^{-ia}\times even_{a} & odd_{1}-iodd_{2}
+                \end{pmatrix} \quad(L\in 2Z+1)
+                \\
+                \\
+                \begin{pmatrix}
+                    even_{1}+ieven_{2}&ie^{ia}odd_{a}\\
+                    ie^{-ia}odd_{a} &even_{1}-ieven_{2}
+                \end{pmatrix}\quad (L\in 2Z)
+            \end{cases}
+        \end{align*}
+        ただし、even/oddは$\lambda$の次数の偶奇を表す\footnote{この際、偶奇性の定義から、自然に$\sqrt{1-\lambda^{2}}=even$である点に注意。}。そして、下の添字が同じものは同じ値であること、及び対角成分のodd/evenは実関数を表すことにする\footnote{実は非対角成分のeven/oddが実であるという条件は必要ない。これの有無の差は、精々対角成分の大きさに効くのみであり、偶奇性に影響はない。ただし、この大きさが変更すると言うのは後々結構重要になる}。
+        \begin{enumerate}
+            \item L=1の時
+            \begin{align*}
+                W_{\phi}&=\begin{pmatrix}
+            \lambda & -ie^{-i\phi}\sqrt{1-\lambda^{2}}\\
+            -ie^{i\phi}\sqrt{1-\lambda^{2}} & \lambda
+        \end{pmatrix}\\
+        &=\begin{pmatrix}
+                odd_{1}+iodd_{2} & ie^{ia}\times even_{a}\\
+                ie^{-ia}\times even_{a} & odd_{1}-iodd_{2}
+                \end{pmatrix}
+            \end{align*}
+            故に、成立。
+            \item L=2N-1まで仮定が成立した場合\\
+            L=2Nの偶奇性は、
+            \begin{align*}
+                W_{\phi_{1}\cdots \phi_{2L}}&=W_{\phi_{2L}}W_{\phi_{1}\cdots \phi_{2L-1}}\\
+                &=\begin{pmatrix}
+                odd_{1}+iodd_{2} & ie^{ia}\times even_{a}\\
+                ie^{-ia}\times even_{a} & odd_{1}-iodd_{2}
+                \end{pmatrix}\times \begin{pmatrix}
+                odd_{3}+iodd_{4} & ie^{ib}\times even_{b}\\
+                ie^{-ib}\times even_{b} & odd_{3}-iodd_{4}
+                \end{pmatrix}\\
+                &=\begin{pmatrix}
+                    even_{1}+ieven_{2}&e^{ia}odd_{a}\\
+                    e^{-ia}odd_{a} &even_{1}-ieven_{2}
+                \end{pmatrix}
+            \end{align*}
+            また、L=2N+1の偶奇性は、
+            \begin{align*}
+                W_{\phi_{1}\cdots \phi_{2L+1}}&=W_{\phi_{2L+1}}W_{\phi_{1}\cdots \phi_{2L}}\\
+                &=\begin{pmatrix}
+                odd_{1}+iodd_{2} & e^{ia}\times even_{a}\\
+                e^{-ia}\times even_{a} & odd_{1}-iodd_{2}
+                \end{pmatrix}\times\begin{pmatrix}
+                    even_{1}+ieven_{2}&e^{ia}odd_{a}\\
+                    e^{-ia}odd_{a} &even_{1}-ieven_{2}
+                \end{pmatrix}\\
+                &=\begin{pmatrix}
+                odd_{1}+iodd_{2} & ie^{ia}\times even_{a}\\
+                ie^{-ia}\times even_{a} & odd_{1}-iodd_{2}
+                \end{pmatrix}
+            \end{align*}
+            帰納法より、(条件1)が成立。
+        \end{enumerate}
+        \item (条件2)について
+        \begin{align*}
+            W_{\vec{\phi}}[\theta_{\lambda}=0]=I
+        \end{align*}
+        Wの定義式と見比べて、条件2が成立。
+        \item (条件3),(条件4)について\\
+        $-1\leq \lambda\leq 1$の時、Wはユニタリオペレータであるため、以下が成立する。
+        \begin{align*}
+            W^{\dagger}W=(A^{2}+B^{2}+C^{2}+D^{2})I=I\\
+        \end{align*}
+        この式を、$\lambda$が実数の場合に解析接続して考える。\\
+        \\
+        ここで(条件1)の時の式変形について再考する。この時、帰納的に考えることで、実は以下のことを示すこともできる\footnote{あえてはやらないが、概要はほぼ同じである。even,oddをreal,imaginaryに置き換えてやれば良い}。
+        \begin{align*}
+            \text{($W_{\phi_{1}}$の非対角が実数)}&\implies\text{($W_{\vec{\phi}}$の非対角が実数)}\\
+            \text{($W_{\phi_{1}}$の非対角が純虚数)}&\implies\text{($W_{\vec{\phi}}$の非対角が純虚数)}
+        \end{align*}
+        この性質により、C,Dが実か虚かを求めることができる。具体的には、
+        \begin{align*}
+            \text{(C,Dが実数)}&\implies -1\leq\lambda\leq1 \\
+            \text{(C,Dが純虚数)}&\implies 1\leq|\lambda|
+        \end{align*}
+        これと$(A^{2}+B^{2}+C^{2}+D^{2})I=I$の条件を比較すると、(条件3),(条件4)が導出される。
+        \item (条件5)について\\
+        力尽きた。また明日やります。
+    \end{enumerate}
+\end{proofbox}
+十分条件の証明は、(1)~(5)を満たす与えられた式から$\vec{\phi}$を逆算するアルゴリズムを、具体的に示すことによって与えられる。以下、そのアルゴリズムを紹介する。
+\begin{setupbox}{QSPの$\phi$を求めるアルゴリズム}
+    
+\end{setupbox}
+\begin{proofbox}
+    
+\end{proofbox}
+最後に、他のQSP実行可能性について考える。先ほどの例では、$\ket{G}$の状態をpost-selectionすることにより、QSPを実装したが、post-selectionを$\ket{G}$にこだわる必要は全くない。他の基底を選ぶこと別の関数を実装する、といった議論も全然可能である。
+
+\subsubsection{一般化（量子特異値変換）}
+今までの章では、暗にBlock-encodingで埋め込む行列がエルミートであるとか、そもそも正方行列であるといったことを暗に仮定して議論を進めていた。しかし、各証明を注意深く追うと、真に必要なのは以下の表式であった。
+\begin{enumerate}
+    \item 行列Hに固有値$\lambda$、対応する固有ベクトル$\ket{\lambda}$が存在
+    \item 固有値が実数である。
+\end{enumerate}
+この時、上記の性質を満たさない一般の行列をBlock-encodingで埋め込む際、例えば以下のような対応を行えば、上記のアルゴリズムを構成するのに何の問題もないように思える。
+\begin{align*}
+    \text{(行列の固有値)}&\to\text{(行列の特異値)}\\
+    \text{(行列の固有ベクトル)}&\to\text{(行列の特異ベクトル)}
+\end{align*}
+故に、Block-encodingを使った関数の実装は、より一般の行列でも同様の手続きで行える。この一連の一般化した手続きを、量子特異値変換(QSVT)と呼ぶ。\\
+\\
+ただし、上記で問題がないと言ったのは、あくまでQubitizationと言った一連の動作と似たような手続きを部分空間内で定義できると言った意味である。本当にQSVTを構築する際には、例えば特異ベクトルが右と左で異なるといった、数学的な煩わしさが非常に多い。\\
+目的の関係上、本論では主にエルミート行列しか扱わない。故に、QSVTへの拡張に伴う数学的な煩わしさは全てスキップし、上記のQSPまでの一連の流れをQSVTと呼ぶことにする。（詳しくは原論文参照）
+
+\subsection{今までのアルゴリズムへの応用}
+QSVTにおいて、問題は「位相を与える関数が多項式で近似して実装できますか？」というものであった。以下では、各アルゴリズムについての多項式近似を考察し、QSVTで確かに目的となる関数が実装されることを示す。
+
+\subsubsection{ハミルトニアンシミュレーション}
+以下では、ハミルトニアンシミュレーションをQSVTの文脈で実装することを考える。
+\subtopic{ハミルトニアンの埋め込み}
+ハミルトニアンシミュレーションを考える際、まず気にすべきは、Block-encoding内にハミルトニアンを本当に埋め込めるかという問題である。コレは決して自明な問題ではない。\\
+\\
+もっと一般に、行列AがBlock-encodingに埋め込めれるためのAの必要十分条件を考える。
+\begin{theorembox}{Block-encodingへの埋め込み条件}
+    行列Aを埋め込めるBlock-encoding Uが存在する必要十分条件は、以下である。
+    \begin{align*}
+        |\text{Aの特異値}|\leq 1
+    \end{align*}
+\end{theorembox}
+\begin{proofbox}
+    \begin{enumerate}
+        \item 必要条件(Uが存在$\implies |\lambda_{max}(A)|\leq 1 $)\\
+        以下のようにUを設定。
+        \begin{align*}
+            U=\begin{pmatrix}
+                A & B\\
+                C & D
+            \end{pmatrix},\quad 
+            U^{\dagger}=\begin{pmatrix}
+                A^{\dagger} & C^{\dagger}\\
+                B^{\dagger} & D^{\dagger}
+            \end{pmatrix}
+        \end{align*}
+        この時、
+        \begin{align*}
+            U^{\dagger}U=\begin{pmatrix}
+                A^{\dagger}A+C^{\dagger}C & \cdot\\
+                \cdot &\cdot
+            \end{pmatrix}
+            =I
+        \end{align*}
+        左上の式に対してAの固有ベクトル$\ket{\alpha}$を挟むと、
+        \begin{align*}
+            \bra{\alpha}A^{\dagger}A\ket{\alpha}=|\alpha|^{2}&=I-|C\ket{\alpha}|^{2}\leq 1\\
+            \implies |\alpha|&\leq 1
+        \end{align*}
+        \item 十分条件($|\lambda_{max}(A)|\leq 1 \implies $Uが存在)\\
+        Uをexplicitに書けばよい。
+        \begin{align*}
+            U\equiv \begin{pmatrix}
+                A& \sqrt{1-AA^{\dagger}}\\
+                \sqrt{1-A^{\dagger}A}& -A^{\dagger}
+            \end{pmatrix},\quad 
+            U^{\dagger}=\begin{pmatrix}
+                A^{\dagger} & \sqrt{1-A^{\dagger}A}\\ \sqrt{1-AA^{\dagger}} &  -A
+            \end{pmatrix}
+        \end{align*}
+        これがユニタリであることを調べれば良い。これを考えるため、以下の性質を証明する。
+        \begin{resultbox}{エルミート共役の性質}
+            fを実多項式関数であるとする。この時、
+            \begin{enumerate}
+                \item $f(A^{\dagger}A)^{\dagger}=f(A^{\dagger}A)$
+                \item $Af(A^{\dagger}A)=f(AA^{\dagger})A$
+            \end{enumerate}
+        \end{resultbox}
+        \begin{proofbox}
+            \begin{enumerate}
+                \item 1の証明\\
+                単に積のエルミート共役の公式使うだけなので、自明。
+                \item 2の証明\\
+                特異値分解用いるのが楽。Aはユニタリ行列V,Wを用いて、以下のようにかける。
+                \begin{align*}
+                    A=V\Sigma W^{\dagger},\quad A^{\dagger}=W\Sigma V^{\dagger}
+                \end{align*}
+                この時、
+                \begin{align*}
+                    f(A^{\dagger}A)=Wf(\Sigma\Sigma)W^{\dagger}\\
+                    f(AA^{\dagger})=Vf(\Sigma\Sigma)V^{\dagger}
+                \end{align*}
+                故に、それぞれ、
+                \begin{align*}
+                    Af(A^{\dagger}A)=V\Sigma f(\Sigma\Sigma)W^{\dagger}\\
+                    f(AA^{\dagger})A=Vf(\Sigma\Sigma)\Sigma W^{\dagger}
+                \end{align*}
+                当然$f(\Sigma\Sigma)$と$\Sigma$は可換なので、題意は証明できた。
+            \end{enumerate}
+        \end{proofbox}
+        コレを踏まえてUがユニタリであるかを見る。
+        \begin{align*}
+            U^{\dagger}U=\begin{pmatrix}
+                A^{\dagger}A+(1-A^{\dagger}A)& A^{\dagger}\sqrt{1-AA^{\dagger}}-\sqrt{1-A^{\dagger}A}A^{\dagger}\\
+                \sqrt{1-AA^{\dagger}}A-A\sqrt{1-A^{\dagger}A}& AA^{\dagger}+(1-AA^{\dagger})
+            \end{pmatrix}
+            =I
+        \end{align*}
+        確かにユニタリである。
+    \end{enumerate}
+\end{proofbox}
+AがBlock-encodingに埋め込めるための必要十分はそのノルムの値だけで、エルミートといった他の条件に制約はない。故に、どのようなハミルトニアンであっても、適切にノルムを規格化すれば、必ず埋め込めるBlock-encodingが存在する\footnote{しかし、埋め込むための回路の構成も全然自明な問題ではない。コレを理解するために結構な努力が払われているが、本論ではそこまで紹介する余裕はない。}。
+\subtopic{関数近似}
+以下では、QSVTを用いてハミルトニアンシミュレーションを実現する方法を考える。\\
+\\
+ハミルトニアンシミュレーションを行うためには、exp関数を実装する必要があるが、コレは無限次元多項式であるため、L個のパラメータで実装できない。故に、近似を用いた実現方法を探す必要がある。\\
+\\
+まず、数学的事実として、expは以下のように分解できることが知られている。コレは証明なしで認めることにする。
+\begin{resultbox}{expのJaccobi-angular展開}
+第k次Bessel関数を$J_{k}$とすると、
+\begin{align*}
+    e^{icos(z) t}=\sum_{k=-\infty}^{\infty} i^{k}J_{k}(t)e^{ikz}
+\end{align*}
+のちに示すように、$J_{-k}(t)=(-1)^{k}J_{k}(t)$なので、コレは以下のようにも記述できる。
+\begin{align*}
+    e^{i\lambda t}=J_{0}(t)+2\sum_{k\in 2N}(-1)^{\frac{k}{2}}J_{k}(t)T_{k}(\lambda)+i2\sum_{k\in 2|Z|-1}(-1)^{\frac{k-1}{2}}J_{k}(t)T_{k}(\lambda)
+\end{align*}
+ただし、Tはチェビシェフ多項式で、以下のように定義される。
+\begin{align*}
+    T_{k}(\lambda)\equiv cos(kcos^{-1}\lambda) 
+\end{align*}
+\end{resultbox}
+QSVTでは、コレを用いた関数近似を考えることが非常に便利である。\\
+\\
+以下では、これの次数にカットオフを入れることで、どの程度の精度が保たれるかを議論する。まずは、以下のようにカットオフ関数を定義する。
+\begin{defbox}{カットオフ関数}
+    カットオフ関数を以下のように定義する。
+\begin{align*}
+    A_{L}(\lambda)+iC_{L}(\lambda)\equiv J_{0}(t)+2\sum_{k\in 2N}^{L}(-1)^{\frac{k}{2}}J_{k}(t)T_{k}(\lambda)\\
+    +i2\sum_{k\in 2|Z|-1}^{L}(-1)^{\frac{k-1}{2}}J_{k}(t)T_{k}(\lambda)
+\end{align*}
+\end{defbox}
+この式のカットオフと精度の関係性は以下の通りである。
+\begin{resultbox}{関数近似のカットオフ依存性}
+仮に、$L>t>>1$となるようにカットオフを取った場合、元の関数との誤差は以下の通りである。
+\begin{align*}
+    |e^{i\lambda t}-(A_{L}+iC_{L})|<O((\frac{t}{2L})^{L})
+\end{align*}
+逆に、誤差を$\epsilon$程度にしたい場合、必要な多項式量は以下の通りである\footnote{これの証明はしないが、オーダー計算に代入すればそれで十分である}。
+\begin{align*}
+    L=O(t+log\frac{1}{\epsilon})
+\end{align*}
+\end{resultbox}
+\begin{proofbox}
+    \begin{align*}
+        |e^{i\lambda t}-(A_{L}+iC_{L})|\leq\sum_{k\geq L+1}|J_{k}(t)T_{k}(\lambda)|=\sum_{k\leq L+1}|J_{k}(t)|
+    \end{align*}
+    ここで、kが整数の時のベッセル関数の具体系は以下の通りである。
+    \begin{align*}
+        J_{k}(t)=\sum_{m\leq 0}\frac{(-1)^{m}}{m!(m+k)!}(\frac{t}{2})^{m+2k}
+    \end{align*}
+    この具体系から、$L>t>>1$でのオーダー計算を行なっていく。\\
+    \\
+    オーダー計算を行うために、いくつかのベッセル関数の式を証明する。
+    \begin{resultbox}{ベッセル関数の性質}
+        \begin{enumerate}
+            \item $J_{-k}(t)=(-1)^{k}J_{k}(t)$
+            \item $|J_{k}(t)|<\frac{1}{k!}(\frac{z}{2})^{k}$
+        \end{enumerate}
+    \end{resultbox}
+    \begin{proofbox}
+        \begin{enumerate}
+            \item 性質1について\\
+            第一種Bessel関数の生成関数は
+\begin{equation}
+\exp\left[\frac{z}{2}\left(t-\frac{1}{t}\right)\right]=\sum_{m=-\infty}^{\infty}J_m(z)t^m
+\end{equation}
+で与えられる。ここで $t\to 1/t$ とすると、
+\begin{equation}
+\exp\left[\frac{z}{2}\left(\frac{1}{t}-t\right)\right]=\sum_{m=-\infty}^{\infty}J_m(z)t^{-m}
+\end{equation}
+を得る。左辺は
+\begin{equation}
+\exp\left[\frac{-z}{2}\left(t-\frac{1}{t}\right)\right]=\sum_{m=-\infty}^{\infty}J_m(-z)t^m
+\end{equation}
+と書ける。一方、右辺で添字を $m\to -m$ と取り直すと、
+\begin{equation}
+\sum_{m=-\infty}^{\infty}J_m(z)t^{-m}=\sum_{m=-\infty}^{\infty}J_{-m}(z)t^m
+\end{equation}
+となる。したがって、$t^m$ の係数を比較することにより
+\begin{equation}
+J_{-m}(z)=J_m(-z)
+\end{equation}
+を得る。
+次に、生成関数において $t\to -t$ とすると、
+\begin{equation}
+\exp\left[\frac{z}{2}\left(-t+\frac{1}{t}\right)\right]=\sum_{m=-\infty}^{\infty}(-1)^mJ_m(z)t^m
+\end{equation}
+となる。左辺は
+\begin{equation}
+\exp\left[\frac{-z}{2}\left(t-\frac{1}{t}\right)\right]=\sum_{m=-\infty}^{\infty}J_m(-z)t^m
+\end{equation}
+であるから、係数比較により
+\begin{equation}
+J_m(-z)=(-1)^mJ_m(z)
+\end{equation}
+を得る。したがって、
+\begin{equation}
+\boxed{J_{-m}(z)=(-1)^mJ_m(z)}
+\end{equation}
+が成り立つ。
+\item 性質2について\\
+        整数 $m\in Z$ に対して、第一種Bessel関数は
+\begin{equation}
+J_{-m}(z)=(-1)^mJ_m(z)
+\end{equation}
+を満たす。したがって、
+\begin{equation}
+|J_{-m}(z)|=|J_m(z)|
+\end{equation}
+である。
+まず $m\geq 0$ とする。第一種Bessel関数のPoisson積分表示
+\begin{equation}
+J_m(z)=\frac{(z/2)^m}{\sqrt{\pi}\Gamma\left(m+\frac{1}{2}\right)}\int_{-1}^{1}e^{izt}(1-t^2)^{m-\frac{1}{2}}\,dt
+\end{equation}
+を用いる。$z\in R$ であれば $|e^{izt}|=1$ であるから、
+\begin{equation}
+|J_m(z)|\leq\frac{|z/2|^m}{\sqrt{\pi}\Gamma\left(m+\frac{1}{2}\right)}\int_{-1}^{1}(1-t^2)^{m-\frac{1}{2}}\,dt
+\end{equation}
+を得る。
+積分部分は、被積分関数の対称性を用いると
+\begin{equation}
+\int_{-1}^{1}(1-t^2)^{m-\frac{1}{2}}\,dt=2\int_{0}^{1}(1-t^2)^{m-\frac{1}{2}}\,dt
+\end{equation}
+となる。ここで $u=t^2$ と置換すると、
+\begin{align}
+2\int_{0}^{1}(1-t^2)^{m-\frac{1}{2}}\,dt
+&=\int_{0}^{1}u^{-\frac{1}{2}}(1-u)^{m-\frac{1}{2}}\,du \\
+&=B\left(\frac{1}{2},m+\frac{1}{2}\right)
+\end{align}
+となる。ただし $B(a,b)$ はBeta関数である。Beta関数とGamma関数の関係
+\begin{equation}
+B(a,b)=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}
+\end{equation}
+を用いると、
+\begin{align}
+\int_{-1}^{1}(1-t^2)^{m-\frac{1}{2}}\,dt
+&=\frac{\Gamma\left(\frac{1}{2}\right)\Gamma\left(m+\frac{1}{2}\right)}{\Gamma(m+1)} \\
+&=\frac{\sqrt{\pi}\Gamma\left(m+\frac{1}{2}\right)}{m!}
+\end{align}
+を得る。
+したがって、
+\begin{align}
+|J_m(z)|
+&\leq\frac{|z/2|^m}{\sqrt{\pi}\Gamma\left(m+\frac{1}{2}\right)}
+\frac{\sqrt{\pi}\Gamma\left(m+\frac{1}{2}\right)}{m!} \\
+&=\frac{1}{m!}\left|\frac{z}{2}\right|^m.
+\end{align}
+さらに、負の整数 $m$ に対しては $|J_m(z)|=|J_{|m|}(z)|$ であるから、任意の $m\in Z$ に対して
+\begin{equation}
+\boxed{|J_m(z)|\leq\frac{1}{|m|!}\left|\frac{z}{2}\right|^{|m|}}
+\end{equation}
+を得る。
+\end{enumerate}
+\end{proofbox}
+    $L>t$であるという仮定を踏まえると、
+    \begin{align*}
+        \sum_{k\leq L+1}|J_{k}(t)|\leq\sum_{k\leq L+1}O(\frac{1}{|m|!}\left|\frac{z}{2}\right|^{|m|})\leq O(|\frac{z}{L+1}|^{L+1})\sum_{k\leq L+1}\frac{1}{2^{k}}
+    \end{align*}
+    最後の和は単なる等比級数であるため、計算すると誤差のオーダーは、
+    \begin{align*}
+        |e^{i\lambda t}-(A_{L}+iC_{L})|<O((\frac{t}{2(L+1)})^{L+1})\sim O((\frac{t}{2L})^{L})
+    \end{align*}
+\end{proofbox}
+最後に、上記で定義したカットオフ関数がQSVTの手続きを用いて実装できることを示す。以上の手続きにより、関数近似によりハミルトニアンシミュレーションが実装できたことになる。\\
+\\
+やることは単純で、QSP実装条件を上記のカットオフ関数A,Cが満たすことを示せば良い。ただし、先ほど言及した(A,B)ではなく、今回は色んな論文とのnotationを合わせるために、(A,C)での実装条件で議論を行う。陽に証明はしないが、(A,C)での実装可能性は以下の通りである。
+\begin{theorembox}{(A,C)のQSP実装条件}
+    特定のL次の自由度をもつ\footnote{ここでいうL次の自由度とは、関数空間の中で適当にL個選んで表現される式のことである。基底は三角関数であっても、多項式であっても、チェビシェフ多項式であっても良い。}式(A,C)について、$A(\lambda)=A_{\vec{\phi}}[2\theta_{\lambda}],C(\lambda)=C_{\vec{\phi}}[2\theta_{\lambda}]$を満たすようなL個のパラメータ$\vec{\phi}=(\phi_{1},\phi_{2}\cdots \phi_{L})$が存在するための必要十分条件は、(A,C)が以下の条件を満たすことである。
+    \begin{enumerate}
+        \item Aが以下の形で表現できること。
+        \begin{align*}
+            A(\theta)=\sum_{k=0}^{\frac{L}{2}}a_{k}cos(k\theta)
+        \end{align*}
+        \item Cが以下の形で表現できること。
+        \begin{align*}
+            C(\theta)=\sum_{k=1}^{\frac{L}{2}}c_{k}sin(k\theta)
+        \end{align*}
+        \item $A(\theta=0)=1$
+        \item $A(\theta)^{2}+C^{2}(\theta)\leq 1$
+    \end{enumerate}
+\end{theorembox}
+このとき、以下が成立する。
+\begin{resultbox}{カットオフ関数のQSP実装可能性}
+    $\lambda\equiv cos(\theta+\frac{\pi}{2})$とすれば、カットオフ関数$A(\lambda)+iC(\lambda)$は上記の性質を、近似\footnote{この近侍は致命的な問題にならないことが知られている。厳密に(A,C)の条件を満たすものとの違いが、近侍制度くらいしか変わらないためである。}の範囲内で全て満たす。
+\end{resultbox}
+\begin{proofbox}
+    \begin{enumerate}
+        \item 性質1,2について
+        \begin{align*}
+            T_{k}(cos(\theta+\frac{\pi}{2}))=cos(k(\theta+\frac{\pi}{2}))=\begin{cases}
+                (-1)^{\frac{k}{2}}cos(k\theta)\quad (k\in 2Z)\\
+                (-1)^{\frac{k-1}{2}}sin(k\theta) \quad (k\in 2Z+1)
+            \end{cases}
+        \end{align*}
+        故に、カットオフ関数に代入すると、性質1,2を満たすことがわかる。
+        \item 性質3について\\
+        $\theta=0$を代入すると、直ちに以下がわかる。
+        \begin{align*}
+            C(\theta=0)=0
+        \end{align*}
+        また、仮に誤差$\epsilon$以内に収まるために十分なLを用意したとすると、オーダー評価より、
+        \begin{align*}
+            |e^{i\lambda t}-A(\theta=0)|\leq \epsilon \implies A(\theta=0)=1+\epsilon
+        \end{align*}
+        \item 性質4について\\
+        性質３とほぼ同様。誤差評価から、
+        \begin{align*}
+            |e^{i\lambda t}-(A_{L}+iC_{L}))|\leq \epsilon &\implies |A_{L}+iC_{L}|\leq 1+\epsilon\\
+            &\implies A^{2}_{L}+C^{2}_{L} \leq 1+\epsilon
+            \end{align*}
+    \end{enumerate}
+\end{proofbox}
+故に、QSVTによってハミルトニアンシミュレーションが実行できる。
+
+\subsubsection{Groverのアルゴリズム}
+以下では、GroverのアルゴリズムもQSVTの文脈で記述できることを示す。Groverのアルゴリズムにおけるブラックボックスは、特定の解を反転させるようなreflectionを用意することであった。QSVTを用いると、関数近似の範囲で、上記のreflectionを用意することが可能になる。\\
+\\
+核となるのは、以下の2定理である。
+\begin{theorembox}{projection回路の構成可能性}
+以下のような
+    
+\end{theorembox}
+\begin{theorembox}{reflection回路の構成可能性}
+
+    
+\end{theorembox}
+\subsection{新しいアルゴリズムの開発}
+\subsubsection{新しい位相推定}
+\subsubsection{基底準備}
 
 \section{量子誤り訂正理論}
 量子コンピュータは1粒子1粒子のダイナミクスを厳密に制御することによって、はじめて成立する計算機である。当然、粒子は軽いため、微小な力などでも大きな状態変化を起こす。このことから、量子コンピュータは、例えば熱放射、宇宙線といった外部エラーの要因に非常に弱い。\\
