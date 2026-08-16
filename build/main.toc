@@ -100,4 +100,12 @@
 \contentsline {section}{\numberline {B}連分数アルゴリズム}{146}{}%
 \contentsline {section}{\numberline {C}鈴木・トロッター分解}{148}{}%
 \contentsline {section}{\numberline {D}断熱定理}{149}{}%
-\contentsline {section}{\numberline {E}Jordan-Wignar変換によるイジングモデルの議論}{151}{}%
+\contentsline {section}{\numberline {E}有限かつ周期的なIsingモデル}{151}{}%
+\contentsline {subsection}{\numberline {E.1}Jordan-Wigner変換}{151}{}%
+\contentsline {subsection}{\numberline {E.2}spin-fermion双対性}{153}{}%
+\contentsline {subsubsection}{\numberline {E.2.1}fermionのセクターと周期性}{154}{}%
+\contentsline {subsubsection}{\numberline {E.2.2}モード展開}{157}{}%
+\contentsline {subsection}{\numberline {E.3}Kibble-Zurek(KZ)機構}{161}{}%
+\contentsline {subsubsection}{\numberline {E.3.1}セクターの指定}{161}{}%
+\contentsline {subsubsection}{\numberline {E.3.2}LZ-modelにおけるKZ機構}{162}{}%
+\contentsline {subsubsection}{\numberline {E.3.3}IsingモデルにおけるKZ機構}{163}{}%

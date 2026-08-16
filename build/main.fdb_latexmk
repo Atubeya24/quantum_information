@@ -1,11 +1,11 @@
 # Fdb version 4
-["dvipdf"] 1786426393 "build/main.dvi" "build/main.pdf" "build/main" 1786426398 0
-  "build/main.dvi" 1786426393 1458608 2bdb8a727bedb8d4d66fb71cc9a6e3ce "latex"
+["dvipdf"] 1786870982 "build/main.dvi" "build/main.pdf" "build/main" 1786870987 0
+  "build/main.dvi" 1786870982 1534112 06eb9d588299428b379287accf6a42b4 "latex"
   (generated)
   "build/main.pdf"
   (rewritten before read)
-["latex"] 1786426389 "/Users/atsushimaebeya/Desktop/github/quantum_information/main.tex" "build/main.dvi" "main" 1786426398 0
-  "/Users/atsushimaebeya/Desktop/github/quantum_information/main.tex" 1786426385 412775 20ad98e5afe657370f55658f00d8ff81 ""
+["latex"] 1786870978 "/Users/atsushimaebeya/Desktop/github/quantum_information/main.tex" "build/main.dvi" "main" 1786870987 0
+  "/Users/atsushimaebeya/Desktop/github/quantum_information/main.tex" 1786870978 428617 a187deb2319147f2bbf767bfb2ca3ee4 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -168,14 +168,14 @@
   "QuantumPhaseEstimationCircuit.eps" 1786151060 824004 0923941ab502582badb890f3ac0bbd2e ""
   "T_dependence_of_missing.eps" 1786151060 1538856 03f9feda8eb1a5707811484c3464c20d ""
   "bell_generate.eps" 1786151060 260551 6fe543589d94b7ee95cf677806b5e15e ""
-  "build/main.aux" 1786426393 19675 088c81bab714c06f76e3a24f7fd4a30c "latex"
-  "build/main.toc" 1786426393 8805 e4caec094e08d1b343920f30d867b472 "latex"
+  "build/main.aux" 1786870982 20634 fcd32b114af47ed5adbbe5719d3c03ec "latex"
+  "build/main.toc" 1786870982 9436 0d93e8ef7910347c5a6e770d6bbb0fff "latex"
   "error_obs.eps" 1786151060 3403356 440a80fb2f8974d97df7ee96a2849aab ""
   "error_propagate.eps" 1786426237 17497 1b7c9176b89fc111800bc2c25e68651f ""
   "first.eps" 1786426253 2176671 3850c6ddc98a905dcc3f75a697c1a31c ""
   "ladder.eps" 1786426223 5914408 985fa2819cb4566456979814b122f1d3 ""
   "magnetization.eps" 1786151060 1517854 9a7cc04190c1c3c4d51c2053387f03d3 ""
-  "main.tex" 1786426385 412775 20ad98e5afe657370f55658f00d8ff81 ""
+  "main.tex" 1786870978 428617 a187deb2319147f2bbf767bfb2ca3ee4 ""
   "quantum_circuit.eps" 1786151060 395896 4947bc5fbaa4253e50fa1a99fbc2d1bb ""
   "renyi_entropy_of_bell.eps" 1786151060 11864 34a074e5567f810553d9db032a807735 ""
   "renyi_of_Ising.eps" 1786151060 786248 87464cecde7061be4c9f2a236bd998c5 ""
