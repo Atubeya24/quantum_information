@@ -1079,98 +1079,610 @@ $n>>1$である状況において典型空間$T(\epsilon,n)$を基底とする�
 このように定義した際係数$2^{-m}$のBell状態の係数は$\rho$の固有値をメジャライズしている。従って$\ket{\phi_{n}}$を部分トレースした状態はm個の固有値が$2^{-m}$である密度行列$\rho'$にLOCCを用いて変換することが出来る。これにより、もつれの抽出を用いることによりn個のコピーに対して$m=nS(\rho)$個のBell状態に変換できる。
 
 \section{量子テレポーテーション}
-量子もつれを利用した現象として、代表的なものに量子テレポーテーションが存在する。例えば、詳細を知らない量子ビット$\ket{\phi}=\alpha \ket{0}+\beta \ket{1}$を、他者に会わずに送信したいと考える。量子テレポーテーションとは、もつれを活かしてこの送信の手続きを行う方法である。有名な方法論としては、Bell stateを用いて行う方法が知られている(すぐ後で解説)。\\
+量子もつれを利用した現象として、代表的なものに量子テレポーテーションが存在する。例えば、詳細を知らない量子ビット$\ket{\phi}=\alpha \ket{0}+\beta \ket{1}$を、他者に会わずに送信したいと考える。量子テレポーテーションとは、もつれを活かしてこの送信の手続きを行う方法である。\\
 \\
-ただし、量子もつれの定量化の概念を知った今なら、例えば「Bell stateが量子テレポーテーションに必要なことは理解したが、より少ないもつれから量子テレポーテーションを行うことは可能であろうか？」といった疑問が生じるはずである。故に、本章は本論文の前半の集大成として、以下のことを理解することをゴールとする。
-\begin{goalbox}
-量子テレポーテーションを行うために必要な量子もつれの条件を導出する。
-\end{goalbox}
+元々、量子通信理論とは、
+\begin{enumerate}
+    \item 如何に多くの量子情報を
+    \item 如何に少ないリソースで
+    \item 如何にノイズを掻い潜り
+\end{enumerate}
+量子テレポーテーションを通じて交換するかを追求する学問であった。故に、量子通信理論のひとまずのゴールとして、一番基礎的な、この量子テレポーテーションについての考察を行う。大抵の場合、テレポーテーションはBellを用いた簡単なセットアップを俯瞰することしかしないが、ここでは通信理論らしく、一般の状態を通信源とした、テレポーテーションの性能評価まで行う。
+
 \subsection{Bell-stateによる量子テレポーテーション}
-まず送信すべき量子ビットを系A',Bell状態にある状態を複合系ABであるとする。この時、複合系A'Aを局所的であるとし、系BはA'Aから空間的に離れているとする。この時、全体系AA'Bの状態$\ket{\psi}$は以下のように書ける。
+量子テレポーテーションの有名なセットアップとして、Bell-stateを利用したセットアップが知られている。\\
+\begin{setupbox}{Bell-stateによる量子テレポーテーション}
+\begin{enumerate}
+    \item 初期状態を用意\\
+    送信したい量子ビットを系A',Bell状態にある状態を複合系ABであるとする。この時、複合系A'Aを局所的であるとし、系BはA'Aから空間的に離れているとする。この時、全体系AA'Bの状態$\ket{\psi}$は以下のように書ける。
 \begin{equation}\begin{split}
     \ket{\psi}_{AA'B} =\ket{\phi}_{A'}\ket{Bell}_{AB} 
     =\frac{1}{\sqrt{2}} (\alpha\ket{0}_{A'}+\beta \ket{1}_{A'})(\ket{00}_{AB}+\ket{11}_{AB})
 \end{split} \end{equation}
-この時制御ビットをA'、標的ビットをAをしてCNOTゲートを作用させ、及び系A'に対してアダマールゲートを作用させたものを変形すると以下の式となる(ゲートについては量子回路についてを参照)。
+    \item A側の操作\\
+    制御ビットをA'、標的ビットをAをしてCNOTゲートを作用させ、及び系A'に対してアダマールゲートを作用させる。
 \begin{equation}\begin{split}
-    \ket{\psi'}=H_{A}C_{A}^{A'}\ket{\psi}_{AA'B}&=\frac{1}{2}(\ket{00}_{A'A}(\alpha \ket{0}_{B}+\beta \ket{1}_{B})+\ket{01}_{A'A}(\beta \ket{0}_{B}+\alpha \ket{1}_{B})\\
-    &+\ket{10}_{A'A}(\alpha \ket{0}_{B}-\beta \ket{1}_{B})+\ket{11}_{A'A}(-\beta \ket{0}_{B}+\alpha \ket{1}_{B}))
+    \ket{\psi'}&=H_{A}C_{A}^{A'}\ket{\psi}_{AA'B}\\&=\frac{1}{2}(\ket{00}_{A'A}(\alpha \ket{0}_{B}+\beta \ket{1}_{B})
+    \\&+\ket{01}_{A'A}(\beta \ket{0}_{B}+\alpha \ket{1}_{B})\\
+    &+\ket{10}_{A'A}(\alpha \ket{0}_{B}-\beta \ket{1}_{B})\\
+    &+\ket{11}_{A'A}(-\beta \ket{0}_{B}+\alpha \ket{1}_{B}))
 \end{split} \end{equation}
-これを踏まえて局所系A'Aにおける状態を観測し、その結果をBに送信する。この送信結果に対応してBが適切に操作を加えることにより、確かに元の状態$\ket{\phi}$が実現されている点を見る。ここで系AA'で観測された状態と、各状態が観測された際のBの状態を整理する。
+    \item AA'側の観測、B側の操作\\
+    AA'側で、「00」が観測された際は、Bに何もしない、「01」が観測された際は、BにXゲートを作用させ、「10」が観測された際はBにZゲートを作用させ、「11」が観測された際はBにXゲート,Zゲートを順番に作用させる。
+\end{enumerate}
+終状態：$\ket{f}_{B}=\ket{\phi}=\alpha\ket{0}+\beta\ket{1}$
+\end{setupbox}
+\begin{proofbox}
+   系AA'で観測された状態と、各状態が観測された際のBの状態を整理する。
 \begin{equation}\begin{split}
-    00 &\to \alpha \ket{0}_{B}+\beta \ket{1}_{B}\\
-    01 &\to \beta \ket{0}_{B}+\alpha \ket{1}_{B}\\
-    10 &\to \alpha \ket{0}_{B}-\beta \ket{1}_{B}\\
-    11 &\to -\beta \ket{0}_{B}+\alpha \ket{1}_{B}
+    00 &\to \alpha \ket{0}_{B}+\beta \ket{1}_{B}=\ket{\phi}\\
+    01 &\to \beta \ket{0}_{B}+\alpha \ket{1}_{B}=X\ket{\phi}\\
+    10 &\to \alpha \ket{0}_{B}-\beta \ket{1}_{B}=Z\ket{\phi}\\
+    11 &\to -\beta \ket{0}_{B}+\alpha \ket{1}_{B}=XZ\ket{\phi}
 \end{split} \end{equation}
-以上により、「00記述できる。た際は何もしない、「01」が観測された際はXゲートを作用させ、「10」が観測された際はZゲートを作用させ、「11」が観測された際はXZゲートを作用させる。この手続きにより部分系Bの状態は全ての場合において$\ket{\phi}$となることが理解できる。\\
-\\
+この時、「00」が観測された際は何もしない、「01」が観測された際はXゲートを作用させ、「10」が観測された際はZゲートを作用させ、「11」が観測された際はXゲート,Zゲートを順番に作用させるとする。すると、この手続きにより、部分系Bの状態は、どの観測結果においても$\ket{\phi}$となることが理解できる。
+\end{proofbox}
+
 量子テレポーテーションは極めて多くの興味ある哲学的な性質を含んでいる。\\
-第1に、これは観測する瞬間に空間的に離れたもう一方の系の状態が定まり情報が伝わるという、一見すると因果律を破っているように見える点である。しかしこれは部分系Bからこの過程を眺めると何も情報が伝わっていないことが明らかとなる。$\ket{\psi'}$を密度行列を用いて記述した際、A'Aが持つビットの状態という情報を手に入れることが出来る。つまり、古典的な通信を挟む必要があるため情報を伝える速度が光速を超えることが決してない。\\
+\\
+第1に、これは観測する瞬間に空間的に離れたもう一方の系の状態が定まり、情報が伝わるという、一見すると因果律を破っているように見える点である。\\
+しかし、これは部分系B視点では、古典通信がくるまで、何も情報が伝わっていないことが、重要となる。このため、情報を伝える速度が光速を超えることは決してない。\\
 \\
 第2の性質として一見この手続きは量子情報をコピーし、非クローン定理に反しているように見える点である。ここでいう非クローン定理とは以下の定理である。
 \begin{theorembox}{非クローン定理}
 任意の量子状態を複製できるユニタリーゲートは存在せず、仮に何かしらの状態を複製できるユニタリーゲートが存在するなら、それはその状態、もしくはそれと直交する状態のみを複製することが出来る。
 \end{theorembox}
 \begin{proofbox}
-仮にデバイスA,デバイスBがあるとして、デバイスAの量子状態$\ket{\psi_{A}}$をデバイスBに複製できるクローンデバイス$U_{copy}$があったとする。デバイスAが2つの量子状態$\ket{\psi},\ket{\phi}$の時にクローンデバイスが正常に作用するとするとする。この時それぞれの量子状態の変化は以下のように書ける。(ただし、デバイスBの初期状態を$\ket{s}$とする)
- \begin{equation}\begin{split}
-     \ket{\psi}\ket{s} &\to U_{copy}(\ket{\psi}\ket{s}) = \ket{\psi}\ket{\psi}\\
-     \ket{\phi}\ket{s} &\to U_{copy}(\ket{\phi}\ket{s}) = \ket{\phi}\ket{\phi}\\
- \end{split} \end{equation}
-クローンデバイスはユニタリーゲートでなければならないため、内積が保存されなければならない。従って量子状態の変化の前後で内積をとるとすると、以下の式が成立する。
-\begin{equation}\begin{split}
-    \bra{\psi}\ket{\phi} = (\bra{\psi}\ket{\phi})^{2}\: \bra{\psi}\ket{\phi}=0,1
-\end{split} \end{equation}
-従って任意の状態を複製できるというデバイスが存在するという仮定は誤りであり、仮に何かしらの状態を複製できるデバイスが存在するなら、その状態もしくはそれと直交する状態のみを複製することが出来る。この特定の状態のコピーは禁止されていない点は重要である。もつれの定量化で確認した通り、量子情報において状態のコピーを用いて議論することがしばしばある。\\
-\end{proofbox}
-量子テレポーテーションは一見この非クローン定理に反しているように見えるが、実はそうではない。部分系AA'の状態が観測により定まりきっており、量子のもつ位相の情報が全てBに伝わっている。\\
-
-\subsection{テレポーテーションの成立条件の考察}
-量子テレポーテーションのプロトコルにはBell状態を利用することが多いが、Bell状態でなければならない理由は、この段階では全くない。テレポーテーションを行える条件を考察するため、一般的な量子テレポーテーションを補助系Rを用いて議論する。\\
+仮に、任意のAの量子状態$\ket{\psi_{A}}$をBに複製できるクローン操作$U_{copy}$があったとする。\\
 \\
-まず、以下のようなセットアップを考える。
-\begin{setupbox}{量子テレポーテーションの系の一般化}
-まず、補助系Rをどの部分系においても触れることが出来ないが、あらかじめ送りたい情報の部分系A'と最大限もつれていると仮定する。また、Bにあらかじめ状態A'Aを格納するための純粋状態の量子ビットC(次元は$|A'|\times |A|$)が存在しているとする。この条件で系A'の情報がテレポートされる条件を考える。現状考えている仮定を列挙する。\\
-1.状態Rにはどの系からも操作が行えない\\
-2.AB間はもつれており、その状態は既知である。\\
-3.A'R間は最大限もつれており、その状態は未知である。\\
-4.A'A間及びBC間にユニタリーゲートを作用させることが出来る。
+$U_{copy}$は任意の状態をコピーできるので、用意した2つの量子状態$\ket{\psi},\ket{\phi}$のコピーも可能である。この時、それぞれの量子状態の変化は以下のように書ける。
+ \begin{equation}\begin{split}
+     \ket{\psi}_{A}\ket{s}_{B}\to&U_{copy}(\ket{\psi}_{A}\ket{s}_{B}) = \ket{\psi}_{A}\ket{\psi}_{B}\\
+     \ket{\phi}_{A}\ket{s}_{B}\to&U_{copy}(\ket{\phi}_{A}\ket{s}_{B}) = \ket{\phi}_{A}\ket{\phi}_{B}\\
+ \end{split} \end{equation}
+クローン操作はユニタリーゲートでなければならないため、内積が保存されなければならない。この時、2つの量子状態の内積は、コピーの前後で不変であるため、
+\begin{equation}\begin{split}
+    \bra{\psi}\ket{\phi}\bra{s}\ket{s} = (\bra{\psi}\ket{\phi})^{2}\implies \bra{\psi}\ket{\phi}=0,1
+\end{split} \end{equation}
+従って、任意の状態を複製できるというデバイスが存在するという仮定は誤りであり、仮に何かしらの状態を複製できるデバイスが存在するなら、その状態もしくはそれと直交する状態のみを複製することが出来る\footnote{ただし、特定の状態をコピーする回路が禁止されていない点は重要である。もつれの定量化で確認した通り、量子情報において状態のコピーを用いて議論することがしばしばある。}。
+\end{proofbox}
+量子テレポーテーションは一見この非クローン定理に反しているように見えるが、実はそうではない。部分系AA'の状態が観測により定まりきっており、量子のもつ位相の情報が全てBに伝わっている。
+
+\subsection{Bell-state Fidelity とテレポーテーション性能}
+量子もつれの定量化の概念を知った今なら、例えば「一般の共有状態をteleportation resourceとして用いたとき、その性能はどのように特徴づけられるだろうか」といった疑問が生じるはずである。\\
+\\
+これに対する答えとして、「最大エンタングル状態とのFidelityが、teleportationの最大平均Fidelityを直接決定する」というstatementが知られている。この節では、この厳密な関係を与える。\\
+しかし、これを行うためには、考えうる全てのテレポーテーションのチャンネルを考えねばならない。これには一般に大変な労力を伴うが、いくつかの道具を整理すると、今回の場合はかなり単純な問題に帰着できる。
+
+\subsubsection{state-channel correspondence}
+本節では、channel操作をまずは状態として操作する方法論を提示する。これを用いて、しばしチャンネルの言葉をstateの言葉に直して議論することが出来る。
+\begin{defbox}{State--channel correspondence}
+$d$ 次元系上の量子チャンネル $\Lambda$ に対して、
+\begin{align*}
+    \rho_\Lambda
+    \equiv
+    (I\otimes\Lambda)(P_+),
+    \qquad
+    P_+=\ket{\Phi_+}\bra{\Phi_+},
+\end{align*}
+と定義する。ここで
+\begin{align*}
+    \ket{\Phi_+}
+    =
+    \frac{1}{\sqrt d}\sum_{i=1}^{d}\ket{ii}
+\end{align*}
+は最大エンタングル状態である。
+\end{defbox}
+\begin{resultbox}{State-channel correspondenceの一意性}
+量子チャンネル $\Lambda$ は、二体系状態 $\rho_\Lambda$ として表すことができる。
+逆に、$\rho_\Lambda$ から元のチャンネルは
+\begin{align*}
+    \boxed{
+    \Lambda(\sigma)
+    =
+    d\,\Tr_A
+    \left[
+        (\sigma^T\otimes I)\rho_\Lambda
+    \right]
+    }
+\end{align*}
+と復元できる。したがって、この対応は一対一であり、
+\begin{align*}
+    \boxed{
+    \Lambda_1=\Lambda_2
+    \iff
+    \rho_{\Lambda_1}=\rho_{\Lambda_2}
+    }
+\end{align*}
+が成立する。
+\end{resultbox}
+\begin{proofbox}
+$P_+$ を展開すると、
+\begin{align*}
+    \rho_\Lambda
+    &=
+    (I\otimes\Lambda)(P_+)\\
+    &=
+    \frac{1}{d}
+    \sum_{i,j}
+    \ket{i}\bra{j}
+    \otimes
+    \Lambda(\ket{i}\bra{j}).
+\end{align*}
+したがって、
+\begin{align*}
+    d\,\Tr_A
+    \left[
+        (\sigma^T\otimes I)\rho_\Lambda
+    \right]
+    &=
+    \sum_{i,j}
+    \Tr
+    \left[
+        \sigma^T\ket{i}\bra{j}
+    \right]
+    \Lambda(\ket{i}\bra{j})\\
+    &=
+    \sum_{i,j}
+    \sigma_{ij}\Lambda(\ket{i}\bra{j})\\
+    &=
+    \Lambda(\sigma).
+\end{align*}
+よって $\rho_\Lambda$ から $\Lambda$ は一意に復元できる。
+\end{proofbox}
+
+\subsubsection{チャンネル操作論}
+次に、量子テレポーテーションのfidelityを議論するために、必要なチャンネルを定義し、その性質を述べる。\\
+\\
+まず、量子チャンネル $\Lambda$ の性能を特徴づける二つの Fidelity を導入する。$f(\Lambda)$ は任意の純粋状態に対する平均 Fidelity、$F(\Lambda)$ は最大エンタングル状態に対する Fidelity である。
+\begin{defbox}{チャンネルの Fidelity}
+\begin{align*}
+f(\Lambda)
+&\equiv
+\int d\phi,
+\bra{\phi}
+\Lambda(\ket{\phi}\bra{\phi})
+\ket{\phi},\
+F(\Lambda)
+&\equiv
+\bra{\Phi_+}
+(I\otimes\Lambda)
+(\ket{\Phi_+}\bra{\Phi_+})
+\ket{\Phi_+}.
+\end{align*}
+\end{defbox}
+
+次に、後に一般のチャンネルを帰着させる脱分極チャンネルを定義する。
+\begin{defbox}{脱分極チャンネル}
+\begin{align*}
+\Lambda_p^{\mathrm{dep}}(\rho)
+=p\rho+(1-p)\frac{I}{d}.
+\end{align*}
+\end{defbox}
+特に、脱分極チャンネルに対応するstateは、以下のように記述できる。
+また、脱分極チャンネルに対応する状態は
+\begin{align*}
+\rho_{\Lambda^{dep}_{p}}
+&\equiv
+(I\otimes\Lambda_p^{\mathrm{dep}})
+(\ket{\Phi_+}\bra{\Phi_+})
+=
+p\ket{\Phi_+}\bra{\Phi_+}
++(1-p)\frac{I\otimes I}{d^2}
+\end{align*}
+であり、noise を含む最大エンタングル状態として解釈できる。\\
+\\
+最後に、一般のチャンネルを脱分極チャンネルへ帰着させる操作として、channel twirling を導入する。
+\begin{defbox}{Channel twirling}
+\begin{align*}
+\operatorname{twirl}(\Lambda)(\rho)
+\equiv
+\int dU
+U^\dagger
+\Lambda(U\rho U^\dagger)
+U 
+\end{align*}
+\end{defbox}
+これらの道具立てから、以下の二つの重要な補題が成立する。
+\begin{theorembox}{Twirlingと脱分極チャンネルの関係}
+任意のチャンネル $\Lambda$ に対して、
+\begin{align*}
+    \operatorname{twirl}(\Lambda)
+    =
+    \Lambda_{p}^{\mathrm{dep}}
+\end{align*}
+となる $p$ が存在する。
+\end{theorembox}
+
+\begin{proofbox}
+証明は、state--channel correspondence を用いて以下の三段階で行う。
+
+\begin{setupbox}{証明のセットアップ}
+以下の三つを示せば十分である。
+\begin{enumerate}
+    \item $\operatorname{twirl}(\rho)=\rho_F$
+    \item $\Lambda_{\rho_F}=\Lambda_p^{\mathrm{dep}}$
+    \item $\rho_{\operatorname{twirl}(\Lambda)}
+    =\operatorname{twirl}(\rho_\Lambda)$
+\end{enumerate}
+ここで
+\begin{align*}
+    F&=\Tr(\rho P_+),\\
+    p&=\frac{d^2F-1}{d^2-1}.
+\end{align*}
+したがって、これらが成立すれば
+\begin{align*}
+    \rho_{\operatorname{twirl}(\Lambda)}
+    &=
+    \operatorname{twirl}(\rho_\Lambda)\\
+    &=
+    \rho_F\\
+    &=
+    \rho_{\Lambda_p^{\mathrm{dep}}},
+\end{align*}
+となるため、state--channel correspondence の一意性から
+\begin{align*}
+    \operatorname{twirl}(\Lambda)
+    =
+    \Lambda_p^{\mathrm{dep}}
+\end{align*}
+を得る。
 \end{setupbox}
-この状況下で部分系A'Aに対して射影測定を行った際に$S(\rho_{R})$が変化しないことを仮定する。この時射影測定前において部分系RA'ABは純粋状態であり、射影測定において部分系A'Aの状態が確定したため、部分系RB(及びRBC)も純粋状態となる。測定前後で$S(\rho_{R})$が不変であること、及び純粋状態である点より測定前のRA'ABと測定後のRBCはどちらも同様の状態$\rho_{R}$の純粋化であるため、BC間にユニタリー演算子を作用させることにより任意の状態を制御できるためBC間に既知の状態ABを再現した場合にCの残りビットに初期状態A'が再現、つまり状態がテレポートされたと言える。よってこの形式によるテレポーテーションが可能な条件は$S(\rho_{R})$を変化させない射影演算子の組$\pi_{i}$が存在することである。\\
-以下、エントロピーを考察する際測定前を$S_{before}$,測定後通信前を$S_{after}$であるとする。そして条件を満たす射影演算子の組を$\pi_{i}$とする。この状態により測定したとすると、測定後の部分系AA'から見た際の状態は純粋状態で以下のように記述できる。
-\begin{equation}\begin{split}
-    \rho_{B}^{i}=\frac{1}{p_{i}}tr_{RA'A}(\pi_{i}\rho_{RA'AB})
-\end{split} \end{equation}
-通信前のBから見た状態は以下のように書ける。
-\begin{equation}\begin{split}
-    \rho_{B}=\sum_{i}p_{i}\rho_{B}^{i}
-\end{split} \end{equation}
-初期状態において部分系RA'ABは純粋状態であるため、$S(\rho_{R})_{before}=S(\rho_{A'AB})_{befor}$である。また測定後RA'ABのうちAから見た際もつれが存在しているのはRB間のみなので$S(\rho_{A'AB})_{after}=S(\rho_{B}^{i})=S(\rho_{R})_{after}$である。従って測定前後で$\rho_{R}$のエントロピーが不変であるなら$S(\rho_{A'AB})_{befor}=S(\rho_{B}^{i})$である。一方理想的な射影測定はAから見るとユニタリー演算子となるため測定の前後に通信が存在しない限り部分系Bのエントロピーは変わらない。エントロピーの凸性と合わせて以下の式が成立する。
-\begin{equation}\begin{split}
-S(\rho_{B})_{before}=S(\rho_{B})_{after}=S(\sum_{i}p_{i}\rho_{B}^{i})\geq p_{i}S(\rho_{B}^{i})
-\end{split} \end{equation}
-以上より、測定前後で$\rho_{R}$のエントロピーが不変である、つまりテレポーテーションの必要条件は以下の通り。
-\begin{equation}\begin{split}
-    S(\rho_{A'AB})_{before} \leq S(\rho_{B})_{before} \label{tele}
-\end{split} \end{equation}
-次にこの条件がテレポーテーションの十分条件であることを見る。簡単のため、十分大きなN個のコピーを用いて状態の送信することを考えるにとどめる。仮定2,4を用粒子も、\eqref{tele}は初期状態でRA'間のエンタングルメントエントロピーよりAB間のエンタングルメントエントロピーが大きいことをテレポーテーションの条件としている。もつれの抽出のプロトコルを用いると、LOCCによりAB間の状態をLOCCによりRA'間と同様のschmidtランクのBell状態を保持するもつれに変形させることが可能である。この状態の下でRB間に初期状態のRA'間と同等のもつれを生成する射影測定が存在することを具体的な射影を考えることにより示す。まず部分系RA',及びLOCCによりもつれを生成したABの状態はschmidt分解を用いて以下のように書ける。
-\begin{equation}\begin{split}
-    \ket{\psi}_{RA'}=\frac{1}{\sqrt{d}}\sum_{i}\ket{i_{R}}\ket{i_{A'}}
-\end{split} \end{equation}
-\begin{equation}\begin{split}
-    \ket{\psi}_{AB}=\frac{1}{\sqrt{d}}\sum_{i'}\ket{i'_{A}}\ket{i'_{B}}
-\end{split} \end{equation}
-A’は最大限もつれており、Aの情報にはアクセスできる。Bell状態はともに同数の正規直交基底により構成されているため部分系A'Aに対し、射影測定の基底として以下を考えることができる。
-\begin{equation}\begin{split}
-    \ket{\phi}_{A'A}=\frac{1}{\sqrt{d}}\sum_{j}\ket{j_{A'}}\ket{j_{A}}
-\end{split} \end{equation}
-この基底による射影測定を考えた場合、測定操作後AA'から見た際の全系RA'ABの状態は以下のようになる。
-\begin{equation}\begin{split}
-    \ket{\psi'}_{RA'AB}=\frac{1}{\sqrt{d}}\sum_{j}\ket{j_{A'}}\ket{j_{A}} 
-    (\frac{1}{\sqrt{d}}\sum_{j'}\ket{j'_{R}}\ket{j'_{B}})
-\end{split} \end{equation}
-この状態にA'Aの部分トレースを施すと確かにRB間に初期のRA間と同等のもつれが存在していることがわかる。射影測定の組を考える場合、適切に符合及び状態を入れ替えた基底による射影測定を考える。この時状態RBにおけるschmidt係数に変化がないことが分かる。この時測定前と測定後で部分トレースを施すことで確かに$S(\rho_{R})_{before}=S(\rho_{R})_{after}$であることがわかる。そのため、十分大きなN個のコピーを用いたテレポーテーションにおいては\eqref{tele}が量子テレポーテーションの十分条件である。\\最後に最初に考えた系においてBell状態以外でテレポーテーションが可能かについて考察する。RA'間は最大限もつれているため必要十分条件\eqref{tele}より2粒子状態AB間で最大限もつれていなければならない。以上より2粒子のもつれを用いてい粒子をテレポーテーションを行うためには、Bell状態を共有する必要がある。
+
+\begin{enumerate}
+\item $\operatorname{twirl}(\rho)=\rho_F$ の証明
+
+最大エンタングル状態に対して
+\begin{align*}
+    (U\otimes U^*)\ket{\Phi_+}
+    &=
+    \frac{1}{\sqrt{d}}
+    \sum_{i,j,k}
+    U_{ji}U_{ki}^*\ket{jk}\\
+    &=
+    \frac{1}{\sqrt{d}}
+    \sum_{j,k}(UU^\dagger)_{jk}\ket{jk}\\
+    &=
+    \ket{\Phi_+}
+\end{align*}
+が成立する。
+
+したがって Schur の補題より、
+\begin{align*}
+    \operatorname{twirl}(\rho)
+    =
+    aP_+ + b(I-P_+)
+\end{align*}
+と書ける。
+
+また、
+\begin{align*}
+    a
+    &=
+    \Tr[P_+\operatorname{twirl}(\rho)]\\
+    &=
+    \Tr(P_+\rho)
+    \equiv F.
+\end{align*}
+さらに $\Tr[\operatorname{twirl}(\rho)]=1$ より、
+\begin{align*}
+    b=\frac{1-F}{d^2-1}.
+\end{align*}
+よって
+\begin{align*}
+    \boxed{
+    \operatorname{twirl}(\rho)
+    =
+    \rho_F
+    =
+    FP_+
+    +
+    \frac{1-F}{d^2-1}(I-P_+)
+    }.
+\end{align*}
+
+\item $\Lambda_{\rho_F}=\Lambda_p^{\mathrm{dep}}$ の証明
+
+state--channel correspondence より、
+\begin{align*}
+    \Lambda_{\rho_F}(\sigma)
+    =
+    d\,\Tr_A[(\sigma^T\otimes I)\rho_F].
+\end{align*}
+ここで
+\begin{align*}
+    d\,\Tr_A[(\sigma^T\otimes I)P_+]
+    &=
+    \sigma,\\
+    \Tr_A(\sigma^T\otimes I)
+    &=
+    \Tr(\sigma)I
+\end{align*}
+を用いると、
+\begin{align*}
+    \Lambda_{\rho_F}(\sigma)
+    &=
+    \frac{d^2F-1}{d^2-1}\sigma
+    +
+    \frac{d(1-F)}{d^2-1}\Tr(\sigma)I.
+\end{align*}
+$\Tr\sigma=1$ に対して、
+\begin{align*}
+    \Lambda_{\rho_F}(\sigma)
+    &=
+    p\sigma+(1-p)\frac{I}{d}\\
+    &=
+    \Lambda_p^{\mathrm{dep}}(\sigma),
+\end{align*}
+ただし
+\begin{align*}
+    \boxed{
+    p=\frac{d^2F-1}{d^2-1}
+    }.
+\end{align*}
+
+\item
+$\rho_{\operatorname{twirl}(\Lambda)}
+=\operatorname{twirl}(\rho_\Lambda)$ の証明
+
+$\rho_\Lambda=(I\otimes\Lambda)(P_+)$ と
+$(U\otimes U^*)\ket{\Phi_+}=\ket{\Phi_+}$ を用いると、
+\begin{align*}
+    \rho_{\operatorname{twirl}(\Lambda)}
+    &=
+    (I\otimes\operatorname{twirl}(\Lambda))(P_+)\\
+    &=
+    \int dU\,
+    (U\otimes U^*)\rho_\Lambda
+    (U^\dagger\otimes U^T)\\
+    &=
+    \operatorname{twirl}(\rho_\Lambda).
+\end{align*}
+
+以上より、
+\begin{align*}
+    \boxed{
+    \operatorname{twirl}(\Lambda)
+    =
+    \Lambda_p^{\mathrm{dep}}
+    }.
+\end{align*}
+\end{enumerate}
+\end{proofbox}
+
+
+\begin{theorembox}{Twirlingによる平均Fidelityの不変性}
+任意のチャンネル $\Lambda$ に対して、
+\begin{align*}
+    \boxed{
+    f(\Lambda)
+    =
+    f(\operatorname{twirl}(\Lambda))
+    }
+\end{align*}
+が成立する。
+\end{theorembox}
+
+\begin{proofbox}
+平均 Fidelity の定義より、
+\begin{align*}
+    f(\operatorname{twirl}(\Lambda))
+    &=
+    \int d\phi\,dU\,
+    \bra{\phi}
+    U^\dagger
+    \Lambda
+    \left(
+    U\ket{\phi}\bra{\phi}U^\dagger
+    \right)
+    U
+    \ket{\phi}.
+\end{align*}
+ここで $\ket{\psi}=U\ket{\phi}$ とおく。
+Haar 測度のユニタリ不変性より $d\psi=d\phi$ であるため、
+\begin{align*}
+    f(\operatorname{twirl}(\Lambda))
+    &=
+    \int d\psi\,
+    \bra{\psi}
+    \Lambda(\ket{\psi}\bra{\psi})
+    \ket{\psi}\\
+    &=
+    f(\Lambda).
+\end{align*}
+\end{proofbox}
+
+
+以上の二つの補題を用いることで、
+任意のチャンネルに対して平均 Fidelity と
+Bell-state に対する Fidelity の関係が得られる。
+
+\begin{theorembox}{任意のチャンネルのFidelity}
+任意の $d$ 次元量子チャンネル $\Lambda$ に対して、
+\begin{align*}
+    \boxed{
+    f(\Lambda)
+    =
+    \frac{dF(\Lambda)+1}{d+1}
+    }
+\end{align*}
+が成立する。
+\end{theorembox}
+
+\begin{proofbox}
+Twirling と脱分極チャンネルの関係、および
+Twirling による平均 Fidelity の不変性から、
+\begin{align*}
+    f(\Lambda)
+    &=
+    f(\operatorname{twirl}(\Lambda))\\
+    &=
+    f(\Lambda_p^{\mathrm{dep}}).
+\end{align*}
+脱分極チャンネルについて、
+\begin{align*}
+    f(\Lambda_p^{\mathrm{dep}})
+    &=
+    p+\frac{1-p}{d},\\
+    F(\Lambda_p^{\mathrm{dep}})
+    &=
+    p+\frac{1-p}{d^2}.
+\end{align*}
+また、Twirling は Bell-state に対する Fidelity も保存するため、
+\begin{align*}
+    F(\Lambda_p^{\mathrm{dep}})
+    =
+    F(\Lambda).
+\end{align*}
+したがって $p$ を消去することで、
+\begin{align*}
+    \boxed{
+    f(\Lambda)
+    =
+    \frac{dF(\Lambda)+1}{d+1}
+    }
+\end{align*}
+を得る。
+\end{proofbox}
+
+\subsubsection{Fidelityの証明}
+以上の道具立てを用いて、
+共有状態 $\rho$ を用いたテレポーテーションで達成可能な
+最大平均 Fidelity を求める。
+
+まず、$\rho$ に trace-preserving LOCC $\mathcal{L}$ を作用させて
+得られる最大 Bell-state Fidelity を
+\begin{align*}
+    F_{\max}(\rho)
+    \equiv
+    \max_{\mathcal{L}}
+    F(\mathcal{L}(\rho))
+\end{align*}
+と定義する。
+
+また、$\rho$ を資源として用いる任意のテレポーテーション
+プロトコルによって実現されるチャンネルを $\Lambda$ とし、
+その最大平均 Fidelity を
+\begin{align*}
+    f_{\max}(\rho)
+    \equiv
+    \max_{\Lambda}f(\Lambda)
+\end{align*}
+と定義する。
+
+\begin{theorembox}{テレポーテーションにおける最大 Fidelity}
+$d$ 次元系の共有状態 $\rho$ に対して、
+テレポーテーションで達成可能な最大平均 Fidelity は
+\begin{align*}
+    \boxed{
+    f_{\max}(\rho)
+    =
+    \frac{dF_{\max}(\rho)+1}{d+1}
+    }
+\end{align*}
+で与えられる。
+\end{theorembox}
+
+\begin{proofbox}
+まず上界を示す。
+
+$\rho$ を用いた任意のテレポーテーションプロトコルが
+チャンネル $\Lambda$ を実現するとする。
+最大エンタングル状態 $P_+$ の片側にこのチャンネルを作用させると、
+\begin{align*}
+    \rho_{\Lambda}
+    =
+    (I\otimes\Lambda)(P_+)
+\end{align*}
+を得る。
+
+この操作全体は $\rho$ に対する trace-preserving LOCC として
+実現できるため、$F_{\max}$ の定義から
+\begin{align*}
+    F(\Lambda)
+    =
+    F(\rho_{\Lambda})
+    \leq
+    F_{\max}(\rho)
+\end{align*}
+である。
+
+一方、任意のチャンネルに対して
+\begin{align*}
+    f(\Lambda)
+    =
+    \frac{dF(\Lambda)+1}{d+1}
+\end{align*}
+が成立するため、
+\begin{align*}
+    f(\Lambda)
+    \leq
+    \frac{dF_{\max}(\rho)+1}{d+1}.
+\end{align*}
+したがって
+\begin{align*}
+    f_{\max}(\rho)
+    \leq
+    \frac{dF_{\max}(\rho)+1}{d+1}.
+\end{align*}
+
+次に、この上界が達成可能であることを示す。
+
+まず $\rho$ に最適な trace-preserving LOCC を作用させ、
+\begin{align*}
+    F(\rho')
+    =
+    F_{\max}(\rho)
+\end{align*}
+を満たす状態 $\rho'$ を得る。
+
+さらに $\rho'$ を twirl すると、
+Bell-state Fidelity を保存したまま
+\begin{align*}
+    \rho'
+    \longrightarrow
+    \rho_{F_{\max}}
+\end{align*}
+とできる。
+
+この状態は脱分極チャンネル
+$\Lambda_p^{\mathrm{dep}}$ に対応するため、
+$\rho_{F_{\max}}$ を用いた標準テレポーテーションは
+$\Lambda_p^{\mathrm{dep}}$ を実現する。
+
+したがって、その平均 Fidelity は
+\begin{align*}
+    f
+    &=
+    \frac{dF(\rho_{F_{\max}})+1}{d+1}\\
+    &=
+    \frac{dF_{\max}(\rho)+1}{d+1}.
+\end{align*}
+
+よって上界は実際に達成可能であり、
+\begin{align*}
+    \boxed{
+    f_{\max}(\rho)
+    =
+    \frac{dF_{\max}(\rho)+1}{d+1}
+    }
+\end{align*}
+を得る。
+\end{proofbox}
+最後に、$f_{max}=1$となる条件を確認する。\\
+\\
+上式から、これは$F_{max}=1$でなければならない。LOCCの下ではエンタングルは減る一方であるため、$F_{max}=1$を達成するためには、共有状態は最大エンタングルでなければならない。\\
+\\
+故に、完全なテレポーテーションを達成するためには、最大エンタングル状態を導入する必要がある。このため、例えば1状態のテレポーテーションを行うには、Bell状態が必要不可欠なのである。\\
+\\
+最後に一つコメントを行う。前節で量子もつれの定量化としてEEを定義したにもかかわらず、ここでEEではなく性能評価の項にfidelityが出てくるのは何故か、である。答えとしては、リソースが仮に
+\begin{enumerate}
+    \item 純粋状態の場合\\
+    この場合、Fidelityとは$\frac{1}{2}$-renyi entropyそのものなので、実はEEとほぼ同じ意味である。
+    \item 混合状態の場合\\
+    この場合、EEはもつれの定量化としての意味を持たないが、Fidelityはその意味を持つ。
+\end{enumerate}
+このため、もつれの定量化の尺度として、EEをより包括したものがFidelityであるためである。
 
 \section{量子情報と熱力学}
 近年量子もつれが物理のダイナミクスに制約をかけている可能性が指摘されている。それに伴い、量子情報のツールが物理系の解析に用いられている。特にブラックホールの熱力学的的な解析においては量子的なエントロピーの存在が不可欠である。ここではその第一歩として量子もつれが熱力学的な特性に与える影響をいくつかのケースに対して議論する。
