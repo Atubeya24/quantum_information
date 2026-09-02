@@ -3225,144 +3225,179 @@ iterate Wを構成できたので、話を本題に戻す。本題は、以下�
 \subsubsection{QSP実装条件}
 各々のアルゴリズムを見る前に、上記の手続きを行った際に、$\phi$を変えることによって、どのような関数を実装できるか、及び求めたい関数から逆算して$\phi$の値を探り当てる方法はあるか？といった一般論を与えておくことにする。ここでの議論は主に\cite{Low:2016znh}を参考にしている。\\
 \\
-有名な結果として、以下が存在する。
-\begin{theorembox}{QSP実装条件}
-    特定のL次の自由度をもつ\footnote{ここでいうL次の自由度とは、関数空間の中で適当にL個選んで表現される式のことである。基底は三角関数であっても、多項式であっても、チェビシェフ多項式であっても良い。}式(A,B)について、$A(\lambda)=A_{\vec{\phi}}[2\theta_{\lambda}],
-            B(\lambda)=B_{\vec{\phi}}[2\theta_{\lambda}]$を満たすようなL個のパラメータ$\vec{\phi}=(\phi_{1},\phi_{2}\cdots \phi_{L})$が存在するための必要十分条件は、(A,B)が以下の条件を満たすことである。
-    \begin{enumerate}
-        \item A,Bは実数であり、かつ
-        \begin{enumerate}
-            \item Lが偶数の時\\
-            $A(\lambda),B(\lambda)$はL次以下の偶多項式
-            \item Lが奇数の時\\
-            $A(\lambda),B(\lambda)$はL次以下の奇多項式
-        \end{enumerate}
-        \item $A(\lambda=1)=A(\theta_{\lambda}=0)=1$
-        \item $-1\leq \lambda \leq 1\implies A(\lambda)^{2}+B^{2}(\lambda)\leq 1$
-        \item $1\leq |\lambda|\implies A(\lambda)^{2}+B^{2}(\lambda)\geq 1
-        $
-        \item $(if\, L\in 2Z)\quad \lambda \geq 0 \implies A(i\lambda)^{2}+B(i\lambda)^{2}\geq 1$
-    \end{enumerate}
-\end{theorembox}
+第一歩として、iterate Wを複数かけた際に、行列がどのような形となりうるかを議論する。このために、L次QSP関数を、以下のようにべき分解する。
+\begin{align*}
+    W_{\vec{\phi}}[\theta_{\lambda}]&=W_{\phi_{L}}W_{\phi_{L-1}}\cdots W_{\phi_{1}}\\
+    &=\sum_{j=0}^{L}(-i)^{j}cos^{L-j}\theta_{\lambda}sin^{j}\theta_{\lambda}\hat{\Phi}_{L,j}
+\end{align*}
+この時、展開係数$\hat{\Phi}_{L,j}$は以下のような性質を満たす。
+\begin{resultbox}{QSP係数の性質とQSP漸化式}
+QSP関数は以下のような形に分解可能である。
+\begin{align*}
+    \hat{\Phi}_{L,j}=(\sigma_{x})^{j}(Re(\Phi_{L,j})I+iIm(\Phi_{L,j})\sigma_{z})
+\end{align*}
+また、係数$\Phi_{L,j}$は、$\phi_{k}$を与えられた際に以下のように漸化式的に定まる。この漸化式を以降、「QSP漸化式」と呼ぶことにする。
+\begin{align*}
+    \Phi_{k,j}=\Phi_{k-1,j}+\Phi_{k-1,j-1}e^{i(-1)^{j+1}\phi_{k}}
+\end{align*}
+ただし、$\Phi_{0,0}=1,\Phi_{i,j>i}=0,\Phi_{i,-1}=0$であるとする。
+\end{resultbox}
 \begin{proofbox}
-    ここでは、まず上の条件が必要条件であることを示す。十分条件性は、A,Bから$\phi$の値を逆算するアルゴリズムを具体的に構成する時に示す。
+    帰納的に示す。
     \begin{enumerate}
-        \item (条件1)について\\
-        帰納法的に、以下が成立することを示せば良い。
+        \item L=0の時
         \begin{align*}
-            W_{\vec{\phi}}=\begin{cases}
-                \begin{pmatrix}
-                odd_{1}+iodd_{2} & ie^{ia}\times even_{a}\\
-                ie^{-ia}\times even_{a} & odd_{1}-iodd_{2}
-                \end{pmatrix} \quad(L\in 2Z+1)
-                \\
-                \\
-                \begin{pmatrix}
-                    even_{1}+ieven_{2}&ie^{ia}odd_{a}\\
-                    ie^{-ia}odd_{a} &even_{1}-ieven_{2}
-                \end{pmatrix}\quad (L\in 2Z)
-            \end{cases}
+            W_{\vec{\phi}}=I\iff \Phi_{0,0}=1
         \end{align*}
-        ただし、even/oddは$\lambda$の次数の偶奇を表す\footnote{この際、偶奇性の定義から、自然に$\sqrt{1-\lambda^{2}}=even$である点に注意。}。そして、下の添字が同じものは同じ値であること、及び対角成分のodd/evenは実関数を表すことにする\footnote{実は非対角成分のeven/oddが実であるという条件は必要ない。これの有無の差は、精々対角成分の大きさに効くのみであり、偶奇性に影響はない。ただし、この大きさが変更すると言うのは後々結構重要になる}。
-        \begin{enumerate}
-            \item L=1の時
-            \begin{align*}
-                W_{\phi}&=\begin{pmatrix}
-            \lambda & -ie^{-i\phi}\sqrt{1-\lambda^{2}}\\
-            -ie^{i\phi}\sqrt{1-\lambda^{2}} & \lambda
-        \end{pmatrix}\\
-        &=\begin{pmatrix}
-                odd_{1}+iodd_{2} & ie^{ia}\times even_{a}\\
-                ie^{-ia}\times even_{a} & odd_{1}-iodd_{2}
-                \end{pmatrix}
-            \end{align*}
-            故に、成立。
-            \item L=2N-1まで仮定が成立した場合\\
-            L=2Nの偶奇性は、
-            \begin{align*}
-                W_{\phi_{1}\cdots \phi_{2L}}&=W_{\phi_{2L}}W_{\phi_{1}\cdots \phi_{2L-1}}\\
-                &=\begin{pmatrix}
-                odd_{1}+iodd_{2} & ie^{ia}\times even_{a}\\
-                ie^{-ia}\times even_{a} & odd_{1}-iodd_{2}
-                \end{pmatrix}\times \begin{pmatrix}
-                odd_{3}+iodd_{4} & ie^{ib}\times even_{b}\\
-                ie^{-ib}\times even_{b} & odd_{3}-iodd_{4}
-                \end{pmatrix}\\
-                &=\begin{pmatrix}
-                    even_{1}+ieven_{2}&e^{ia}odd_{a}\\
-                    e^{-ia}odd_{a} &even_{1}-ieven_{2}
-                \end{pmatrix}
-            \end{align*}
-            また、L=2N+1の偶奇性は、
-            \begin{align*}
-                W_{\phi_{1}\cdots \phi_{2L+1}}&=W_{\phi_{2L+1}}W_{\phi_{1}\cdots \phi_{2L}}\\
-                &=\begin{pmatrix}
-                odd_{1}+iodd_{2} & e^{ia}\times even_{a}\\
-                e^{-ia}\times even_{a} & odd_{1}-iodd_{2}
-                \end{pmatrix}\times\begin{pmatrix}
-                    even_{1}+ieven_{2}&e^{ia}odd_{a}\\
-                    e^{-ia}odd_{a} &even_{1}-ieven_{2}
-                \end{pmatrix}\\
-                &=\begin{pmatrix}
-                odd_{1}+iodd_{2} & ie^{ia}\times even_{a}\\
-                ie^{-ia}\times even_{a} & odd_{1}-iodd_{2}
-                \end{pmatrix}
-            \end{align*}
-            帰納法より、(条件1)が成立。
-        \end{enumerate}
-        \item (条件2)について
+        故に満たす。
+        \item L=k-1まで満たすとき\\
         \begin{align*}
-            W_{\vec{\phi}}[\theta_{\lambda}=0]=I
+            W_{\phi_{k-1}}W_{\phi_{k-2}}\cdots W_{\phi_{1}}=\sum_{j=0}^{k-1}(-i)^{j}cos^{k-1-j}\theta_{\lambda}sin^{j}\theta_{\lambda}\hat{\Phi}_{k-1,j}
         \end{align*}
-        Wの定義式と見比べて、条件2が成立。
-        \item (条件3),(条件4)について\\
-        $-1\leq \lambda\leq 1$の時、Wはユニタリオペレータであるため、以下が成立する。
+        この時、以下を考える。まずは定義より、
         \begin{align*}
-            W^{\dagger}W=(A^{2}+B^{2}+C^{2}+D^{2})I=I\\
+            W_{\phi_{k}}W_{\phi_{k-1}}\cdots W_{\phi_{1}}=\sum_{j=0}^{k}(-i)^{j}cos^{L-j}\theta_{\lambda}sin^{j}\theta_{\lambda}\hat{\Phi}_{k,j}
         \end{align*}
-        この式を、$\lambda$が実数の場合に解析接続して考える。\\
-        \\
-        ここで(条件1)の時の式変形について再考する。この時、帰納的に考えることで、実は以下のことを示すこともできる\footnote{あえてはやらないが、概要はほぼ同じである。even,oddをreal,imaginaryに置き換えてやれば良い}。
+        次に、展開した結果より、
         \begin{align*}
-            \text{($W_{\phi_{1}}$の非対角が実数)}&\implies\text{($W_{\vec{\phi}}$の非対角が実数)}\\
-            \text{($W_{\phi_{1}}$の非対角が純虚数)}&\implies\text{($W_{\vec{\phi}}$の非対角が純虚数)}
+            &W_{\phi_{k}}W_{\phi_{k-1}}\cdots W_{\phi_{1}}\\
+            =&(\sum_{j=0}^{k-1}(-i)^{j}cos^{k-1-j}\theta_{\lambda}sin^{j}\theta_{\lambda}\hat{\Phi}_{k-1,j})(cos\theta_{\lambda}-isin\theta_{\lambda}(cos\phi_{L}\hat{\sigma}_{x}+sin\phi_{L}\hat{\sigma}_{y}))\\
+            =&(\sum_{j=0}^{k-1}(-i)^{j}cos^{k-j}\theta_{\lambda}sin^{j}\theta_{\lambda}\hat{\Phi}_{k-1,j})\\
+            &+(\sum_{i=1}^{k}(-i)^{j}cos^{k-i}\theta_{\lambda}sin^{i}\theta_{\lambda}(cos\phi_{L}\hat{\sigma}_{x}+sin\phi_{L}\hat{\sigma}_{y})\hat{\Phi}_{k-1,i-1})
         \end{align*}
-        この性質により、C,Dが実か虚かを求めることができる。具体的には、
+        ただし、最後の2つ目の総和において、$i=j+1$とした。初期条件などから、$\Phi_{k-1,k}=\Phi_{k-1,-1}=0$であるため、総和の添字を変更することができ、
         \begin{align*}
-            \text{(C,Dが実数)}&\implies -1\leq\lambda\leq1 \\
-            \text{(C,Dが純虚数)}&\implies 1\leq|\lambda|
+            W_{\phi_{k}}W_{\phi_{k-1}}\cdots W_{\phi_{1}}
+            =\sum_{j=0}^{k}(-i)^{j}cos^{k-i}\theta_{\lambda}sin^{i}\theta_{\lambda}\big(\hat{\Phi}_{k-1,j}+(cos\phi_{L}\hat{\sigma}_{x}+sin\phi_{L}\hat{\sigma}_{y})\hat{\Phi}_{k-1,i-1} \big)
         \end{align*}
-        これと$(A^{2}+B^{2}+C^{2}+D^{2})I=I$の条件を比較すると、(条件3),(条件4)が導出される。
-        \item (条件5)について\\
-        力尽きた。また明日やります。
+        両辺同じ係数部分を比較して、
+        \begin{align*}
+            \hat{\Phi}_{k,j}=\hat{\Phi}_{k-1,j}+(cos\phi_{L}\hat{\sigma}_{x}+sin\phi_{L}\hat{\sigma}_{y})\hat{\Phi}_{k-1,i-1} 
+        \end{align*}
+        あとは、上式に$\hat{\Phi}_{i,j}$の式を代入して比較すると、
+        \begin{align*}
+            Re(\Phi_{k,i})&=Re(\Phi_{k-1,i}+cos\theta\Phi_{L-a,j-1})\\
+            Im(\Phi_{k,i})&=Im(\Phi_{k-1,i}+(-1)^{j+1}sin\phi_{L}\Phi_{k-1,j-1})\\
+            \\
+            \implies \Phi_{k,i}&=\Phi_{k-1,j}+\Phi_{k-1,j-1}e^{i(-1)^{j+1}\phi_{k}}
+        \end{align*}
     \end{enumerate}
 \end{proofbox}
+以後、簡単のために以下のようなnotationを採用する。
+\begin{align*}
+    x&=cos\theta_{\lambda}\\
+    y&=sin\theta_{\lambda}
+\end{align*}
+この時、Wは以下のようにまとまることが理解できる。
+\begin{resultbox}{QSPの関数系}
+QSPはL次多項式(A,B,C,D)を用いて、以下のように表せられる。
+    \begin{align*}
+        W_{\vec{\phi}}=
+        \begin{cases}
+            A(x)I+B(x)\sigma_{z}+C(y)\sigma_{x}+D(y)\sigma_{y}\quad(L\in odd)\\
+            A(x)I+B(x)\sigma_{z}+xC(y)\sigma_{x}+xD(y)\sigma_{y}\quad (L\in even)
+        \end{cases}
+    \end{align*}
+\end{resultbox}
+\begin{proofbox}
+    Lを偶奇に分けた際、jをさらに偶奇に分ける。$\hat{\Phi}_{L,j}$の具体系から、jの偶奇で$\hat{\Phi}_{L,j}$がどの部分の線形結合となるかが変化することがわかる。
+    \begin{align*}
+        \hat{\Phi}_{L,2n}&=A+B\sigma_{z}\\
+        \hat{\Phi}_{L,2n+1}&=C\sigma_{x}+D\sigma_{y}
+    \end{align*}
+    そして、変数部分については、sin,cosが2乗の形で出現した際、$cos^{2}+sin^{2}=1$を介してcosをsinに押し付ける、といった動作を行う。Lが奇数の時は、L-j,jのどちらかが偶数になるので、その性質を用いて、cosかsinのどちらかに押し付けることが可能である。Lが偶数の時は、あらかじめcosを括り出してやると、同じ処方を与えることができる。\\
+    \\
+    以上をまとめると、確かにWを上記の形にまとめることができる。
+\end{proofbox}
+これは、まさにQSPで出現した関数系そのものである。\\
+\\
+さて、ではQSPの実装条件の本題に入るとする。命題は、以下の通りである。
+\begin{problembox}{QSP実装条件}
+    関数WをQSPを用いて実装したいと思った時、その関数を実装できるためのWの必要十分条件は？また、Wから実装の際に$\vec{\phi}$を逆算する方法は？
+\end{problembox}
+以下では、まず、Wが
+\begin{align*}
+        W_{\vec{\phi}}=
+        \begin{cases}
+            A(x)I+iB(x)\sigma_{z}+iC(y)\sigma_{x}+iD(y)\sigma_{y}\quad(L\in odd)\\
+            A(x)I+iB(x)\sigma_{z}+ixC(y)\sigma_{x}+ixD(y)\sigma_{y}\quad (L\in even)
+        \end{cases}
+\end{align*}
+の形で与えられる、つまり(A,B,C,D)全てが求まっている際、実装可能性の必要十分条件を与える。
+\begin{resultbox}{QSP実装可能条件}
+    (A,B,C,D)が与えられた際、実装可能であることの必要十分条件は、以下の通りである。
+    \begin{enumerate}
+        \item (A,B,C,D)が実関数である。
+        \item $A(1)=1,B(1)=0$を満たす。
+        \item \begin{enumerate}
+            \item Lが奇数のとき\\
+            (A,B,C,D)いずれも奇多項式
+            \item Lが偶数の時\\
+            (A,B)は偶多項式,(C,D)が奇多項式
+        \end{enumerate}
+        \item\begin{enumerate}
+            \item Lが奇数のとき
+            \begin{align*}
+                A(x)^{2}+B(x)^{2}+C(y)^{2}+D(y)^{2}=1
+            \end{align*}
+            \item Lが偶数の時
+            \begin{align*}
+                A(x)^{2}+B(x)^{2}+x^{2}C(y)^{2}+x^{2}D(y)^{2}=1
+            \end{align*}
+        \end{enumerate}
+    \end{enumerate}
+\end{resultbox}
+\begin{proofbox}
+    十分条件は$\phi_{L}$を逆算するアルゴリズムの提示そのものであるため、別個に示す。ここでは、必要条件のみ求める。
+    \begin{enumerate}
+        \item 1,3について\\
+        $\hat{\Phi}_{L,j}$の具体系を、QSP関数
+        \begin{align*}
+    W_{\vec{\phi}}[\theta_{\lambda}]&=W_{\phi_{L}}W_{\phi_{L-1}}\cdots W_{\phi_{1}}\\
+    &=\sum_{j=0}^{L}(-i)^{j}cos^{L-j}\theta_{\lambda}sin^{j}\theta_{\lambda}\hat{\Phi}_{L,j}
+\end{align*}
+        に代入して偶奇性、及び虚数の出方を整理すれば自明にもとまる。
+        \item 2について\
+        \begin{align*}
+            W_{\phi_{i}}(\theta=0)=I=A(1)I+B(1)\sigma_{z}
+        \end{align*}
+        故に、$A(1)=1,B(1)=0$
+        \item 4について\\
+        Wはユニタリでなければならないため、$W^{\dagger}W=1$
+        ここにWの具体系を代入するともとまる。
+    \end{enumerate}
+\end{proofbox}
+
 十分条件の証明は、(1)~(5)を満たす与えられた式から$\vec{\phi}$を逆算するアルゴリズムを、具体的に示すことによって与えられる。以下、そのアルゴリズムを紹介する。
 \begin{setupbox}{(A,B,C,D)のから$\phi$を求めるアルゴリズム}
-input:(A,B,C,D)及びそのL次べき展開
+INPUT:条件1から条件4を満たす(A,B,C,D)及びそのL次べき展開
 \begin{align*}
-    A(\lambda)&=\sum_{n=0}^{L}a_{n}x^{n}\\
-    B(\lambda)&=\sum_{n=0}^{L}b_{n}x^{n}\\
-    C(\lambda)&=\sum_{n=0}^{L}c_{n}x^{n}\\
-    D(\lambda)&=\sum_{n=0}^{L}d_{n}x^{n}
+    A(\lambda)&=\sum_{n=0}^{L}a_{n}x^{n}\quad
+    B(\lambda)=\sum_{n=0}^{L}b_{n}x^{n}\\
+    C(\lambda)&=\sum_{n=0}^{L}c_{n}x^{n} \quad
+    D(\lambda)=\sum_{n=0}^{L}d_{n}x^{n}
 \end{align*}
 求める関数：$W_{\vec{\phi}}[\theta_{\lambda}]$
 \begin{align*}
         W_{\vec{\phi}}[\theta_{\lambda}]
         &=W_{\phi_{1}}W_{\phi_{2}}\cdots W_{\phi_{L}}\\
-        &=\sum_{j=0}^{L}cos^{L-n}\theta_{\lambda}sin^{n}\theta_{\lambda}\Phi_{L,n}
+        &=\sum_{j=0}^{L}cos^{L-n}\theta_{\lambda}sin^{n}\theta_{\lambda}\Phi_{L,n}\\
+        &=\begin{cases}
+            A(x)I+B(x)\sigma_{z}+C(y)\sigma_{x}+D(y)\sigma_{y}\quad(L\in odd)\\
+            A(x)I+B(x)\sigma_{z}+xC(y)\sigma_{x}+xD(y)\sigma_{y}\quad (L\in even)
+        \end{cases}
     \end{align*}
 \begin{enumerate}
     \item $(A,B,C,D)$から$\Phi_{L,j}$を逆引き
         \begin{align*}
         \Phi_{L,j}=
         \begin{cases}
-            i^{j}\sum_{n=0}^{L-j}(a_{n}+ib_{n}){}_{\frac{L-n}{2}}C_{\frac{j}{2}}\quad (j\in odd)\\
-            i^{j}\sum_{n=0}^{L-j}(ic_{n}-id_{n}){}_{\frac{L-n}{2}}C_{\frac{j-n}{2}}\quad (j\in even)
+            i^{j}\sum_{n=0}^{L-j}(a_{n}+ib_{n}){}_{\frac{L-n}{2}}C_{\frac{j}{2}}\quad (j\in even)\\
+            i^{j}\sum_{n=0}^{L-j}(ic_{n}-id_{n}){}_{\frac{L-n}{2}}C_{\frac{j-n}{2}}\quad (j\in odd)
         \end{cases}
         \end{align*}
         ただし、${}_{i}C_{j>i}=0$とする。
-    \item $\phi_{L}$及び$\Phi_{L-1,j}$を逆引き
+    \item $\Phi_{L,j}$から$\phi_{L}$及び$\Phi_{L-1,j}$を逆引き
     \begin{align*}
         \Phi_{L-1,j}=\sum_{k=0}^{j}\begin{cases}
             -e^{-i(-1)^{j}\phi_{L}}\Phi_{L,k}\quad (j+k\in odd)\\
@@ -3387,12 +3422,434 @@ input:(A,B,C,D)及びそのL次べき展開
         =\frac{\sum_{k=1,odd}^{i}\Phi_{i,k}}{\sum_{k=1,even}^{i}\Phi_{i,k}}
     \end{align*}
     \item $\phi_{1}$が出てくるまで繰り返す。最後に$\Phi_{0,0}=1$が出れば完了。
-\end{enumerate}   
+\end{enumerate}
+OUTPUT:$(\phi_{1}\cdots \phi_{L})$
 \end{setupbox}
 \begin{proofbox}
-    以下では、この手続きから
+    以下では、このアルゴリズムにより、実際にQSP漸化式や境界条件を保ちつつ($\phi_{1}\cdots \phi_{L}$)が取り出せることをみる。\\
+    \\
+    ただし、ここではLが偶数の場合についてのみ、上記が正しいことを示す。
+    \begin{enumerate}
+        \item 1の逆引きについて\\
+        ここは次数の比較により直接行える。\\
+        例えば(A,B)部分について、Wの展開のうち、A,Bに相当するのはjが偶数である部分なので、
+        \begin{align*}
+            W|_{\text{(A,B)部分}}=\sum_{j\in even}(-i)^{j}x^{L-j}(1-x)^{\frac{j}{2}}(Re(\Phi_{L,j})+iIm(\Phi_{L,j})\sigma_{z})
+        \end{align*}
+        一方、(A,B)のべき展開は、
+        \begin{align*}
+            A(x)I+iB(x)\sigma_{z}=\sum_{n\in even}(a_{n}+ib_{n}\sigma_{z})x^{n}
+        \end{align*}
+        この時、以下の恒等式を用いる。
+        \begin{align*}
+            x^{n}&=x^{n}(x^{2}-(1-x^{2}))^{\frac{L-n}{2}}\\
+            &=\sum_{k=0}^{\frac{L-n}{2}}{}_{\frac{L-n}{2}}C_{k}x^{L-2k}(1-x^{2})^{k}
+        \end{align*}
+        故に、
+        \begin{align*}
+            A(x)I+iB(x)\sigma_{z}=\sum_{n\in even}\sum_{k=0}^{\frac{L-n}{2}}{}_{\frac{L-n}{2}}C_{k}x^{L-2k}(1-x^{2})^{k}(a_{n}+ib_{n}\sigma_{z})
+        \end{align*}
+        ここで、j=2kと変数を取り替えると、
+        \begin{align*}
+            A(x)I+iB(x)\sigma_{z}=\sum_{n\in even}\sum_{j=0,even}^{L-n}{}_{\frac{L-n}{2}}C_{\frac{j}{2}}x^{L-j}(1-x^{2})^{\frac{j}{2}}(a_{n}+ib_{n}\sigma_{z})
+        \end{align*}
+        添字の和は以下のように交換できる。
+        \begin{align*}
+            \sum_{n\in even}\sum_{j=0,even}^{L-n}=\sum_{j\in even}\sum_{n=0,even}^{L-j}
+        \end{align*}
+        故に、(A,B)のべき展開は、
+        \begin{align*}
+            A(x)I+iB(x)=\sum_{j\in even}x^{L-j}(1-x^{2})^{\frac{j}{2}}(\sum_{n=0,even}^{L-j}{}_{\frac{L-n}{2}}C_{\frac{j}{2}}(a_{n}+ib_{n}\sigma_{z}))
+        \end{align*}
+        実部、虚部ごとに係数比較し、まとめると、
+        \begin{align*}
+            \Phi_{L,j}=i^{j}\sum_{n=0}^{L-j}(a_{n}+ib_{n}){}_{\frac{L-n}{2}}C_{\frac{j}{2}}\quad (j\in even)
+        \end{align*}
+        また、jが奇数の時にも同様のことを行うと、
+        \begin{align*}
+            \Phi_{L,j}=i^{j}\sum_{n=0}^{L-j}(ic_{n}-id_{n}){}_{\frac{L-n}{2}}C_{\frac{j-n}{2}}\quad (j\in odd)
+        \end{align*}
+        \item 2の逆引きについて\\
+        QSP漸化式を用いて逆引きしていく。まず、QSP漸化式を持ちると、
+        \begin{align*}
+    \Phi_{L,j}
+    &= \Phi_{L-1,j}
+    + e^{i(-1)^{j+1}\phi_L}\Phi_{L-1,j-1},\\
+    \Phi_{L,j-1}
+    &= \Phi_{L-1,j-1}
+    + e^{i(-1)^j\phi_L}\Phi_{L-1,j-2},\\
+    &\ \vdots\\
+    \Phi_{L,1}
+    &= \Phi_{L-1,1}
+    + e^{i\phi_L}\Phi_{L-1,0},\\
+    \Phi_{L,0}
+    &= \Phi_{L-1,0}.
+\end{align*}
+故に、右辺を連鎖的に消していくと、
+\begin{align*}
+        \Phi_{L-1,j}=\sum_{k=0}^{j}\begin{cases}
+            -e^{-i(-1)^{j}\phi_{L}}\Phi_{L,k}\quad (j+k\in odd)\\
+            \Phi_{L,k}\quad (j+k\in odd)
+        \end{cases}
+\end{align*}
+また、境界条件$\Phi_{L-1,L}=0$を満たすようにするには、QSP漸化式から、
+\begin{align*}
+    \Phi_{L,L}=\Phi_{L-1,L}+e^{i(-1)^{L+1}\phi_L}\Phi_{L-1,L-1}=e^{-i\phi_L}\Phi_{L-1,L-1}
+\end{align*}
+を満たすように$\phi_{L}$を選ばないとダメ。これを満たすには、上記の$\Phi_{L-1,j}$の具体系から、
+\begin{align*}
+    e^{i\phi_{L}}=\frac{\sum_{k\in odd}^{L}\Phi_{L,k}}{\sum_{k\in even}^{L}\Phi_{L,k}}
+\end{align*}
+となる必要がある。
+\item 3について\\
+これはLをL-1に、L-1をL-2に置換して2を行えばそれでいい。
+\item 4について\\
+\begin{align*}
+            W_{\vec{\phi}}(\theta=0)=\sum_{j}1^{L-j}0^{j}\hat{\Phi}_{L,j}=\hat{\Phi}_{L,0}=I \iff \Phi_{L,0}=1
+\end{align*}
+故に、$\Phi_{0,0}=1$の必要十分条件が$A(1)=1,B(1)=0$であるため、これを満たすなら本アルゴリズムは正常に終了する。
+\end{enumerate}
 \end{proofbox}
-最後に、他のQSP実行可能性について考える。先ほどの例では、$\ket{G}$の状態をpost-selectionすることにより、QSPを実装したが、post-selectionを$\ket{G}$にこだわる必要は全くない。他の基底を選ぶこと別の関数を実装する、といった議論も全然可能である。
+以上の手続きにより、組 $(A,B,C,D)$ が所定の条件を満たす場合には、それらに対応する QSP を具体的に構成することが可能となった。\\
+\\
+しかし、実際にQSPを適用する上では、これだけでは十分ではない。\\
+実際の応用では、前節で見たように、補助量子ビットに対する post-selection を通じて、最終的な変換から $(A,B)$ などの一部の成分のみを取り出して利用することが多い。そのため、実際の応用では $(A,B,C,D)$のすべてがあらかじめ指定されるとは限らず、例えば $(A,B)$ や $(A,C)$ のみが所望の関数として与えられる場合を考える必要がある。\\
+\\
+そこで次に、$(A,B,C,D)$ の一部のみが指定された場合に、それらを含むQSPが実装可能であることの必要十分条件を考える。例えば、(A,B)のみの場合は以下の通りである。
+\begin{resultbox}{(A,B)のQSP実装条件}
+    (A,B)が与えられた際、QSPでそれが実装可能である必要十分条件は、以下を満たすことである。
+    \begin{enumerate}
+        \item $|x|\leq 1$において、
+        \begin{align*}
+            A(x)^{2}+B(x)^{2}\leq 1
+        \end{align*}
+        \item $|x|\geq 1$において、
+        \begin{align*}
+            A(x)^{2}+B(x)^{2}\geq 1
+        \end{align*}
+        \item (Lが偶数の時)$x\geq 0$において、
+        \begin{align*}
+            A(ix)^{2}+B(ix)^{2}\geq 1
+        \end{align*}
+    \end{enumerate}
+\end{resultbox}
+\begin{proofbox}
+    十分条件は後に構成アルゴリズムを与えることで示す。
+    ここでは必要性のみを示す。
+
+    $W$のユニタリ性より、
+    \begin{align}
+        A(x)^2+B(x)^2
+        +\alpha(x)\left(C(y)^2+D(y)^2\right)=1,
+        \qquad
+        y^2=1-x^2,
+        \label{eq:AB-unitarity}
+    \end{align}
+    が成り立つ。ただし、
+    \begin{align*}
+        \alpha(x)=
+        \begin{cases}
+            1 & (L\in\mathrm{odd}),\\
+            x^2 & (L\in\mathrm{even})
+        \end{cases}
+    \end{align*}
+    とした。また、$C,D$はいずれの場合も実係数の奇多項式である。
+
+    \begin{enumerate}
+        \item $|x|\leq1$のとき、$y=\sqrt{1-x^2}$は実数である。
+        したがって
+        \begin{align*}
+            \alpha(x)\left(C(y)^2+D(y)^2\right)\geq0
+        \end{align*}
+        であり、Eq.~\eqref{eq:AB-unitarity}より
+        \begin{align*}
+            A(x)^2+B(x)^2\leq1.
+        \end{align*}
+
+        \item $|x|\geq1$のとき、
+        \begin{align*}
+            y=i\sqrt{x^2-1}
+        \end{align*}
+        は純虚数である。
+        $C,D$は実係数の奇多項式なので、$C(y),D(y)$も純虚数となり、
+        \begin{align*}
+            C(y)^2+D(y)^2\leq0.
+        \end{align*}
+        また$\alpha(x)\geq0$であるから、
+        Eq.~\eqref{eq:AB-unitarity}より
+        \begin{align*}
+            A(x)^2+B(x)^2\geq1.
+        \end{align*}
+
+        \item $L$が偶数の場合、Eq.~\eqref{eq:AB-unitarity}は
+        \begin{align*}
+            A(x)^2+B(x)^2
+            +x^2\left(C(y)^2+D(y)^2\right)=1
+        \end{align*}
+        である。ここで$x\to ix$とすると、
+        $y^2=1+x^2$であるから
+        \begin{align*}
+            A(ix)^2+B(ix)^2
+            -x^2\left[
+                C\!\left(\sqrt{1+x^2}\right)^2
+                +D\!\left(\sqrt{1+x^2}\right)^2
+            \right]
+            =1.
+        \end{align*}
+        $C,D$は実係数多項式であるため、$x\geq0$において角括弧内は非負である。
+        したがって
+        \begin{align*}
+            A(ix)^2+B(ix)^2\geq1.
+        \end{align*}
+    \end{enumerate}
+\end{proofbox}
+
+十分条件の証明として、(A,B)から$(\phi_{i})$の復元アルゴリズムを構築することを行う。しかしこの際、$(A,B,C,D)$から$(\phi_{i})$を復元する方法は既に構築したので、これを行うためには$(A,B)$から$(A,B,C,D)$を構築できればそれで十分である。故に、その方法を構築する。
+\begin{setupbox}{(A,B)から(A,B,C,D)を復元するアルゴリズム}
+INPUT:条件を満たす(A,B)
+    \begin{enumerate}
+    \item $F(x)=1-A(x)^2-B(x)^2$を計算する。
+    \item $y^2=1-x^2$を用いて
+    \begin{align*}
+        G(y)=
+        \begin{cases}
+            F(\sqrt{1-y^2})
+            &(L\in\mathrm{odd}),\\[1mm]
+            \displaystyle
+            \frac{F(\sqrt{1-y^2})}{1-y^2}
+            &(L\in\mathrm{even})
+        \end{cases}
+    \end{align*}
+    と定義する。
+    \item $G(y)$を複素数体上で因数分解する。
+    \item 複素共役な零点の各組から一方を選び、
+    \begin{align*}
+        Q(y)=\gamma\prod_k(y-z_k)
+    \end{align*}
+    が
+    \begin{align*}
+        G(y)=Q(y)Q(y)^*
+    \end{align*}
+    を満たすように構成する。
+    \item$C(y)=Re Q(y),\,
+        D(y)=Im Q(y)$
+    とする。
+\end{enumerate}
+OUTPUT:QSP実装条件を満たす(A,B,C,D)
+\end{setupbox}
+\begin{proofbox}
+    上記のアルゴリズムによって構成された$(A,B,C,D)$が、
+    QSP実装条件を満たすことを示す。
+
+    まず、
+    \begin{align*}
+        F(x)=1-A(x)^2-B(x)^2
+    \end{align*}
+    とする。
+    $A,B$は同一のパリティを持つため、$F(x)$は偶多項式である。
+    したがって、$y^2=1-x^2$を用いることで、
+    $F$は$y^2$の多項式として書き直すことができる。
+
+    まず$L$が奇数の場合を考える。このとき
+    \begin{align*}
+        G(y)=F\!\left(\sqrt{1-y^2}\right)
+    \end{align*}
+    とする。
+    $0\leq y\leq1$では$x=\sqrt{1-y^2}\in[-1,1]$であるから、
+    条件1より
+    \begin{align*}
+        G(y)=1-A(x)^2-B(x)^2\geq0.
+    \end{align*}
+    一方、$|y|\geq1$では
+    \begin{align*}
+        x=i\sqrt{y^2-1}.
+    \end{align*}
+    $L$が奇数の場合、$A,B$は実係数の奇多項式であるから
+    $A(ix),B(ix)$は純虚数であり、
+    \begin{align*}
+        A(ix)^2+B(ix)^2\leq0.
+    \end{align*}
+    したがって、この場合にも$G(y)\geq0$である。
+    よって$G$は実軸上で非負な実多項式となる。
+
+    次に$L$が偶数の場合には
+    \begin{align*}
+        G(y)
+        =
+        \frac{
+        F\!\left(\sqrt{1-y^2}\right)
+        }{1-y^2}
+    \end{align*}
+    とする。
+    $|y|<1$では条件1より分子、分母ともに非負であるから
+    $G(y)\geq0$である。
+    一方、$|y|>1$では
+    \begin{align*}
+        x=i\sqrt{y^2-1}
+    \end{align*}
+    であり、条件3から
+    \begin{align*}
+        A(ix)^2+B(ix)^2\geq1.
+    \end{align*}
+    したがって分子$F(ix)$は非正である。
+    また$1-y^2<0$であるため、
+    やはり
+    \begin{align*}
+        G(y)\geq0
+    \end{align*}
+    を得る。
+    なお、$y=\pm1$における特異点は
+    QSPの境界条件により可除である。
+
+    以上より、いずれの場合にも$G(y)$は実軸上で非負な
+    実係数多項式である。
+
+    このとき$G$の非実零点は複素共役な組
+    \begin{align*}
+        (z,z^*)
+    \end{align*}
+    として現れる。
+    また、実零点は$G(y)\geq0$より必ず偶数重根である。
+    したがって、それぞれの複素共役な零点の組から一方を選び、
+    実零点についてはその重複度の半分を選ぶことで、
+    ある複素係数多項式$Q(y)$を
+    \begin{align*}
+        Q(y)=\gamma\prod_k(y-z_k)
+    \end{align*}
+    と構成でき、
+    \begin{align*}
+        G(y)=Q(y)Q(y)^*
+    \end{align*}
+    とできる。
+
+    ここで
+    \begin{align*}
+        Q(y)=C(y)+iD(y)
+    \end{align*}
+    と実部、虚部に分解すれば、
+    \begin{align*}
+        Q(y)Q(y)^*
+        &=(C(y)+iD(y))(C(y)-iD(y))\\
+        &=C(y)^2+D(y)^2.
+    \end{align*}
+    よって
+    \begin{align*}
+        G(y)=C(y)^2+D(y)^2.
+    \end{align*}
+
+    したがって$L$が奇数の場合には
+    \begin{align*}
+        1-A(x)^2-B(x)^2
+        =C(y)^2+D(y)^2,
+    \end{align*}
+    すなわち
+    \begin{align*}
+        A(x)^2+B(x)^2+C(y)^2+D(y)^2=1.
+    \end{align*}
+
+    また$L$が偶数の場合には
+    \begin{align*}
+        \frac{1-A(x)^2-B(x)^2}{x^2}
+        =C(y)^2+D(y)^2
+    \end{align*}
+    であるから、
+    \begin{align*}
+        A(x)^2+B(x)^2
+        +x^2C(y)^2+x^2D(y)^2=1.
+    \end{align*}
+
+    さらに、$G$は$y$について偶多項式であり、
+    $y=0$に必要な零点を$Q$へ割り当てた上で
+    $\pm z$の零点を対称に選ぶことで、
+    $Q$を奇多項式として取ることができる。
+    したがって、その実部、虚部である$C,D$も
+    実係数の奇多項式として取ることができる。
+
+    以上より、構成された$(A,B,C,D)$は
+    QSP実装条件を満たす。
+\end{proofbox}
+最後に、(A,B)ではなく、よりいろんな論文で取り上げられている仮定である、(A,C)が与えられた場合に、QSPが実装できる条件、及びアルゴリズムを、証明はしないが与えておく。ここで、notationを少し変更し、Qubitizationのものを採用することにする。
+\begin{resultbox}{$(A,C)$のQSP実装条件}
+    $(A,C)$が与えられた際、それを含むQSPが実装可能であるための
+    必要十分条件は、以下を満たすことである。
+    \begin{enumerate}
+        \item $A$が余弦関数の有限和として
+        \begin{align*}
+            A(\theta)
+            =
+            \sum_{k}a_k\cos(k\theta)
+        \end{align*}
+        と表される。
+
+        \item $C$が正弦関数の有限和として
+        \begin{align*}
+            C(\theta)
+            =
+            \sum_{k}c_k\sin(k\theta)
+        \end{align*}
+        と表される。
+
+        \item
+        \begin{align*}
+            A(0)=1.
+        \end{align*}
+
+        \item 任意の実数$\theta$に対して
+        \begin{align*}
+            A(\theta)^2+C(\theta)^2\leq1.
+        \end{align*}
+    \end{enumerate}
+\end{resultbox}
+\begin{setupbox}{$(A,C)$から$(A,B,C,D)$を構成するアルゴリズム}
+    INPUT：上記のQSP実装条件を満たす$(A,C)$
+
+    \begin{enumerate}
+        \item 以下の非負な三角多項式を定義する。
+        \begin{align*}
+            F(\theta)
+            :=
+            1-A(\theta)^2-C(\theta)^2.
+        \end{align*}
+
+        \item $z=e^{i\theta}$とおき、$F(\theta)$をLaurent多項式
+        $F(z)$として表す。
+
+        \item $F(z)$を複素数体上で因数分解し、
+        \begin{align*}
+            F(\theta)
+            =
+            Q(e^{i\theta})Q(e^{i\theta})^{*}
+        \end{align*}
+        を満たす多項式$Q$を構成する。
+        ただし、零点は複素共役性および
+        $z\leftrightarrow z^{-1}$の対称性を保つように選択する。
+
+        \item $Q(e^{i\theta})$を実部と虚部に分解し、
+        \begin{align*}
+            Q(e^{i\theta})
+            =
+            B(\theta)+iD(\theta)
+        \end{align*}
+        とする。
+
+        \item このとき
+        \begin{align*}
+            F(\theta)
+            =
+            B(\theta)^2+D(\theta)^2
+        \end{align*}
+        であるから、
+        \begin{align*}
+            A(\theta)^2+B(\theta)^2
+            +C(\theta)^2+D(\theta)^2
+            =1
+        \end{align*}
+        を満たす。
+    \end{enumerate}
+
+    OUTPUT：QSP実装条件を満たす$(A,B,C,D)$
+\end{setupbox}
+
 
 \subsubsection{一般化（量子特異値変換）}
 今までの章では、暗にBlock-encodingで埋め込む行列がエルミートであるとか、そもそも正方行列であるといったことを暗に仮定して議論を進めていた。しかし、各証明を注意深く追うと、真に必要なのは以下の表式であった。
