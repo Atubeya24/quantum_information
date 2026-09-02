@@ -1,0 +1,49 @@
+This is upBibTeX, Version 0.99d-j0.36-u1.29 (utf8.euc) (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: utphys.bst
+Database file #1: ref.bib
+Warning--I didn't find a database entry for ""
+You've used 8 entries,
+            2438 wiz_defined-function locations,
+            645 strings with 5446 characters,
+and the built_in function-call counts, 2457 in all, are:
+= -- 250
+> -- 87
+< -- 0
++ -- 40
+- -- 20
+* -- 224
+:= -- 271
+add.period$ -- 11
+call.type$ -- 8
+change.case$ -- 11
+chr.to.int$ -- 0
+cite$ -- 8
+duplicate$ -- 153
+empty$ -- 236
+format.name$ -- 27
+if$ -- 626
+int.to.chr$ -- 0
+int.to.str$ -- 8
+missing$ -- 26
+newline$ -- 30
+num.names$ -- 8
+pop$ -- 70
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 106
+stack$ -- 0
+substring$ -- 67
+swap$ -- 70
+text.length$ -- 7
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 15
+width$ -- 9
+write$ -- 68
+is.kanji.str$ -- 0
+(There was 1 warning)

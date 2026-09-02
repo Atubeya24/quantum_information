@@ -262,6 +262,10 @@ INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /usr/local/texlive/2023/texmf-dist/tex/latex/base/omscmr.fd
+INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisr-v.tfm
+INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisr-h.tfm
+INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisr-v.tfm
+INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisr-h.tfm
 INPUT ./bell_generate.eps
 INPUT ./bell_generate.eps
 INPUT ./bell_generate.eps
@@ -316,10 +320,6 @@ INPUT ./renyi_of_Ising.eps
 INPUT ./renyi_of_Ising.eps
 INPUT ./renyi_of_Ising.eps
 INPUT renyi_of_Ising.eps
-INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisr-v.tfm
-INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisr-h.tfm
-INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisr-v.tfm
-INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisr-h.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmti7.tfm
 INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmti7.tfm
 INPUT ./Max-cut.eps
@@ -358,4 +358,9 @@ INPUT ./error_propagate.eps
 INPUT ./error_propagate.eps
 INPUT ./error_propagate.eps
 INPUT error_propagate.eps
+INPUT build/main.bbl
+INPUT build/main.bbl
+INPUT build/main.bbl
+INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
+INPUT /usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm
 INPUT build/main.aux

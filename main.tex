@@ -218,7 +218,7 @@
 \\
 第三部では、実用的な量子コンピュータの実現に不可欠な量子誤り訂正理論を解説する。量子系は環境との相互作用によって容易に誤りを生じるため、大規模な量子計算を実現するためには誤り耐性を持つ情報処理手法が必要となる。本章では量子誤りの基本的性質から始め、代表的な誤り訂正符号およびフォールトトレラント量子計算の考え方を概観する。\\
 \\
-以上を通じて、本論文では量子情報理論を「何が量子的資源であり」、「なぜそれが有用であり」、「どのように実現されるのか」という三つの観点から統一的に理解することを目指す。\\
+以上を通じて、本論文では量子情報理論を「何が量子的資源であり」、「なぜそれが有用であり」、「どのように実現されるのか」という三つの観点から統一的に理解することを目指す。本論は基本的には\cite{Nielsen:2012yss}の流れに基づくが、議論が不足であると感じた、及び最新の内容に触れる場合は、適宜それを別個の論文で保管する形で議論を進めていく。\\
 \\
 以下、量子ゲートや実際の量子計算の結果を本論文に載せる場合、全てIBMが出している量子計算専用のパッケージであるQiskitを使用し記述したものである。また、特に断りのない限り計算は実機ではなくシミュレーションを用いている。本論文はゲート方式の汎用型量子計算モデルを想定している。更に本論文は自然単位系を想定し、logと記述した場合の対数の底は2とする。\\
 
@@ -1151,7 +1151,7 @@ $U_{copy}$は任意の状態をコピーできるので、用意した2つの量
 \subsection{Bell-state Fidelity とテレポーテーション性能}
 量子もつれの定量化の概念を知った今なら、例えば「一般の共有状態をteleportation resourceとして用いたとき、その性能はどのように特徴づけられるだろうか」といった疑問が生じるはずである。\\
 \\
-これに対する答えとして、「最大エンタングル状態とのFidelityが、teleportationの最大平均Fidelityを直接決定する」というstatementが知られている。この節では、この厳密な関係を与える。\\
+これに対する答えとして、「最大エンタングル状態とのFidelityが、teleportationの最大平均Fidelityを直接決定する」というstatementが知られている\cite{}。この節では、この厳密な関係を与える。\\
 しかし、これを行うためには、考えうる全てのテレポーテーションのチャンネルを考えねばならない。これには一般に大変な労力を伴うが、いくつかの道具を整理すると、今回の場合はかなり単純な問題に帰着できる。
 
 \subsubsection{state-channel correspondence}
@@ -2591,7 +2591,7 @@ zスピンの上向き、下向き意味を量子ビットの1,0に対応させ�
 あとは粒子数、及び時間分割の回数分この回路を繰り返せば、$t=t_{1}$から$t=t_{2}$までの状態をN分割してその状態を再現することが出来る。
  
 \subsection{断熱準備}
-前節で時間発展を量子回路上で表したが、この時間発展回路をどのように生かすべきであろうか？本節では、この時間発展を活かした最たるアルゴリズムとして、「断熱準備」を導入し、実際に物理量を計算する。\\
+前節で時間発展を量子回路上で表したが、この時間発展回路をどのように生かすべきであろうか？本節では、この時間発展を活かした最たるアルゴリズムとして、「断熱準備」\cite{Farhi:2000ikn}を導入し、実際に物理量を計算する。\\
 \\
 まず、断熱準備を述べる際に、キーワードとなる定理として、「断熱定理」が挙げられる。そのstatementは以下である。
 \begin{theorembox}{断熱定理}
@@ -2641,7 +2641,7 @@ N=5においてはTが大きい場合高い確率で基底状態が取り出せ�
     \caption{磁化$<\sigma_{x}>$のJ依存性}
     \label{ising_zika}
 \end{figure}
-厳密解は以下のように与えられる。ただし、これは文献から引っ張ってきた。
+厳密解は以下のように与えられる。ただし、これは文献\cite{Pfeuty:1970}から引っ張ってきた。
 \begin{equation}\begin{split}
     <\sigma_{x}>=\frac{1}{\pi}\int_{0}^{\pi} dk\frac{1+\frac{J}{g}cosk}{\sqrt{1+(\frac{J}{g})^{2}+2\frac{J}{g}cosk}}
 \end{split} \end{equation}
@@ -2714,7 +2714,7 @@ Hilbert空間の次元がそれぞれ$N_{A},N_{B}$となる複合系ABが存在�
     \label{Bell_renyi}
 \end{figure}
 確かに、誤差の範囲内でBell状態の2次renyiエントロピーが計算できたと言える。\\
-先ほど求めた横地場イジングモデルの基底状態に対して2次renyiエントロピーのアルゴリズムを適用する。まず粒子数N、スピン鎖を分割した際の分割空間内の粒子数Lとした際、$N,L \to \infty$の場合の２次renyiエントロピーの厳密解は以下の通り。
+先ほど求めた横地場イジングモデルの基底状態に対して2次renyiエントロピーのアルゴリズムを適用する。まず粒子数N、スピン鎖を分割した際の分割空間内の粒子数Lとした際、$N,L \to \infty$の場合の２次renyiエントロピーの厳密解は以下の通り\cite{Franchini:2007eu}。
 \begin{equation}\begin{split}
     f_{2}(\rho)&=-\frac{1}{6}ln(k^{2}k'^{\frac{3}{2}}\frac{(1+k')^{2}}{1-k'}) +\frac{1}{2}ln2\\
     k&=\frac{J}{g} \:\:\:\:\:\:k'=\sqrt{1-k^{2}}
@@ -2826,8 +2826,7 @@ max-cut問題の解を与えるためには、すべての点での{0,1}を総�
 ここまで、量子優位性が期待されている代表的なアルゴリズムとして、「位相推定」、「Groverのアルゴリズム」、「ハミルトニアンシミュレーション」を見てきた。無論、これら以外にも、多数の量子アルゴリズムが提案されている。\\
 \\
 しかし、これらのアルゴリズムは、それぞれ個別に考案されたものであり、その構成原理が必ずしも明確に統一されているわけではない。新たな量子アルゴリズムを「より効率的に」設計する際には、「そもそも量子計算で何ができるか？」ということを知ることが求められる。この視点から、量子アルゴリズムをより構成論的・統一的に構築する視点が求められる。\\
-\\
-そこで本章では、多くの量子アルゴリズムを包括的に理解できる枠組みである、量子特異値変換（Quantum Singular Value Transformation; QSVT）について解説する。QSVTを理解することで、既存の量子アルゴリズムを統一的な観点から捉えられるだけでなく、新たな量子アルゴリズムを設計するための基本的な指針を得ることができる。\\
+そこで本章では、多くの量子アルゴリズムを包括的に理解できる枠組みである、量子特異値変換（Quantum Singular Value Transformation; QSVT）を、主に\cite{Low:2016sck}\cite{Low:2016znh}\cite{Gilyen:2018khw}に基づき解説する。QSVTを理解することで、既存の量子アルゴリズムを統一的な観点から捉えられるだけでなく、新たな量子アルゴリズムを設計するための基本的な指針を得ることができる。\\
 \\
 なお、最初に述べておくが、この章にも直感的な描像は、導入を除いて存在しない。故に、「なぜ書いた人はこれを思いついたのか？」という理由を探ることは多分無駄である。「原論文の著者は天才だったんだな」と思いつつ見てほしい。
 
@@ -2846,7 +2845,7 @@ Groverのアルゴリズムとは、以下のreflectionを複数回作用させ�
 \begin{align*}
     \Pi=I-\sum_{x}2\ket{x}\bra{x}
 \end{align*}
-特に、最適化問題などでは、解空間を、ハミルトニアンの基底状態に写像することが多い。この場合、reflectionは以下の通りである。
+特に、最適化問題などでは、解空間を、ハミルトニアンを基底状態に写像することが多い。この場合、reflectionは以下の通りである。
 \begin{align*}
     \Pi= \sum sign(\hat{H}-\mu I)\ket{E}\bra{E}
 \end{align*}
@@ -2881,7 +2880,7 @@ Block-encodingとは、ある行列Aを、以下のように、Ancillaを加え�
 \end{align*}
 \end{defbox}
 この行列Hが、例えばハミルトニアンシミュレーションの場合、ハミルトニアンに相当する。\footnote{ハミルトニアンはあくまでエルミートな行列なので、こんなユニタリの中に埋め込むのは無理やんけと思われるかもしれないが、結果としては、規格化さえすれば大丈夫である。詳しくはハミルトニアンシミュレーションの項で見る。}\\
-このBlock-encodingを用いた手法を考えることで、ユニタリであるという制約に縛られることなく、より広いクラスの関数を実装できる。\\
+このBlock-encodingを用いた手法を考えることで、ユニタリであるという制約に縛られることなく、より広いクラスの関数を実装できる。最初にこの方法が提示された論文は\cite{Low:2016sck}である。\\
 \\
 問題は、Block-encodingの形で行列Aが与えられた際に、どのようにしてその多項式を位相として吐き出す回路を実装できるかである。単純な例から話を進める。例えば、まずは多項式実装の一番目に簡単な例として、以下のような回路の実装方法を考える。
 \begin{problembox}{Aを作用させる回路}
@@ -2948,7 +2947,7 @@ AのBlock-encoding回路Uが与えられたとして、以下のような回路�
     \item 避けなくても良い問題\\
     逆に避けなくても良いのはUを2回かけても答えが$H^{2}$にならない問題そのものである。極論、求めたい関数近似は冪乗の形で書けるものでなくても良いため、あーアプローチが悪かったなー別のがいいかもなーくらいの感覚でいい。
 \end{enumerate}
-少なくとも、Block-encodingからダイレクトで与えられたUは、上記の2乗の計算から「避けなければならない問題」を含んでいる。この問題を回避するために、Block-encoding回路Uを「改造」しなければならない。この改造した回路のことを、原論文に習い「iterate W」と呼ぶことにする。以下では、iterateの上手い構成方法、「Qubitization」を与える。
+少なくとも、Block-encodingからダイレクトで与えられたUは、上記の2乗の計算から「避けなければならない問題」を含んでいる。この問題を回避するために、Block-encoding回路Uを「改造」しなければならない。この改造した回路のことを、原論文\cite{Low:2016znh}に習い「iterate W」と呼ぶことにする。以下では、iterateの上手い構成方法、「Qubitization」を与える。
 
 \subsubsection{iterate Wの構成(Qubitization)}
 まずは、iterate Wを構築する際にほしい性質を述べる。これは上記の解析、および問題提起から、以下のような性質が挙げられる。
@@ -3220,9 +3219,7 @@ iterate Wを構成できたので、話を本題に戻す。本題は、以下�
 \end{problembox}
 ここから先は、ひたすらこの問題を解いていく作業となる。\\
 \subsubsection{QSP実装条件}
-各々のアルゴリズムを見る前に、上記の手続きを行った際に、$\phi$を変えることによって、どのような関数を実装できるか、及び求めたい関数から逆算して$\phi$の値を探り当てる方法はあるか？といった一般論を与えておくことにする。\\
-\\
-まず、Wの具体系についての情報を与えることにする。
+各々のアルゴリズムを見る前に、上記の手続きを行った際に、$\phi$を変えることによって、どのような関数を実装できるか、及び求めたい関数から逆算して$\phi$の値を探り当てる方法はあるか？といった一般論を与えておくことにする。ここでの議論は主に\cite{Low:2016znh}を参考にしている。\\
 \\
 有名な結果として、以下が存在する。
 \begin{theorembox}{QSP実装条件}
@@ -3337,11 +3334,59 @@ iterate Wを構成できたので、話を本題に戻す。本題は、以下�
     \end{enumerate}
 \end{proofbox}
 十分条件の証明は、(1)~(5)を満たす与えられた式から$\vec{\phi}$を逆算するアルゴリズムを、具体的に示すことによって与えられる。以下、そのアルゴリズムを紹介する。
-\begin{setupbox}{QSPの$\phi$を求めるアルゴリズム}
-    
+\begin{setupbox}{(A,B,C,D)のから$\phi$を求めるアルゴリズム}
+input:(A,B,C,D)及びそのL次べき展開
+\begin{align*}
+    A(\lambda)&=\sum_{n=0}^{L}a_{n}x^{n}\\
+    B(\lambda)&=\sum_{n=0}^{L}b_{n}x^{n}\\
+    C(\lambda)&=\sum_{n=0}^{L}c_{n}x^{n}\\
+    D(\lambda)&=\sum_{n=0}^{L}d_{n}x^{n}
+\end{align*}
+求める関数：$W_{\vec{\phi}}[\theta_{\lambda}]$
+\begin{align*}
+        W_{\vec{\phi}}[\theta_{\lambda}]
+        &=W_{\phi_{1}}W_{\phi_{2}}\cdots W_{\phi_{L}}\\
+        &=\sum_{j=0}^{L}cos^{L-n}\theta_{\lambda}sin^{n}\theta_{\lambda}\Phi_{L,n}
+    \end{align*}
+\begin{enumerate}
+    \item $(A,B,C,D)$から$\Phi_{L,j}$を逆引き
+        \begin{align*}
+        \Phi_{L,j}=
+        \begin{cases}
+            i^{j}\sum_{n=0}^{L-j}(a_{n}+ib_{n}){}_{\frac{L-n}{2}}C_{\frac{j}{2}}\quad (j\in odd)\\
+            i^{j}\sum_{n=0}^{L-j}(ic_{n}-id_{n}){}_{\frac{L-n}{2}}C_{\frac{j-n}{2}}\quad (j\in even)
+        \end{cases}
+        \end{align*}
+        ただし、${}_{i}C_{j>i}=0$とする。
+    \item $\phi_{L}$及び$\Phi_{L-1,j}$を逆引き
+    \begin{align*}
+        \Phi_{L-1,j}=\sum_{k=0}^{j}\begin{cases}
+            -e^{-i(-1)^{j}\phi_{L}}\Phi_{L,k}\quad (j+k\in odd)\\
+            \Phi_{L,k}\quad (j+k\in odd)
+        \end{cases}
+    \end{align*}
+    及び、
+    \begin{align*}
+        e^{i\phi_{L}}
+        =\frac{\sum_{k=1,odd}^{L}\Phi_{L,k}}{\sum_{k=1,even}^{L}\Phi_{L,k}}
+        =\frac{c_{2[\frac{L}{2}]-1}+id_{2[\frac{L}{2}]-1}}{(-1)^{[\frac{L}{2}]}(a_{L}+ib_{L})}
+    \end{align*}
+    \item $\Phi_{i,j}$から$\phi_{i}$及び$\Phi_{i-1,j}$を逆引き
+     \begin{align*}
+        \Phi_{i-1,j}=\sum_{k=0}^{j}\begin{cases}
+            -e^{-i(-1)^{j}\phi_{L}}\Phi_{i,k}\quad (j+k\in odd)\\
+            \Phi_{i,k}\quad (j+k\in odd)
+        \end{cases}
+    \end{align*}
+    \begin{align*}
+        e^{i\phi_{i}}
+        =\frac{\sum_{k=1,odd}^{i}\Phi_{i,k}}{\sum_{k=1,even}^{i}\Phi_{i,k}}
+    \end{align*}
+    \item $\phi_{1}$が出てくるまで繰り返す。最後に$\Phi_{0,0}=1$が出れば完了。
+\end{enumerate}   
 \end{setupbox}
 \begin{proofbox}
-    
+    以下では、この手続きから
 \end{proofbox}
 最後に、他のQSP実行可能性について考える。先ほどの例では、$\ket{G}$の状態をpost-selectionすることにより、QSPを実装したが、post-selectionを$\ket{G}$にこだわる必要は全くない。他の基底を選ぶこと別の関数を実装する、といった議論も全然可能である。
 
@@ -3356,7 +3401,7 @@ iterate Wを構成できたので、話を本題に戻す。本題は、以下�
     \text{(行列の固有値)}&\to\text{(行列の特異値)}\\
     \text{(行列の固有ベクトル)}&\to\text{(行列の特異ベクトル)}
 \end{align*}
-故に、Block-encodingを使った関数の実装は、より一般の行列でも同様の手続きで行える。この一連の一般化した手続きを、量子特異値変換(QSVT)と呼ぶ。\\
+故に、Block-encodingを使った関数の実装は、より一般の行列でも同様の手続きで行える。この一連の一般化した手続きを、量子特異値変換(QSVT)と呼ぶ\cite{Gilyen:2018khw}。\\
 \\
 ただし、上記で問題がないと言ったのは、あくまでQubitizationと言った一連の動作と似たような手続きを部分空間内で定義できると言った意味である。本当にQSVTを構築する際には、例えば特異ベクトルが右と左で異なるといった、数学的な煩わしさが非常に多い。\\
 目的の関係上、本論では主にエルミート行列しか扱わない。故に、QSVTへの拡張に伴う数学的な煩わしさは全てスキップし、上記のQSPまでの一連の流れをQSVTと呼ぶことにする。（詳しくは原論文参照）
@@ -3672,18 +3717,105 @@ B(a,b)=\frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}
 \subsubsection{Groverのアルゴリズム}
 以下では、GroverのアルゴリズムもQSVTの文脈で記述できることを示す。Groverのアルゴリズムにおけるブラックボックスは、特定の解を反転させるようなreflectionを用意することであった。QSVTを用いると、関数近似の範囲で、上記のreflectionを用意することが可能になる。\\
 \\
-核となるのは、以下の2定理である。
-\begin{theorembox}{projection回路の構成可能性}
-以下のような
-    
+ただし、一般的なオラクルの形は、当然ながら関数の形に依存するため、そこに触れることなしにreflectionの構成を議論することは難しい。故に、この説では、一般論ではなく、特定の問題に対してのGrover回路をQSVTを用いて構築することで、QSVTを用いてGroverを再現できる可能性を示すにとどめることにする\footnote{ただし、ここでいうQSVTとは実を言うとQSPのことである。QSVTの場合、全ての特異値が正であるため、reflectionが自明になってしまう。}。\\
+\\
+Groverのアルゴリズムとして、以下のような問題を考える。
+\begin{problembox}{問題のセットアップ}
+    行列の固有値を考えた際、その固有値が正となるような固有ベクトルを求めよ。
+\end{problembox}
+この問題において、reflectionというのは、以下のように書き換えることが可能である。
+\begin{align*}
+    f(\lambda)\ket{\lambda}\bra{\lambda}=sign(\lambda)\ket{\lambda}\bra{\lambda}
+\end{align*}
+故に、Groverのアルゴリズムを上記の問題において構成できるかどうかは、sign関数を多項式近似で実装できるかに全てがかかっている。この実装可能性の答えは、以下のような性質で与えられる。
+\begin{theorembox}{sign関数の実装可能性}
+符号関数は、誤差率$\epsilon\in [0,\frac{1}{2}]$,幅$\delta>0$とした時、次数$L=O(\frac{1}{\delta}log\frac{1}{\epsilon})$の下で以下のように関数近似できる。
+\begin{enumerate}
+    \item $x\in[-2,2]$に対し、$|P(x)|\leq 1$\\
+    \item $x\in\frac{[-2,2]}{(-\delta,\delta)}$に対し、$|P(x)-sign(x)|\in \epsilon$
+\end{enumerate}
 \end{theorembox}
-\begin{theorembox}{reflection回路の構成可能性}
+\begin{proofbox}
+    
+\end{proofbox}
+sign関数は符号のみを返すアルゴリズムであるため、確かにreflectionである。故に、固有値の正負を分ける問題においては、確かに上記のsign関数を実装することが、Groverを実装することにつながる。
 
-    
-\end{theorembox}
 \subsection{新しいアルゴリズムの開発}
-\subsubsection{新しい位相推定}
+以下では、QSVTにインスパイアされ提案された、いくつかの新しいアルゴリズムを紹介する。\\
+ただし、以下ではBlock-encodingの規格化、及びAncillaのサイズが非自明となるような拡張を考えることが多い。このnotationを整理するために、以下のような記法を導入する。
+\begin{defbox}{Block-encodingの記法}
+    ある行列Aの、以下を満たすBlock-eoncoding Uが与えられたとする。
+    \begin{enumerate}
+        \item Aの規格化定数が$\alpha$である。
+        \item ancillaの数がm個である。
+        \item Block-eoncodinが厳密にAを与えるのではなく、限りなくAに近い行列を与えるものとして考える。すなわち、
+        \begin{align*}
+            |A-\bra{0}^{\otimes m}U\ket{0}^{\otimes m}|\leq \epsilon
+        \end{align*}
+    \end{enumerate}
+    この時、Uのことを、$(\alpha,m,\epsilon)$-block encodingと呼ぶことにする。
+\end{defbox}
 \subsubsection{基底準備}
+例えば、QSVTを用いることにより、断熱近似とは異なる手法で基底状態を用意する方法が近年提示されている\cite{Lin:2020zni}。アイデアとしては、ただreflectionを構成してGroverを行うだけである。従来ではこのreflectionを構成することが困難であったが、QSVTを用いることで上記のrefectionを構成できるようになったため、このセットアップが具体的に実現できるようになった。以下では、このオラクルの構築方法について議論を行う。\\
+\\
+鍵となる定理を与える前に、「$(\beta,b,\epsilon_{1})$-state preparation pair」というものを準備しておく。
+\begin{defbox}{$(\beta,b,\epsilon_{1})$-state preparation pair}
+    ある実数ベクトル$y_{j}$に対して、$|y|\leq \beta$とする。\\
+    \\
+    ユニタリ変換の組$(P_{L},P_{R})$が$(\beta,b,\epsilon_{1})$-state preparation pairであるということは、以下を満たすことである。
+    \begin{enumerate}
+        \item b量子ビットの初期状態への応答が以下の通りである\footnote{ただし、$2^{b}>j$である。}。
+        \begin{align*}
+            P_{R}\ket{0}^{\otimes b}=\sum_{j=0}^{2^{b}-1}c_{j}\ket{j}\\
+            P_{L}\ket{0}^{\otimes b}=\sum_{j=0}^{2^{b}-1}d_{j}\ket{j}
+        \end{align*}
+        \item $\sum_{j=0}^{m-1}|\beta(c_{j}^{\star}d_{j})-y_{j}|\leq \epsilon_{1}\equiv$
+        \item $j\in [m,2^{b}-1]$に対して、$c_{j}^{\star}d_{j}=0$\footnote{ただし、これは縮約和を取っていないことに注意。}
+    \end{enumerate}
+\end{defbox}
+オラクルの構成において、カギとなる定理は以下の通りである。
+\begin{theorembox}{Block-encodingの加法}
+    行列$A_{j}$の$(\alpha,m,\epsilon_{2})$-Block-encoding $U_{j}$が与えられたとする。\\
+    この時、
+    \begin{enumerate}
+        \item $(\beta,b,\epsilon_{1})$-state preparation pair $(P_{L},P_{R})$
+        \item b量子ビット分のancilla
+    \end{enumerate}
+    を用いることで、$A\equiv \sum_{j}y_{j}A_{j}$の$(\alpha\beta,m+b,\alpha\epsilon_{1}+\alpha\beta\epsilon_{2})$-Block encodingが構成可能である。
+\end{theorembox}
+\begin{proofbox}
+    まず、以下のようなユニタリ行列Wを定義する。
+    \begin{align*}
+        W=\sum_{j=0}^{m-1}\ket{j}\bra{j}_{b}\otimes U_{j}+(I-\sum_{j=m}^{2^{b}-1}\ket{j}\bra{j}_{b})\otimes I
+    \end{align*}
+    このWの前後で、state preparation pair及びその逆行列を作用させた以下の行列を定義する。
+    \begin{align*}
+        \tilde{W}\equiv P_{L}^{\dagger}WP_{R}
+    \end{align*}
+    この時、$\tilde{W}$をpost-selectionしたものが、Block-encodingの加法に対応している。この事実は以下のように理解できる。
+    \begin{align*}
+        &|A-\alpha\beta\bra{0}^{\otimes b}\bra{0}^{\otimes a}W\ket{0}^{\otimes b}\ket{0}^{\otimes a}|\\
+        =&|A-\alpha\beta \sum_{j=0}^{m-1}\sum_{j'=0}^{m-1}c_{j}^{\star}d_{j'}\bra{j}_{b}\bra{0}^{\otimes a}W\ket{j'}_{b}\ket{0}^{\otimes a}|\\
+        =&|A-\alpha\sum_{j=0}^{m-1}\beta(c_{j}^{\star}d_{j})\bra{0}^{\otimes a}U_{j}\ket{0}^{\otimes a}|\\
+        \leq&\alpha\epsilon_{1}+\alpha\sum_{j}y_{j}|A_{j}-\bra{0}^{\otimes a}U_{j}\ket{0}^{\otimes a}|\\
+        \leq& \alpha\epsilon_{1}+\alpha\beta\epsilon_{2}
+    \end{align*}
+    故に、state-preparation pair及びWを構築できたとすると、Block-encodingの加法が構築可能である\footnote{Wの構築はそこまで難しくない。適当なUに対してコントロールを実装するだけで済むからである。しかし、state-preparation pairは対応する線形結合次第なので、そんなに自明ではない。}。
+\end{proofbox}
+上記の定理を用いると、ハミルトニアンHに対して、例えば単位行列を足したもの、すなわち$H'=H-\mu I$のBlock-encodingが可能となることを意味する。これは、エネルギー固有値のシフトを導入できたことを意味する。これを用いて、例えば基底エネルギーのみマイナス符号にすることを考えることが出来る。\\
+\\
+一方、行列の固有値の符号だけを抜き出す、sign関数を導出できることは、Groverの欄で見たとおりである。\\
+これらの事実を組み合わせると、以下のようなセットアップで、基底状態のみを反転させるreflection、及び基底準備を導出できる。
+\begin{setupbox}{QSVTによる基底準備アルゴリズム}
+\begin{enumerate}
+    \item ハミルトニアンのBlock-encodingを導入
+    \item Block-encodingの加法により、エネルギーシフトを導入
+    \item エネルギーシフト後のBlock-encodingに対して、sign関数を導入。これが実質的なGroverのreflectionとなる。
+    \item Groverのアルゴリズムより、基底準備が完了
+\end{enumerate}
+\end{setupbox}
+
+\subsubsection{新しい位相推定}
 
 \section{量子誤り訂正理論}
 量子コンピュータは1粒子1粒子のダイナミクスを厳密に制御することによって、はじめて成立する計算機である。当然、粒子は軽いため、微小な力などでも大きな状態変化を起こす。このことから、量子コンピュータは、例えば熱放射、宇宙線といった外部エラーの要因に非常に弱い。\\
@@ -6013,22 +6145,8 @@ Jordan-Wigner変換を用いると、例えば横磁場イジングモデルな�
 \subsubsection{IsingモデルにおけるKZ機構}
 \clearpage
 
-\begin{thebibliography}
-1.量子コンピュータと量子通信1-量子力学とコンピュータ化学-・Michael A Nilsen, Isaac L. Chuang 共著/木村達也 訳\\
-2.量子コンピュータと量子通信2-量子コンピュータとアルゴリズム-・Michael A Nilsen, Isaac L. Chuang 共著/木村達也 訳\\
-3.量子コンピュータと量子通信3-量子通信・情報処理と誤り訂正-・Michael A Nilsen, Isaac L. Chuang 共著/木村達也 訳\\
-4.量子情報理論 第3版・佐川弘幸/吉田宣章 著\\
-5.量子アルゴリズム・中山 茂著\\
-6.量子情報と時空の物理 量子情報物理学入門[第2版]・堀田典寛 著\\
-7.量子測定と量子制御[第2版] ・沙川貴大,上田正二 共著\\
-8.量子コンピューティング・ワークブックへようこそ！・東京大学素粒子物理国際研究センター\\(URL:https://utokyo-icepp.github.io/qc-workbook/welcome.html)\\
-9.Quantum Phase Transitions / subir Sachdev\\
-10.Polynomial-time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer・Peter W. shor arXiv:quant-ph/9508027\\
-11.Quantum Computation by Adibatic Evolution ・Edward Farhi,Jeffrey Goldstone,Sam Gutmann,Michael Sipser arXiv:quant-ph/0001106\\
-12.A Mini-Introduction To Information Theory  ・Edward Witten  arXiv:1805.11965v5 \\
-13.Renyi Entropy of the XY Spin Chain ・F. Franchini ,A. R. Its ,V. E. Korepin 　arXiv:0707.2534\\
-14.The One-Dimensional Ising Model with a Transverse Field  ・PIERRE PFEUTY  ANNALS OF PHYSICS\\
-15.Classically emulated digital quantum simulation for screening and confinement in the Schwinger model with a topological term ・Masazumi Honda, Etsuko Itou, Yuta Kikuchi, Lento Nagano, Takuya Okuda  arXiv:2105.03276
-\end{thebibliography}
+\bibliographystyle{utphys}
+\bibliography{ref}
+
 
 \end{document}

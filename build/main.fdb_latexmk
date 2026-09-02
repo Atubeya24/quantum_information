@@ -1,11 +1,19 @@
 # Fdb version 4
-["dvipdf"] 1787360365 "build/main.dvi" "build/main.pdf" "build/main" 1787360370 0
-  "build/main.dvi" 1787360365 1558492 42565cc038508846dcded7cfc26cf545 "latex"
+["bibtex build/main"] 1788322546 "build/main.aux" "build/main.bbl" "build/main" 1788322556 0
+  "./ref.bib" 1788322537 3613 de40b5d524c235b37046122297fd230d ""
+  "./utphys.bst" 1788321014 27063 96951f0a9c5ad175897559dd4aae1267 ""
+  "build/main.aux" 1788322551 21552 29b8fa8cc0251c5930cf4d1570f0deae "latex"
+  (generated)
+  "build/main.bbl"
+  "build/main.blg"
+  (rewritten before read)
+["dvipdf"] 1788322551 "build/main.dvi" "build/main.pdf" "build/main" 1788322556 0
+  "build/main.dvi" 1788322551 1661452 7c47f7f5d85f30abb91b9348867a81bb "latex"
   (generated)
   "build/main.pdf"
   (rewritten before read)
-["latex"] 1787360360 "/Users/atsushimaebeya/Desktop/github/quantum_information/main.tex" "build/main.dvi" "main" 1787360370 0
-  "/Users/atsushimaebeya/Desktop/github/quantum_information/main.tex" 1787360160 436285 731e3c4713b35424c13cfa02e18b8123 ""
+["latex"] 1788322546 "/Users/atsushimaebeya/Desktop/github/quantum_information/main.tex" "build/main.dvi" "main" 1788322556 0
+  "/Users/atsushimaebeya/Desktop/github/quantum_information/main.tex" 1788322537 452550 0ca7a806b73a453ffd51556775d7daef ""
   "/usr/local/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -27,7 +35,9 @@
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
+  "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1136768653 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmti7.tfm" 1136768653 1492 86331993fe614793f5e7e755835c31c5 ""
+  "/usr/local/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm" 1136768653 768 1321e9409b4137d6fb428ac9dc956269 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisg-h.tfm" 1522271273 812 52bd92aa20c58a398601cda6dd62c8d1 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisg-v.tfm" 1522271273 536 5f2475e9deb198c23894800d3c5eed00 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisr-h.tfm" 1522271273 812 52bd92aa20c58a398601cda6dd62c8d1 ""
@@ -168,14 +178,15 @@
   "QuantumPhaseEstimationCircuit.eps" 1786151060 824004 0923941ab502582badb890f3ac0bbd2e ""
   "T_dependence_of_missing.eps" 1786151060 1538856 03f9feda8eb1a5707811484c3464c20d ""
   "bell_generate.eps" 1786151060 260551 6fe543589d94b7ee95cf677806b5e15e ""
-  "build/main.aux" 1787360365 20658 de5349b0ad6c154cbd1dc4e6e43c84f8 "latex"
-  "build/main.toc" 1787360365 9419 b12d732b270cc0cdc17c90d5c2ee0b13 "latex"
+  "build/main.aux" 1788322551 21552 29b8fa8cc0251c5930cf4d1570f0deae "latex"
+  "build/main.bbl" 1788322546 2313 97103855ed3e6de06884866af15ed0ca "bibtex build/main"
+  "build/main.toc" 1788322551 9672 072dd9695f97f66a41107fa57333ba1f "latex"
   "error_obs.eps" 1786151060 3403356 440a80fb2f8974d97df7ee96a2849aab ""
   "error_propagate.eps" 1786426237 17497 1b7c9176b89fc111800bc2c25e68651f ""
   "first.eps" 1786426253 2176671 3850c6ddc98a905dcc3f75a697c1a31c ""
   "ladder.eps" 1786426223 5914408 985fa2819cb4566456979814b122f1d3 ""
   "magnetization.eps" 1786151060 1517854 9a7cc04190c1c3c4d51c2053387f03d3 ""
-  "main.tex" 1787360160 436285 731e3c4713b35424c13cfa02e18b8123 ""
+  "main.tex" 1788322537 452550 0ca7a806b73a453ffd51556775d7daef ""
   "quantum_circuit.eps" 1786151060 395896 4947bc5fbaa4253e50fa1a99fbc2d1bb ""
   "renyi_entropy_of_bell.eps" 1786151060 11864 34a074e5567f810553d9db032a807735 ""
   "renyi_of_Ising.eps" 1786151060 786248 87464cecde7061be4c9f2a236bd998c5 ""
