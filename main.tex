@@ -3172,10 +3172,14 @@ iterate Wを構成できたので、話を本題に戻す。本題は、以下�
 この時、iterateに回転を加えた「回転iterate」を定義する。
 \begin{defbox}{回転iterate}
     \begin{align*}
-        W_{\phi}\equiv  \bigoplus_{\lambda} \begin{pmatrix}
+        W_{\phi} &\equiv Z_{\phi-\frac{\pi}{2}} WZ_{-\phi+\frac{\pi}{2}} \\&= \bigoplus_{\lambda} \begin{pmatrix}
             \lambda & -ie^{-i\phi}\sqrt{1-\lambda^{2}}\\
             -ie^{i\phi}\sqrt{1-\lambda^{2}} & \lambda
-        \end{pmatrix} =Z_{\phi-\frac{\pi}{2}} WZ_{-\phi+\frac{\pi}{2}}
+        \end{pmatrix} 
+        \\&= \bigoplus_{\lambda} \begin{pmatrix}
+            cos\theta_{\lambda} & -ie^{-i\phi}sin\theta_{\lambda}\\
+            -ie^{i\phi}\sin\theta_{\lambda} & cos\theta_{\lambda}
+        \end{pmatrix} 
     \end{align*}
     ただし、ZはHilbert空間$
         H_{\lambda}=<\ket{\lambda}\ket{G},\ket{\lambda^{\perp}}>

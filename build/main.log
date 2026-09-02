@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.141592653-p4.1.0-u1.29-230214-2.6 (utf8.uptex) (TeX Live 2023) (preloaded format=uplatex 2023.6.27)  2 SEP 2026 13:15
+This is e-upTeX, Version 3.141592653-p4.1.0-u1.29-230214-2.6 (utf8.uptex) (TeX Live 2023) (preloaded format=uplatex 2023.6.27)  2 SEP 2026 13:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -775,47 +775,48 @@ LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
 (Font)              No change on input line 3099.
  [92] [93]
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3182.
+(Font)              No change on input line 3186.
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3182.
+(Font)              No change on input line 3186.
  [94]
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3226.
+(Font)              No change on input line 3230.
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3226.
+(Font)              No change on input line 3230.
  [95]
-Overfull \hbox (44.13252pt too wide) detected at line 3291
+Overfull \hbox (44.13252pt too wide) detected at line 3295
 []
  []
 
 
-Overfull \hbox (67.48132pt too wide) detected at line 3306
+Overfull \hbox (67.48132pt too wide) detected at line 3310
 []
  []
 
 [96] [97] [98] [99] [100] [101]
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3540.
+(Font)              No change on input line 3544.
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3540.
+(Font)              No change on input line 3544.
  [102] [103] [104]
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3670.
+(Font)              No change on input line 3674.
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3670.
+(Font)              No change on input line 3674.
+ [105]
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3686.
+(Font)              No change on input line 3690.
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3686.
- [105] [106] [107]
+(Font)              No change on input line 3690.
+ [106] [107]
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3767.
+(Font)              No change on input line 3771.
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3767.
+(Font)              No change on input line 3771.
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3773.
+(Font)              No change on input line 3777.
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 3773.
+(Font)              No change on input line 3777.
  [108] [109] [110] [111] [112] [113] [114]
 File: shor-code.eps Graphic file (type eps)
  <shor-code.eps>
@@ -835,32 +836,32 @@ File: ladder.eps Graphic file (type eps)
  <ladder.eps> [132] [133] [134]
 File: error_propagate.eps Graphic file (type eps)
  <error_propagate.eps> [135] [136] [137] [138] [139] [140] [141]
-Overfull \hbox (3.84937pt too wide) in paragraph at lines 4867--4869
+Overfull \hbox (3.84937pt too wide) in paragraph at lines 4871--4873
 \JY2/mc/m/n/10 これを書くためには 、 初期状態に対し 、 符号空間へ \OT1/cmr/m/n/10 map \JY2/mc/m/n/10 するような \OT1/cmr/m/n/10 Projection$^^E$
  []
 
 [142] [143] [144] [145] [146] [147]
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 5075.
+(Font)              No change on input line 5079.
 LaTeX Font Info:    Kanji font shape `JY2/mc/m/it' undefined
-(Font)              No change on input line 5075.
+(Font)              No change on input line 5079.
  [148] [149] [150] [151] [152] [153] [154] [155] [156] [157] [158] [159] [160] [161]
-Overfull \hbox (21.89049pt too wide) detected at line 5542
+Overfull \hbox (21.89049pt too wide) detected at line 5546
 []
  []
 
 [162]
-Overfull \hbox (78.3167pt too wide) detected at line 5601
+Overfull \hbox (78.3167pt too wide) detected at line 5605
 []
  []
 
 [163]
-Overfull \hbox (9.90082pt too wide) detected at line 5613
+Overfull \hbox (9.90082pt too wide) detected at line 5617
 []
  []
 
 [164] [165] [166] [167]
-Overfull \hbox (4.03177pt too wide) detected at line 5746
+Overfull \hbox (4.03177pt too wide) detected at line 5750
 []
  []
 
@@ -904,4 +905,4 @@ Here is how much of TeX's memory you used:
  929 hyphenation exceptions out of 8191
  91i,25n,99p,1293b,1044s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on build/main.dvi (178 pages, 1661452 bytes).
+Output written on build/main.dvi (178 pages, 1661396 bytes).
