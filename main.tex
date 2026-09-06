@@ -5609,10 +5609,10 @@ magic-state蒸留のアイデアは、「誤りをある程度許容してmagic-
 \begin{align*}
     1-\epsilon = 1- exp (\frac{T}{N^{2}}) \iff T=O(N^{2}long\frac{1}{\epsilon})
 \end{align*}
-また、時間発展回路自体もTrotter近似を用いているため、その分割分の誤差が存在する。この誤差を$\epsilon_{tro}$程度に抑えるために分割数を$O(Tlog\frac{1}{\epsilon_{tro}})$とする。時間発展1step分の回路の計算量はO(N)であるため、
+また、時間発展回路自体もTrotter近似を用いているため、その分割分の誤差が存在する。この誤差を$\epsilon_{tro}$程度に抑えるために分割数を$O(T\frac{1}{\epsilon_{tro}})$とする。時間発展1step分の回路の計算量はO(N)であるため、
 \begin{resultbox}{断熱オンリーの場合の必要計算量}
 \begin{align*}
-    \text{(断熱準備の計算量)}=O(N)\times O(Tlog\frac{1}{\epsilon_{tro}})=O(N^{3}log\frac{1}{\epsilon}log\frac{1}{\epsilon_{tro}})
+    \text{(断熱準備の計算量)}=O(N)\times O(T\frac{1}{\epsilon_{tro}})=O(N^{3}log\frac{1}{\epsilon}\frac{1}{\epsilon_{tro}})
 \end{align*}
 \end{resultbox}
 次に、ハイブリットアルゴリズムにおける計算量を考える。
@@ -5636,7 +5636,7 @@ Filteringの方で初期状態用意のクエリを複数回用いるため、�
 次に、初期状態用意クエリの計算量を考えるが、問題設定から、断熱時間はパラメータとして与えられる。これが大きいほどFilteringが楽になり、
 小さいほどFilteringに時間がかかることがFiltering回路の計算量と断熱クエンチの結果から直感的に理解できる。このため、$T=O(N^{a})$とこちらで与えたとすると、トロッター誤差と、時間発展1step分の回路がO(N)であることを踏まえると、計算量は以下の通りとなる。
 \begin{align*}
-    \text{(初期状態用意クエリ計算量)}=O(N^{1+a}log\frac{1}{\epsilon_{tro}})
+    \text{(初期状態用意クエリ計算量)}=O(N^{1+a}\frac{1}{\epsilon_{tro}})
 \end{align*}
 最後に、$\gamma$の値を与える。これはKZ機構の解析において、$N>>1$として、$P_{GS}$の積分を評価することで求められる。そのために、積分を以下の形に分ける。
 \begin{align*}
@@ -5665,7 +5665,7 @@ Filteringの方で初期状態用意のクエリを複数回用いるため、�
 となる。残りの定数は、問題設定から全てO(1)であるため無視していい。結局$T=O(N^{a})$の際のハイブリットの計算量は、
 \begin{resultbox}{$T=O(N^{a})$のハイブリットアルゴリズムの計算量}
     \begin{align*}
-    \text{(hybridの計算量)}=&O(N^{1+a}exp(N^{1-\frac{a}{2}})log\frac{1}{\epsilon_{tro}}) \\
+    \text{(hybridの計算量)}=&O(N^{1+a}exp(N^{1-\frac{a}{2}})\frac{1}{\epsilon_{tro}}) \\
     &+ O(N(N^{1-\frac{a}{2}}+log\frac{1}{\epsilon})exp(N^{1-\frac{a}{2}}))\\
     &+ O((N^{1-\frac{a}{2}}+log\frac{1}{\epsilon})exp(N^{1-\frac{a}{2}}))
 \end{align*}
@@ -5684,7 +5684,7 @@ Filteringの方で初期状態用意のクエリを複数回用いるため、�
 故に、最良計算量は以下のようであると推定される。
 \begin{resultbox}{ハイブリットアルゴリズムの最良計算量}
     \begin{align*}
-        O(N^{3}log\frac{1}{\epsilon_{tro}})+O(Nlog\frac{1}{\epsilon})
+        O(N^{3}\frac{1}{\epsilon_{tro}})+O(Nlog\frac{1}{\epsilon})
     \end{align*}
 \end{resultbox}
 誤差依存性に関しては確かに掛け算が足し算になったくらいの改善が見られた。スケーリングはexpが重すぎるため、改善の余地が見られなかった。モデル依存？
@@ -5964,58 +5964,587 @@ IがAに対して凹であるため、Aの定義から相対エントロピー�
 2．$q_{n}p_{n-1}-p_{n}q_{n-1}=(-1)^{n}$\\
 1に関してはほぼ自明であり、2は\eqref{renbun_katei}の$q_{n},p_{n}$の式にそれぞれ$p_{n-1},q_{n-1}$をかけて引くことで導出できる。1,2により、nが偶数であるなら$\lambda > \frac{2}{\delta}-1 >2-1=1$である。これにより$\lambda$は1より大きい有理数であるため、連分数展開$[b_{0}\cdots b_{m}]$を考えることが出来る。これによって$\phi=[a_{0}\cdots a_{n},b_{0}\cdots b_{m}]$であることがわかる。nが奇数であれば$a_{n}=a_{n}-1 +\frac{1}{1}$とすることにより偶数のnによる連分数展開に考え直し同様の議論が使える。以上より連分数展開の何次かの収束値を考えることにより、近似値から正確な分数を取り出すことが出来る（上の例ではn+m+2で連分数が終了することに対し、n+1次収束をとることで正確な$\frac{s}{r}$が推定できるわけである）。
 
- \section{鈴木・トロッター分解}
-\begin{theorembox}{鈴木・トロッター分解}
-  \begin{equation}\begin{split}
-     \lim_{k \to \infty} exp(\frac{A}{k})exp(\frac{B}{k})
-     =exp[k^{-1}(A+B)+O(k^{-2})]
-  \end{split} \end{equation}
+\section{鈴木・トロッター分解}
+量子系の時間発展を量子回路上で実装する際、Hamiltonian 全体の指数演算子を直接実装することは一般には容易ではない。一方、Hamiltonian が
+\begin{align}
+    H=\sum_{j=1}^{n}H_j
+\end{align}
+のように、それぞれの時間発展演算子 $e^{-iH_jt}$ を比較的容易に実装できる項へ分解されている場合には、各項による時間発展を逐次的に作用させることによって、全体の時間発展を近似することができる。この方法が鈴木・トロッター分解である。
+
+まず、その基本となる二つの演算子に対する関係を示す。
+
+\begin{theorembox}{Baker--Campbell--Hausdorff 展開}
+二つの演算子 $A,B$ と十分小さい実数 $t$ に対して、
+\begin{align}
+    e^{tA}e^{tB}
+    =
+    \exp\left(
+        t(A+B)
+        +
+        \frac{t^2}{2}[A,B]
+        +
+        O(t^3)
+    \right)
+\end{align}
+が成り立つ。
 \end{theorembox}
+
 \begin{proofbox}
-これを証明をするために、まずは以下の式を証明することを考える。
-\begin{equation}\begin{split}
-     exp(tA)exp(tB) = exp(t(A+B) + \frac{t^{2}}{2}[A,B] +O(t^{3}))
- \end{split} \end{equation}
- まずは$f(t)\equiv exp(tA)exp(tB)\equiv exp(g(t))$と定義し、f(t)のテイラー展開を求める。
- \begin{equation}\begin{split}
-     f^{\prime}(t) &= exp(tA)t(A+B)exp(tB)\\
-     f^{\prime \prime}(t) &= exp(tA)t^{2}A(A+B)exp(tB)+exp(tA)t^{2}(A+B)Bexp(tB)\\
-     &=exp(tA)t^{2}(A^{2}+2AB+B^{2})exp(tB)\\
-     &=exp(tA)t^{2}(A^{2}+AB+BA+B^{2}+AB-BA)exp(tB)\\
-     &=exp(tA)((tA+tB)^{2}-[tA,tB])exp(tB)
-\end{split} \end{equation}
- よって$f(t)$のテイラー展開は以下のように書くことが出来る。
- \begin{equation}\begin{split}
-     f(t) = 1+t(A+B)+\frac{1}{2}t^{2}((A+B)^{2}+[A,B])+O(t^{3})\\
-     F(t) \equiv t(A+B)+\frac{1}{2}t^{2}((A+B)^{2}+[A,B])+O(t^{3})
- \end{split} \end{equation}
-この時、$g(t)=log(f(t))$と書くことが出来るため、上で求めた$f(t)$を代入した後に$log$をのテイラー展開を使用すると、g(t)の具体形を求めることが出来る。そのため、まずは$log(1+x)$のテイラー展開を求める。
- \begin{equation}\begin{split}
-     log(1+x) = x-\frac{1}{2}x^{2}+O(x^{3})
- \end{split} \end{equation}
-これにより、g(t)を以下のように求めることが出来る。(ただし、最後以外は$t^{3}$以降の項は省略する。)
- \begin{equation}\begin{split}
-     g(t)&=log(1+F(t))\\
-     &=F(t)-\frac{1}{2}F(t)^{2}\\
-     &=t(A+B)+\frac{1}{2}t^{2}((A+B)^{2}+[A,B])-\frac{1}{2}(t(A+B)
-     +\frac{1}{2}t^{2}((A+B)^{2}+[A,B]))^{2}\\
-     &=t(A+B)+\frac{1}{2}t^{2}[A,B]+O(t^{3})
- \end{split} \end{equation}￥￥￥
-g(t)の具体形を$f(t)\equiv exp(tA)exp(tB)\equiv exp(g(t))$に代入すると、確かに欲しい式が導けた。この関係は任意のtについて成り立つので、$t=k^{-1}$として$k\to \infty$の状況を考えると鈴木トロッター分解の公式が導出できる。具体的には以下のようにする。
-\begin{equation}\begin{split}
-    &\lim_{t \to 0} exp(tA)exp(tB)=exp[t(A+B)+O(t)^{2}]\\
-    &\lim_{k \to \infty} exp(\frac{A}{k})exp(\frac{B}{k}) 
-    = exp[k^{-1}(A+B)+O(k^{-2})]\\
-\end{split} \end{equation}
-この最後の式が、鈴木・トロッター分解の公式となる。
+まず、
+\begin{align}
+    f(t)=e^{tA}e^{tB}
+\end{align}
+と定義する。
+
+$t=0$ において、
+\begin{align}
+    f(0)=I
+\end{align}
+である。
+
+また、一階微分は
+\begin{align}
+    f'(t)
+    =
+    Ae^{tA}e^{tB}
+    +
+    e^{tA}Be^{tB}
+\end{align}
+であるため、
+\begin{align}
+    f'(0)=A+B
+\end{align}
+となる。
+
+さらに、二階微分は
+\begin{align}
+    f''(t)
+    =
+    A^2e^{tA}e^{tB}
+    +
+    2Ae^{tA}Be^{tB}
+    +
+    e^{tA}B^2e^{tB}
+\end{align}
+であるから、
+\begin{align}
+    f''(0)
+    =
+    A^2+2AB+B^2
+\end{align}
+を得る。
+
+ここで、
+\begin{align}
+    A^2+2AB+B^2
+    =
+    (A+B)^2+[A,B]
+\end{align}
+であるため、$f(t)$ を $t=0$ のまわりで Taylor 展開すると、
+\begin{align}
+    f(t)
+    =
+    I
+    +
+    t(A+B)
+    +
+    \frac{t^2}{2}
+    \left(
+        (A+B)^2+[A,B]
+    \right)
+    +
+    O(t^3)
+\end{align}
+となる。
+
+ここで、
+\begin{align}
+    f(t)=I+F(t)
+\end{align}
+とおくと、
+\begin{align}
+    F(t)
+    =
+    t(A+B)
+    +
+    \frac{t^2}{2}
+    \left(
+        (A+B)^2+[A,B]
+    \right)
+    +
+    O(t^3)
+\end{align}
+である。
+
+さらに、
+\begin{align}
+    f(t)=e^{g(t)}
+\end{align}
+と書けば、
+\begin{align}
+    g(t)=\log\left(I+F(t)\right)
+\end{align}
+である。
+
+対数の展開
+\begin{align}
+    \log(I+X)
+    =
+    X-\frac{1}{2}X^2+O(X^3)
+\end{align}
+を用いると、
+\begin{align}
+    g(t)
+    &=
+    F(t)-\frac{1}{2}F(t)^2+O(t^3)
+    \\
+    &=
+    t(A+B)
+    +
+    \frac{t^2}{2}
+    \left(
+        (A+B)^2+[A,B]
+    \right)
+    -
+    \frac{t^2}{2}(A+B)^2
+    +
+    O(t^3)
+    \\
+    &=
+    t(A+B)
+    +
+    \frac{t^2}{2}[A,B]
+    +
+    O(t^3).
+\end{align}
+
+したがって、
+\begin{align}
+    e^{tA}e^{tB}
+    =
+    \exp\left(
+        t(A+B)
+        +
+        \frac{t^2}{2}[A,B]
+        +
+        O(t^3)
+    \right)
+\end{align}
+を得る。
 \end{proofbox}
-また、第一式にexp(tC)といった式を順次追加していくことにより、鈴木トロッター分解の式が成り立つなら、自明に以下の式に拡張できることがわかる。
-\begin{theorembox}{鈴木・トロッター分解の拡張}
-\begin{equation}\begin{split}
-     \lim_{k \to \infty} \Pi_{i=1}^{n}exp(\frac{A_{i}}{k}) 
-     = exp(k^{-1}\sum_{i=1}^{n}A_{i}+ O(k^{-2})) 
-\end{split} \end{equation}
+
+以上の関係から、一次の鈴木・トロッター分解を導くことができる。
+
+\begin{theorembox}{一次鈴木・トロッター分解}
+二つの演算子 $A,B$ に対して、
+\begin{align}
+    e^{A+B}
+    =
+    \lim_{r\to\infty}
+    \left(
+        e^{A/r}e^{B/r}
+    \right)^r
+\end{align}
+が成り立つ。
 \end{theorembox}
+
+\begin{proofbox}
+Baker--Campbell--Hausdorff 展開において、
+\begin{align}
+    t=\frac{1}{r}
+\end{align}
+とすると、
+\begin{align}
+    e^{A/r}e^{B/r}
+    =
+    \exp\left(
+        \frac{A+B}{r}
+        +
+        \frac{1}{2r^2}[A,B]
+        +
+        O(r^{-3})
+    \right)
+\end{align}
+となる。
+
+この演算子を $r$ 回掛け合わせると、
+\begin{align}
+    \left(
+        e^{A/r}e^{B/r}
+    \right)^r
+    =
+    \exp\left(
+        A+B
+        +
+        \frac{1}{2r}[A,B]
+        +
+        O(r^{-2})
+    \right)
+\end{align}
+を得る。
+
+したがって、$r\to\infty$ の極限を取ると、
+\begin{align}
+    \lim_{r\to\infty}
+    \left(
+        e^{A/r}e^{B/r}
+    \right)^r
+    =
+    e^{A+B}
+\end{align}
+が成り立つ。
+\end{proofbox}
+
+この関係は、有限個の演算子に対しても拡張することができる。
+
+\begin{theorembox}{一次鈴木・トロッター分解の一般化}
+有限個の演算子 $A_j$ に対して、
+\begin{align}
+    \exp\left(
+        \sum_{j=1}^{n}A_j
+    \right)
+    =
+    \lim_{r\to\infty}
+    \left(
+        \prod_{j=1}^{n}
+        e^{A_j/r}
+    \right)^r
+\end{align}
+が成り立つ。
+\end{theorembox}
+
+次に、この公式を量子系の時間発展に適用する。Hamiltonian を
+\begin{align}
+    H=\sum_{j=1}^{n}H_j
+\end{align}
+とする。
+
+このとき、時間 $t$ における時間発展演算子は
+\begin{align}
+    U(t)
+    =
+    e^{-iHt}
+    =
+    \exp\left(
+        -it\sum_{j=1}^{n}H_j
+    \right)
+\end{align}
+である。
+
+全時間 $t$ を $r$ 個の区間に分割し、
+\begin{align}
+    \Delta t=\frac{t}{r}
+\end{align}
+とする。
+
+一次鈴木・トロッター分解による一つの時間ステップを
+\begin{align}
+    S_1(\Delta t)
+    =
+    \prod_{j=1}^{n}
+    e^{-iH_j\Delta t}
+\end{align}
+と定義すると、全時間発展は
+\begin{align}
+    U(t)
+    \simeq
+    \left(
+        S_1(\Delta t)
+    \right)^r
+\end{align}
+と近似することができる。
+
+\subsection{一次鈴木・トロッター分解の誤差}
+
+有限の分割数 $r$ を用いる場合には、鈴木・トロッター分解に由来する誤差が生じる。まず、簡単のため
+\begin{align}
+    H=H_1+H_2
+\end{align}
+の場合を考える。
+
+Baker--Campbell--Hausdorff 展開に
+\begin{align}
+    A=-iH_1,
+    \qquad
+    B=-iH_2
+\end{align}
+を代入すると、
+\begin{align}
+    e^{-iH_1\Delta t}
+    e^{-iH_2\Delta t}
+    =
+    \exp\left(
+        -i(H_1+H_2)\Delta t
+        -
+        \frac{\Delta t^2}{2}[H_1,H_2]
+        +
+        O(\Delta t^3)
+    \right)
+\end{align}
+となる。
+
+一方、厳密な一ステップの時間発展は
+\begin{align}
+    e^{-i(H_1+H_2)\Delta t}
+\end{align}
+である。したがって、一ステップあたりの誤差は
+\begin{align}
+    \epsilon_{\mathrm{step}}
+    =
+    O(\Delta t^2)
+\end{align}
+であり、
+\begin{align}
+    \Delta t=\frac{t}{r}
+\end{align}
+を用いると、
+\begin{align}
+    \epsilon_{\mathrm{step}}
+    =
+    O\left(
+        \frac{t^2}{r^2}
+    \right)
+\end{align}
+となる。
+
+しかし、全時間 $t$ の時間発展を構成するためには、この近似を $r$ 回繰り返す必要がある。そのため、全体の誤差は単純に $O(r^{-2})$ とはならず、各時間ステップにおける誤差の蓄積を考慮する必要がある。
+
+そこで、
+\begin{align}
+    U_{\Delta t}
+    &=
+    e^{-iH\Delta t},
+    \\
+    V_{\Delta t}
+    &=
+    S_1(\Delta t)
+\end{align}
+と定義する。
+
+このとき、
+\begin{align}
+    U_{\Delta t}^{r}
+    -
+    V_{\Delta t}^{r}
+    =
+    \sum_{\ell=0}^{r-1}
+    U_{\Delta t}^{r-1-\ell}
+    \left(
+        U_{\Delta t}-V_{\Delta t}
+    \right)
+    V_{\Delta t}^{\ell}
+\end{align}
+という恒等式が成り立つ。
+
+両辺の演算子ノルムを取ると、三角不等式および演算子ノルムの劣乗法性より、
+\begin{align}
+    \left\|
+        U_{\Delta t}^{r}
+        -
+        V_{\Delta t}^{r}
+    \right\|
+    &\leq
+    \sum_{\ell=0}^{r-1}
+    \left\|
+        U_{\Delta t}^{r-1-\ell}
+    \right\|
+    \left\|
+        U_{\Delta t}-V_{\Delta t}
+    \right\|
+    \left\|
+        V_{\Delta t}^{\ell}
+    \right\|.
+\end{align}
+
+$U_{\Delta t}$ および $V_{\Delta t}$ はともにユニタリ演算子であるため、
+\begin{align}
+    \left\|
+        U_{\Delta t}^{m}
+    \right\|
+    &=
+    1,
+    \\
+    \left\|
+        V_{\Delta t}^{m}
+    \right\|
+    &=
+    1
+\end{align}
+が成り立つ。
+
+したがって、
+\begin{align}
+    \left\|
+        U_{\Delta t}^{r}
+        -
+        V_{\Delta t}^{r}
+    \right\|
+    &\leq
+    r
+    \left\|
+        U_{\Delta t}-V_{\Delta t}
+    \right\|
+    \\
+    &=
+    O\left(
+        r\Delta t^2
+    \right).
+\end{align}
+
+ここで $\Delta t=t/r$ を代入すると、
+\begin{align}
+    \epsilon_{\mathrm{Trotter}}
+    &=
+    O\left(
+        r\Delta t^2
+    \right)
+    \\
+    &=
+    O\left(
+        \frac{t^2}{r}
+    \right)
+\end{align}
+となる。
+
+すなわち、一ステップあたりの誤差は
+\begin{align}
+    O(\Delta t^2)
+    =
+    O\left(
+        \frac{t^2}{r^2}
+    \right)
+\end{align}
+であるが、それを $r$ 回繰り返すため、全時間発展に対する誤差は $O(r^{-1})$ となる。
+
+より一般に、
+\begin{align}
+    H=\sum_{j=1}^{n}H_j
+\end{align}
+の場合、一次鈴木・トロッター分解における主要な誤差は Hamiltonian の各項の非可換性によって決定される。具体的には、
+\begin{align}
+    \epsilon_{\mathrm{Trotter}}
+    =
+    O\left(
+        \frac{t^2}{r}
+        \sum_{j<k}
+        \left\|
+            [H_j,H_k]
+        \right\|
+    \right)
+\end{align}
+と評価される。
+
+特に、すべての Hamiltonian 項が互いに可換、すなわち
+\begin{align}
+    [H_j,H_k]=0
+    \qquad
+    \text{for all } j,k
+\end{align}
+である場合には、
+\begin{align}
+    e^{-iHt}
+    =
+    \prod_{j=1}^{n}
+    e^{-iH_jt}
+\end{align}
+が厳密に成立するため、鈴木・トロッター分解による誤差は生じない。
+
+\begin{resultbox}{一次鈴木・トロッター分解の誤差と分割数}
+
+一次鈴木・トロッター分解では、一ステップあたりの誤差は
+\begin{align}
+    \epsilon_{\mathrm{step}}
+    =
+    O\left(
+        \frac{t^2}{r^2}
+    \right)
+\end{align}
+である。一方、全時間発展を構成するためにはこの操作を $r$ 回繰り返す必要があるため、全体の誤差は
+\begin{align}
+    \boxed{
+        \epsilon_{\mathrm{Trotter}}
+        =
+        O\left(
+            \frac{t^2}{r}
+        \right)
+    }
+\end{align}
+となる。
+
+したがって、時間発展を誤差 $\epsilon$ 以下で近似するために必要な分割数は、
+\begin{align}
+    \boxed{
+        r
+        =
+        O\left(
+            \frac{t^2}{\epsilon}
+        \right)
+    }
+\end{align}
+となる。
+
+より一般に、Hamiltonian を
+\begin{align}
+    H=\sum_{j=1}^{n}H_j
+\end{align}
+と分解した場合には、
+\begin{align}
+    \epsilon_{\mathrm{Trotter}}
+    =
+    O\left(
+        \frac{t^2}{r}
+        \sum_{j<k}
+        \left\|
+            [H_j,H_k]
+        \right\|
+    \right)
+\end{align}
+であるため、要求精度 $\epsilon$ を達成するためには
+\begin{align}
+    r
+    =
+    O\left(
+        \frac{t^2}{\epsilon}
+        \sum_{j<k}
+        \left\|
+            [H_j,H_k]
+        \right\|
+    \right)
+\end{align}
+程度の分割数が必要となる。
+
+また、一つの Trotter step を実装するために必要なゲート数を $G_{\mathrm{step}}$ とすると、全時間発展を実装するために必要なゲート数は
+\begin{align}
+    G
+    =
+    O\left(
+        rG_{\mathrm{step}}
+    \right)
+\end{align}
+である。したがって、一次鈴木・トロッター分解によるゲート計算量は
+\begin{align}
+    G
+    =
+    O\left(
+        \frac{t^2}{\epsilon}
+        G_{\mathrm{step}}
+    \right)
+\end{align}
+となる。ただし、Hamiltonian の非可換性を明示する場合には、
+\begin{align}
+    G
+    =
+    O\left(
+        \frac{t^2}{\epsilon}
+        G_{\mathrm{step}}
+        \sum_{j<k}
+        \left\|
+            [H_j,H_k]
+        \right\|
+    \right)
+\end{align}
+となる。
+\end{resultbox}
 
  \section{断熱定理}
 \begin{theorembox}{断熱定理}
