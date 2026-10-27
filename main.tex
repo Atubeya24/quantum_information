@@ -10,6 +10,7 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{tcolorbox}
+\usepackage{amssymb}
 \tcbuselibrary{breakable,skins}
 
 \newcounter{subtopic}[subsubsection]
@@ -22,6 +23,15 @@
     \par\nobreak\smallskip
     \noindent
 }
+
+\providecommand{\ii}{\mathrm{i}}
+\providecommand{\ee}{\mathrm{e}}
+\providecommand{\id}{\mathbb{I}}
+\providecommand{\nv}{\mathrm{nv}}
+\providecommand{\st}{\mathrm{st}}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
 
 % ===== 色 =====
 % ===== colors =====
@@ -862,6 +872,7 @@ $S(A,B)\leq S(A)+S(B)$より$\sum_{i}p_{i}S(\rho_{i})\leq S(\sum_{i}p_{i}\rho_{i
 \begin{goalbox}
 エンタングルメントエントロピーの物理的意味を理解する。
 \end{goalbox}
+
 
 \subsection{エンタングルメントエントロピー}
 まず始めに、始状態が以下のように、直積状態にかけた場合を考える。
@@ -4293,6 +4304,7 @@ sign関数は符号のみを返すアルゴリズムであるため、確かにr
     \item magic-state蒸留の手続きを理解する。
 \end{enumerate}
 \end{goalbox}
+
 \section{誤り訂正理論の基礎}
 \subsection{古典コンピュータの誤り訂正}
 エラーの存在に関しては、別に量子コンピュータに限った話ではない。古典コンピュータにも当然ながら熱の効果や回路の故障など、様々なエラーの要因が存在する。にもかかわらず、少なくとも著者は古典コンピュータを幾年使った中で、そのようなエラーの影響にぶち当たったことはない。このことは、古典コンピュータにおいて、エラー訂正の方法論が確立されていることを意味する。\\
@@ -5638,7 +5650,7 @@ Filteringの方で初期状態用意のクエリを複数回用いるため、�
 \begin{align*}
     \text{(初期状態用意クエリ計算量)}=O(N^{1+a}\frac{1}{\epsilon_{tro}})
 \end{align*}
-最後に、$\gamma$の値を与える。これはKZ機構の解析において、$N>>1$として、$P_{GS}$の積分を評価することで求められる。そのために、積分を以下の形に分ける。
+また、$\gamma$の値を与える。これはKZ機構の解析において、$N>>1$として、$P_{GS}$の積分を評価することで求められる。そのために、積分を以下の形に分ける。
 \begin{align*}
     &\int_{0}^{2\pi}dx \,ln(1-exp\big(-\frac{\pi N^{a}}{2}  sin^{2}x\big))\\
     =&\int_{0}^{\epsilon} +\int_{\epsilon}^{2\pi}ln(1-exp\big(-\frac{\pi N^{a}}{2}sin^{2}x\big))\\
@@ -5662,11 +5674,12 @@ Filteringの方で初期状態用意のクエリを複数回用いるため、�
 \begin{align*}
     \gamma =O(exp(-N^{1-\frac{a}{2}}))
 \end{align*}
-となる。残りの定数は、問題設定から全てO(1)であるため無視していい。結局$T=O(N^{a})$の際のハイブリットの計算量は、
+最後に、Block-encodingの規格化のスケーリングを求める。エネルギーは系のサイズに比例するため、$\alpha=O(N)$である。\\
+残りの定数は、問題設定から全てO(1)であるため無視していい。結局$T=O(N^{a})$の際のハイブリットの計算量は、
 \begin{resultbox}{$T=O(N^{a})$のハイブリットアルゴリズムの計算量}
     \begin{align*}
     \text{(hybridの計算量)}=&O(N^{1+a}exp(N^{1-\frac{a}{2}})\frac{1}{\epsilon_{tro}}) \\
-    &+ O(N(N^{1-\frac{a}{2}}+log\frac{1}{\epsilon})exp(N^{1-\frac{a}{2}}))\\
+    &+ O(N^{2}(N^{1-\frac{a}{2}}+log\frac{1}{\epsilon})exp(N^{1-\frac{a}{2}}))\\
     &+ O((N^{1-\frac{a}{2}}+log\frac{1}{\epsilon})exp(N^{1-\frac{a}{2}}))
 \end{align*}
 \end{resultbox}
@@ -5684,10 +5697,10 @@ Filteringの方で初期状態用意のクエリを複数回用いるため、�
 故に、最良計算量は以下のようであると推定される。
 \begin{resultbox}{ハイブリットアルゴリズムの最良計算量}
     \begin{align*}
-        O(N^{3}\frac{1}{\epsilon_{tro}})+O(Nlog\frac{1}{\epsilon})
+        O(N^{3}\frac{1}{\epsilon_{tro}})+O(N^{2}log\frac{1}{\epsilon})
     \end{align*}
 \end{resultbox}
-誤差依存性に関しては確かに掛け算が足し算になったくらいの改善が見られた。スケーリングはexpが重すぎるため、改善の余地が見られなかった。モデル依存？
+誤差依存性に関しては確かに掛け算が足し算になったくらいの改善が見られた。スケーリングはexpが重すぎるため、改善の余地が見られなかった\footnote{ただし、これはIsingの場合の話である。他の相転移での基底重なりのN依存性は、どうなのだろうか？ユニバーサリティ的なものは存在するのだろうか？}。
 
 \subsubsection{Non-crossing定理}
 このアイデアの活かしどころとして、有限系でギャップレスが存在する場合なら良さそうであると述べたが、断熱のような状況を考える限り、それが非常に厳しいことが、von-Neumannによって示された。以下では、その概要について述べる。\\
@@ -6546,7 +6559,353 @@ $U_{\Delta t}$ および $V_{\Delta t}$ はともにユニタリ演算子であ�
 となる。
 \end{resultbox}
 
- \section{断熱定理}
+\section{断熱定理}
+系を十分にゆっくり変化させると、初期の固有状態は、その時々の固有状態を追うように時間発展する。これを「断熱定理」という。 ノートでは、次の二点を導くことを目標としている。
+\begin{goalbox}
+\begin{enumerate}
+\item 断熱遷移が成立する条件を求める。
+\item 励起状態への遷移振幅が、なぜ振動しながらゼロへ近づくかを説明する。
+\end{enumerate}
+\end{goalbox}
+第一点はハミルトニアンの変化速度とエネルギー差の関係に帰着する。第二点は、遷移振幅の時間積分に現れる位相因子と、始点及び終点の寄与を調べることで理解できる。
+
+\subsection{問題の設定と断熱追従}
+時間依存ハミルトニアンの瞬間固有状態を定義し、断熱追従を展開係数の言葉で表す。
+\subsubsection{時間に依存する系}
+時刻$t=0$から$t=T$までの間に、ハミルトニアン$H_0$を$H_1$へ変化させる。
+\begin{setupbox}{系の設定}
+\begin{align}
+H(0)&=H_0,&H(T)&=H_1,\\
+H(t)\ket{k(t)}&=E_k(t)\ket{k(t)},&
+\braket{n(t)}{k(t)}&=\delta_{nk}.
+\end{align}
+基底状態を$k=0$で表し、初期状態を$\ket{\Psi(0)}=\ket{0(0)}$とする。
+\end{setupbox}
+瞬間固有状態は、各時刻のハミルトニアンを対角化して得られる状態である。一方、実際の系の状態$\ket{\Psi(t)}$はSchrödinger方程式に従うため、両者は一般には一致しない。
+
+以下では、有限次元の系で、固有状態を滑らかに選べる場合を考える。基底状態は非縮退であり、全区間で励起状態との間に正のギャップがあるとする。
+\begin{align}
+\inf_{\substack{0\leq t\leq T\\n\neq0}}
+\left[E_n(t)-E_0(t)\right]>0.
+\end{align}
+一般の二つの固有値の差で割る場合も、それらが異なることを仮定する。
+
+\subsection{時間依存する展開係数の一般論}
+瞬間固有状態によって一般の状態を展開し、Schrödinger方程式から展開係数の厳密な運動方程式を得る。
+\subsubsection{一般の状態の展開}
+\begin{defbox}{モード係数}
+一般の状態を、ノートと同じく以下の形に展開する。
+\begin{align}
+\ket{\Psi(t)}
+=\sum_k
+\exp\left(-\ii\int_0^t E_k(t')\,\dd t'\right)
+a_k(t)\ket{k(t)}.
+\label{eq:expansion}
+\end{align}
+$a_k(t)$は、指数関数で表した位相因子を取り出した後の係数である。
+\end{defbox}
+指数関数の絶対値は1であるため、瞬間固有状態$k$を観測する確率は$|a_k(t)|^2$となる。また、状態の規格化より$\sum_k|a_k(t)|^2=1$である。
+
+Schrödinger方程式は、
+\begin{align}
+\ii\frac{\dd}{\dd t}\ket{\Psi(t)}=H(t)\ket{\Psi(t)}
+\end{align}
+である。その右辺は、
+\begin{align}
+H(t)\ket{\Psi(t)}
+=\sum_k\exp\left(-\ii\int_0^t E_k(t')\,\dd t'\right)
+a_k(t)E_k(t)\ket{k(t)}
+\end{align}
+となる。一方、左辺は位相因子、係数及び固有状態をそれぞれ微分し、
+\begin{align}
+\ii\frac{\dd}{\dd t}\ket{\Psi(t)}
+={}&\sum_k\exp\left(-\ii\int_0^t E_k(t')\,\dd t'\right)
+\notag\\
+&\quad\times\left[
+E_k(t)a_k(t)\ket{k(t)}
++\ii\left(\frac{\dd}{\dd t}a_k(t)\right)\ket{k(t)}
++\ii a_k(t)\frac{\dd}{\dd t}\ket{k(t)}
+\right]
+\end{align}
+となる。両辺の$E_k(t)a_k(t)$に比例する項を相殺すると、
+\begin{align}
+&\sum_k\exp\left(-\ii\int_0^t E_k(t')\,\dd t'\right)
+\left(\frac{\dd}{\dd t}a_k(t)\right)\ket{k(t)}
+\notag\\
+&\qquad=
+-\sum_k\exp\left(-\ii\int_0^t E_k(t')\,\dd t'\right)
+a_k(t)\frac{\dd}{\dd t}\ket{k(t)}.
+\end{align}
+左から$\bra{n(t)}$を作用させ、直交性を用いると、以下の式を得る。
+\begin{resultbox}{モード係数の運動方程式}
+\begin{align}
+\frac{\dd}{\dd t}a_n(t)
+={}&-\sum_k
+\exp\left(\ii\int_0^t\dd t'\,[E_n(t')-E_k(t')]\right)
+\notag\\
+&\quad\times a_k(t)\bra{n(t)}\frac{\dd}{\dd t}\ket{k(t)}.
+\label{eq:coeff-general}
+\end{align}
+\end{resultbox}
+ここまでは断熱近似を用いていない、一般的な式変形である。
+
+\subsubsection{対角成分と位相の選択}
+まず$k=n$の場合を考える。規格化条件を時間微分すると、
+\begin{align}
+0&=\frac{\dd}{\dd t}\braket{n(t)}{n(t)}\notag\\
+&=\left(\frac{\dd}{\dd t}\bra{n(t)}\right)\ket{n(t)}
++\bra{n(t)}\frac{\dd}{\dd t}\ket{n(t)}.
+\end{align}
+従って、
+\begin{align}
+\operatorname{Re}\left[
+\bra{n(t)}\frac{\dd}{\dd t}\ket{n(t)}
+\right]=0
+\end{align}
+となり、この内積は純虚数である。
+\begin{remarkbox}
+規格化だけから内積がゼロになるわけではない。固有状態には位相の自由度があるため、時間区間上でその位相を選ぶことで、
+\begin{align}
+\bra{n(t)}\frac{\dd}{\dd t}\ket{n(t)}=0
+\label{eq:parallel}
+\end{align}
+とできる。以下ではこの選び方を用いる。閉じた経路の場合、始点と終点の固有ベクトルが同じ位相になるとは限らない。
+\end{remarkbox}
+この選択により、式\eqref{eq:coeff-general}の対角項を取り除くことができる。
+
+\subsubsection{非対角成分とハミルトニアンの微分}
+次に$n\neq k$、$E_n(t)\neq E_k(t)$の場合を考える。
+\begin{resultbox}{瞬間固有状態の微分}
+\begin{align}
+\bra{n(t)}\frac{\dd}{\dd t}\ket{k(t)}
+=\frac{\bra{n(t)}\frac{\dd H(t)}{\dd t}\ket{k(t)}}
+{E_k(t)-E_n(t)}.
+\label{eq:eigen-derivative}
+\end{align}
+\end{resultbox}
+\begin{proofbox}
+固有値方程式を微分すると、
+\begin{align}
+\frac{\dd H(t)}{\dd t}\ket{k(t)}
++H(t)\frac{\dd}{\dd t}\ket{k(t)}
+={}&\frac{\dd E_k(t)}{\dd t}\ket{k(t)}
+\notag\\
+&+E_k(t)\frac{\dd}{\dd t}\ket{k(t)}.
+\end{align}
+左から$\bra{n(t)}$を作用させると、
+\begin{align}
+&\bra{n(t)}\frac{\dd H(t)}{\dd t}\ket{k(t)}
++E_n(t)\bra{n(t)}\frac{\dd}{\dd t}\ket{k(t)}
+\notag\\
+&\qquad=
+\frac{\dd E_k(t)}{\dd t}\delta_{nk}
++E_k(t)\bra{n(t)}\frac{\dd}{\dd t}\ket{k(t)}.
+\end{align}
+$n\neq k$では$\delta_{nk}=0$であるため、移項して式\eqref{eq:eigen-derivative}を得る。
+\end{proofbox}
+故に、対角項をゼロとする位相の選び方の下で、
+\begin{resultbox}{ハミルトニアンの変化によるモード間結合}
+\begin{align}
+\frac{\dd}{\dd t}a_n(t)
+={}&\sum_{k\neq n}
+\exp\left(\ii\int_0^t\dd t'\,[E_n(t')-E_k(t')]\right)
+\notag\\
+&\quad\times a_k(t)
+\frac{\bra{n(t)}\frac{\dd H(t)}{\dd t}\ket{k(t)}}
+{E_n(t)-E_k(t)}.
+\label{eq:coeff-h}
+\end{align}
+\end{resultbox}
+ハミルトニアンが変化しなければ$\dd H(t)/\dd t=0$であり、異なる固有状態への遷移は生じない。また、同じ変化速度でも固有値が近接しているほど、モード間の結合は大きくなる。
+
+\subsection{基底状態からの遷移振幅}
+断熱追従する状態の近傍で係数の方程式を近似し、励起状態への遷移振幅を時間積分として表す。さらに、部分積分によって表面項と積分項に分ける。
+\subsubsection{断熱近似のまわりの展開}
+\begin{defbox}{基底状態への断熱追従}
+初期条件$a_0(0)=1$、$a_n(0)=0$ $(n\neq0)$に対し、全区間で、
+\begin{align}
+a_0(t)\simeq1,\qquad a_n(t)\simeq0\quad(n\neq0)
+\end{align}
+と近似できることを考える。係数がこの形になるのは、式\eqref{eq:parallel}の位相の選び方を用いているためである。
+\end{defbox}
+式\eqref{eq:coeff-h}の右辺にこの近似を代入すると、
+\begin{align}
+\frac{\dd}{\dd t}a_n(t)
+\simeq
+\exp\left(\ii\int_0^t\dd t'\,[E_n(t')-E_0(t')]\right)
+\frac{\bra{n(t)}\frac{\dd H(t)}{\dd t}\ket{0(t)}}
+{E_n(t)-E_0(t)}
+\end{align}
+となる。初期条件を用いて積分すると、
+\begin{align}
+a_n(t)\simeq
+\int_0^t\dd t'\,
+\exp\left(\ii\int_0^{t'}\dd t''\,[E_n(t'')-E_0(t'')]\right)
+\frac{\bra{n(t')}\frac{\dd H(t')}{\dd t'}\ket{0(t')}}{E_n(t')-E_0(t')}.
+\label{eq:first-transition}
+\end{align}
+以下、この右辺を部分積分する。これは断熱的な係数を右辺に代入して得た近似式であり、厳密な係数方程式とは区別する。
+
+\subsubsection{部分積分による表面項と積分項}
+指数関数の微分は、
+\begin{align}
+\frac{\dd}{\dd t'}
+\exp\left(\ii\int_0^{t'}\dd t''\,[E_n(t'')-E_0(t'')]\right)
+\notag\\
+\qquad=\ii[E_n(t')-E_0(t')]\,
+\exp\left(\ii\int_0^{t'}\dd t''\,[E_n(t'')-E_0(t'')]\right)
+\label{eq:phase-derivative}
+\end{align}
+となる。この関係を用いると、
+\begin{align}
+a_n(t)\simeq\frac1\ii\int_0^t\dd t'\,
+\frac{\bra{n(t')}\frac{\dd H(t')}{\dd t'}\ket{0(t')}}{\left[E_n(t')-E_0(t')\right]^2}
+\frac{\dd}{\dd t'}\exp\left(\ii\int_0^{t'}\dd t''\,[E_n(t'')-E_0(t'')]\right).
+\end{align}
+従って、部分積分により以下を得る。
+\begin{resultbox}{部分積分した遷移振幅}
+\begin{align}
+a_n(t)\simeq{}&
+\frac1\ii\left[
+\exp\left(\ii\int_0^{t'}\dd t''\,[E_n(t'')-E_0(t'')]\right)
+\frac{\bra{n(t')}\frac{\dd H(t')}{\dd t'}\ket{0(t')}}{\left[E_n(t')-E_0(t')\right]^2}
+\right]_{t'=0}^{t'=t}\notag\\
+&-\frac1\ii\int_0^t\dd t'\,
+\exp\left(\ii\int_0^{t'}\dd t''\,[E_n(t'')-E_0(t'')]\right)\notag\\
+&\qquad\qquad\times
+\frac{\dd}{\dd t'}\left[\frac{\bra{n(t')}\frac{\dd H(t')}{\dd t'}\ket{0(t')}}{\left[E_n(t')-E_0(t')\right]^2}\right].
+\label{eq:ibp-time}
+\end{align}
+第一項を表面項、第二項を積分項と呼ぶ。
+\end{resultbox}
+位相因子の絶対値を最初から1として積分を評価すると、振動による相殺が失われる。故に、断熱極限を理解するためには、この振動を保って計算する必要がある。
+
+\subsection{全操作時間$T$に対する評価}
+経路を固定して全操作時間だけを長くした時、表面項が$O(T^{-1})$、十分滑らかな場合の残りの積分項が$O(T^{-2})$となることを説明する。
+
+\subsubsection{スケジュールと時間微分}
+ここで、始点と終点の間の補間を以下で与える。
+\begin{setupbox}{ハミルトニアンの断熱スケジュール}
+ハミルトニアンの断熱スケジュールを与える関数を$f$とおく。
+\begin{align}
+H(t)&=\left[1-f\left(\frac tT\right)\right]H_0
++f\left(\frac tT\right)H_1,\\
+f(0)&=0,\qquad f(1)=1,\qquad
+\frac{\dd f(u)}{\dd u}\geq0.
+\end{align}
+ここで$f$は$T$に依存しない滑らかな関数であり、必要な導関数は$T$によらず有界とする。$u$は関数$f$の引数であり、ノートの$f(u)$の表記に対応する。
+\end{setupbox}
+この時、連鎖律より、
+\begin{align}
+\frac{\dd H(t)}{\dd t}
+=\frac1T
+\left.\frac{\dd f(u)}{\dd u}\right|_{u=t/T}
+(H_1-H_0)
+=O(T^{-1}).
+\end{align}
+従って、無次元の引数$t/T$で表した経路を固定すると、時間で一回微分するごとに$1/T$が生じる。固有値及び固有状態も、この固定した経路に沿って変化する。
+
+\subsubsection{$a_{n}(t)$のオーダー評価}
+$a_{n}(t)$のオーダー評価は、以下で与えられる。
+\begin{resultbox}{表面項と積分項の次数}
+\begin{align}
+\text{表面項}=O(T^{-1}),\qquad
+\text{残りの積分項}=O(T^{-2})
+\end{align}
+となる。ただし、一様に正のエネルギー差と、ここで用いた導関数の有界性を仮定する。
+\end{resultbox}
+\begin{proofbox}
+まず、式\eqref{eq:ibp-time}の表面項は、分子のハミルトニアンの時間微分が$O(T^{-1})$であることから、$O(T^{-1})$となる。\\
+\\
+式\eqref{eq:ibp-time}に残った積分について、以下の関係が成立する。
+\begin{align}
+&\int_0^t\dd t'\,\exp\left(\ii\int_0^{t'}\dd t''\,[E_n(t'')-E_0(t'')]\right)\notag\\
+&\qquad\times \frac{\dd}{\dd t'}\left[\frac{\bra{n(t')}\frac{\dd H(t')}{\dd t'}\ket{0(t')}}{[E_n(t')-E_0(t')]^2}\right]\notag\\
+&=\frac1\ii\left[
+\begin{aligned}
+&\exp\left(\ii\int_0^{t'}\dd t''\,[E_n(t'')-E_0(t'')]\right)\\
+&\quad\times \frac{1}{E_n(t')-E_0(t')}\frac{\dd}{\dd t'}\left[\frac{\bra{n(t')}\frac{\dd H(t')}{\dd t'}\ket{0(t')}}{[E_n(t')-E_0(t')]^2}\right]
+\end{aligned}
+\right]_{t'=0}^{t'=t}\notag\\
+&\quad-\frac1\ii\int_0^t\dd t'\,\exp\left(\ii\int_0^{t'}\dd t''\,[E_n(t'')-E_0(t'')]\right)\notag\\
+&\qquad\qquad\times\frac{\dd}{\dd t'}\left\{
+\frac{1}{E_n(t')-E_0(t')}\frac{\dd}{\dd t'}\left[\frac{\bra{n(t')}\frac{\dd H(t')}{\dd t'}\ket{0(t')}}{[E_n(t')-E_0(t')]^2}\right]
+\right\}.
+\label{eq:second-ibp}
+\end{align}
+これは、指数関数の時間微分を取り出し、再び部分積分したものである。\\
+\\
+分子のハミルトニアンの時間微分は$O(T^{-1})$であり、その分数をさらに一回微分したものは$O(T^{-2})$である。従って、式\eqref{eq:second-ibp}の表面項は$O(T^{-2})$となる。\\
+同式の最後の積分では、分数に対する時間微分がさらに一回増えるため、係数は$O(T^{-3})$となる。積分区間の長さが$O(T)$であることを用いれば、その積分全体も$O(T^{-2})$で抑えられる。従って、元の一次近似の積分式について、
+\begin{align}
+\text{表面項}=O(T^{-1}),\qquad
+\text{残りの積分項}=O(T^{-2})
+\end{align}
+が成立する。
+\end{proofbox}
+\begin{remarkbox}
+この評価は、式\eqref{eq:first-transition}の近似した積分に対する評価である。厳密な$a_n(t)$の漸近展開の係数まで、この計算だけで全て確定したことにはならない。厳密解の評価には、モード間結合を含めた議論が必要となる。本稿の計算は、断熱的な遷移抑制の仕組みと典型的な次数を説明するものである。
+\end{remarkbox}
+
+\subsection{振動する収束と断熱条件}
+
+始点と終点の表面項から振動を理解し、ハミルトニアンの変化速度をエネルギー差の二乗と比較する断熱条件を得る。
+
+\subsubsection{振動しながらゼロへ近づく理由}
+式\eqref{eq:ibp-time}の表面項を始点と終点に分けると、一次近似における主要な寄与は以下となる。
+\begin{align}
+a_n(t)\simeq{}&
+\frac1\ii
+\exp\left(\ii\int_0^t\dd t'\,[E_n(t')-E_0(t')]\right)
+\frac{\bra{n(t)}\frac{\dd H(t)}{\dd t}\ket{0(t)}}
+{[E_n(t)-E_0(t)]^2}
+\notag\\
+&-\frac1\ii
+\frac{\bra{n(0)}\left.\frac{\dd H(t')}{\dd t'}\right|_{t'=0}\ket{0(0)}}
+{[E_n(0)-E_0(0)]^2}.
+\label{eq:leading}
+\end{align}
+ここで省略したのは、前節で評価した$O(T^{-2})$の積分項である。
+
+二つの分数は典型的に$O(T^{-1})$である。一方、指数関数に含まれる積分は、固定した$t/T$で$T$を増やすと$T$に比例して大きくなる。これは、時間を$t'=Tu$に置き換えれば確認できる。
+\begin{align}
+\int_0^t\dd t'\,[E_n(t')-E_0(t')]
+=T\int_0^{t/T}\dd u\,[E_n(Tu)-E_0(Tu)].
+\end{align}
+経路を固定した時、右辺の積分の中身は経路上の同じ位置のエネルギー差を表す。
+
+\begin{resultbox}{収束に伴う振動}
+終点の寄与には$T$に依存して回転する位相因子があり、始点の寄与にはその因子がない。両者を足し合わせると、相対位相による干渉が起こる。故に、振幅の包絡線は典型的に$O(T^{-1})$で小さくなりながら、その絶対値には振動が現れる。遷移確率の包絡線は典型的に$O(T^{-2})$となる。
+\end{resultbox}
+始点又は終点の寄与がゼロなら、この二つの項の干渉による振動は現れない。従って、誤差が必ず単調に減少するとも、必ず振動するとも限らない。
+
+\subsubsection{通常の断熱条件}
+主要な表面項を小さくするための目安は、以下である。
+\begin{resultbox}{局所的な断熱条件}
+\begin{align}
+\max_{\substack{0\leq t\leq T\\n\neq0}}
+\frac{\left|\bra{n(t)}\frac{\dd H(t)}{\dd t}\ket{0(t)}\right|}
+{[E_n(t)-E_0(t)]^2}
+\ll1.
+\label{eq:adiabatic-condition}
+\end{align}
+$\hbar$を戻す場合、分子に$\hbar$を掛ける。
+\end{resultbox}
+ハミルトニアンを速く変化させるほど遷移しやすく、エネルギー差が小さいほど断熱的な操作は難しくなる。
+\begin{remarkbox}
+この式は通常用いられる局所的な目安であり、任意の時間依存ハミルトニアンに対する必要十分条件ではない。固定した滑らかな経路と一様に正のエネルギー差という仮定と併せて用いる。また、励起状態が複数ある場合、全励起確率は$\sum_{n\neq0}|a_n(t)|^2$であり、一つのモードの評価だけでは全体の誤差は決まらない。
+\end{remarkbox}
+
+\subsubsection{f(t)の選び方のテクニック}
+線形補間において、$f$の一階微分を引数0及び1でゼロと選ぶと、
+\begin{align}
+\left.\frac{\dd H(t)}{\dd t}\right|_{t=0}=0,\qquad
+\left.\frac{\dd H(t)}{\dd t}\right|_{t=T}=0
+\end{align}
+となる。この時、最終時刻において式\eqref{eq:leading}の二つの表面項が共にゼロとなる。従って、前節の近似した積分式では、最終時刻の寄与は$O(T^{-2})$から始まる。
+これは、全操作時間だけでなく、操作の始め方及び終え方も最終的な誤差に関係することを示す。ただし、中間時刻ではハミルトニアンの時間微分がゼロとは限らず、同じ次数の改善が全時刻で成立するとは限らない。
+\subsection{簡易版断熱定理}
+上記が断熱定理にかかわる主要な議論であるが、実用上以下のような形式の断熱準備を採用することが多い。
 \begin{theorembox}{断熱定理}
 以下のようなハミルトニアン系を考える。ただし、摂動を加える時間tをt=[0,T]とする。
 \begin{equation}\begin{split}
@@ -6554,70 +6913,7 @@ $U_{\Delta t}$ および $V_{\Delta t}$ はともにユニタリ演算子であ�
 \end{split} \end{equation}
 この時、エネルギースペクトラムが離散的であり、エネルギーの差に比べてTが十分に大きいなら、離散間の準位を変えることなく状態が遷移する。
 \end{theorembox}
-\begin{proofbox}
-断熱定理は摂動論の範囲を超えて成立ことが知られている。故に、摂動論を用いることなく論理を展開する。\\
-\\
-$s=\frac{t}{T}$として時間を規格化する。この際、ハミルトニアンはH(s)と書くことができる。このハミルトニアンの固有値と固有状態を、($E_{n}(s),\ket{\psi(s)}_{n}$)とする。この時、以下の式が成立する。ただし各状態は直交していると仮定する。
-\begin{equation}\begin{split}
-    H(s)\ket{\psi(s)}_{n} =E_{n}(s)\ket{\psi(s)}_{n}
-\end{split} \end{equation}
-この式を両辺微分し、$\ket{\psi(s)}_{m}$により内積を考えたとすると、以下の式が成立する。
-\begin{equation}\begin{split}
-    &\bra{\psi(s)}_{m}\pdv{H(s)}{s}\ket{\psi(s)}_{n}
-    +\bra{\psi(s)}_{m} H(s)\pdv{s}\ket{\psi(s)}_{n}\\
-    &=\pdv{E_{n}(s)}{s}\bra{\psi(s)}_{m}\ket{\psi(s)}_{n}
-    +\bra{\psi(s)}_{m} E_{n}(s)\pdv{s}\ket{\psi(s)}_{n}\\
-\end{split} \end{equation}
-$m\neq n$であったとすると、$\bra{\psi(s)}_{m}\ket{\psi(s)}_{n}=\delta_{mn}$であると考えて、以下の式が成立する。
-\begin{equation}\begin{split}
-    \bra{\psi(s)}_{m}\pdv{s}\ket{\psi(s)}_{n}
-    &=\frac{1}{E_{n}(s)-E_{m}(s)} \bra{\psi(s)}_{m}\pdv{H(s)}{s}\ket{\psi(s)}_{n}
-    \;(m\neq n)\\
-    \bra{\psi(s)}_{n}\pdv{s}\ket{\psi(s)}_{n} &= 0
-\end{split} \end{equation}
-また、時間を規格化したため、シュレーティンガー方程式は改めて以下のように書ける。
-\begin{equation}\begin{split}
-    i\frac{1}{T}\pdv{s}\ket{k} = H(s)\ket{k}
-\end{split} \end{equation}
-ここで規格化時刻sの固有状態を用いて任意の量子状態を以下のように展開する。
-\begin{equation}\begin{split}
-    \ket{k} = \sum_{n} c_{n}(s)  exp(-iT\phi_{n}(s))\ket{\psi(s)}_{n} 
-\end{split} \end{equation}
-(この時$\phi_{n}(s)=\int_{0}^{s}du E_{n}(s)$とする)
-この状態をシュレーティンガー方程式に代入する。
-\begin{equation}\begin{split}
-    &i\frac{1}{T}\sum_{n} exp(-iT\phi_{n}(s))(\pdv{s}c_{n}(s)-iTE_{n}(s)c_{n}(s))\ket{\psi_{n}(s)} + c_{n}(s)  exp(-iT\phi_{n}(s))\ket{\psi(s)}_{n}\pdv{s}\ket{\psi(s)}_{n}\\
-    &=\sum_{n} c_{n}(s)  exp(-iT\phi_{n}(s))H(s)\ket{\psi(s)}_{n}
-\end{split} \end{equation}
-左辺第2項と右辺が$H(s)\ket{\psi(s)}_{n}=E_{n}(s){\psi(s)}_{n}$により打ち消しあうため、$\ket{\psi(s)}_{m}$により内積をとって整理をすると以下のようになる。
-\begin{equation}\begin{split}
-    \pdv{s}c_{n}(s) = \sum_{m\neq n} c_{m}(s) 
-    \frac{exp\{iT(\phi_{n}(s)-\phi_{m}(s))\}}{E_{n}(s)-E_{m}(s)}
-    \bra{\psi(s)}_{m}\pdv{H(s)}{s}\ket{\psi(s)}_{n}
-\end{split} \end{equation}
-よってこの式を積分すると、以下のようになる。
-\begin{equation}\begin{split}
-    c_{n}(s) = c_{n}(0) + \sum_{m\neq n}\int_{0}^{s} du  c_{m}(s) 
-    \frac{exp\{iT(\phi_{n}(u)-\phi_{m}(u))\}}{E_{n}(u)-E_{m}(u)}
-    \bra{\psi(u)}_{m}\pdv{H(u)}{u}\ket{\psi(u)}_{n}
-\end{split} \end{equation}
-初期条件として$c_{0}(0)=1,c_{n(\neq0)}(0)=0$であったとすると、$c_{n(\neq0)}(s)$は以下の通りとなる。
-\begin{equation}\begin{split}
-    c_{n(\neq0)}(s) = \sum_{m\neq n}\int_{0}^{s} du  c_{m}(s) 
-    \frac{exp\{iT(\phi_{n}(u)-\phi_{m}(u))\}}{E_{n}(u)-E_{m}(u)}
-    \bra{\psi(u)}_{m}\pdv{H(u)}{u}\ket{\psi(u)}_{n}\label{keturonmae}
-\end{split} \end{equation}
-Tが十分に大きい場合では三角関数が激しく振動し、他の項を打ち消すと考えられる。従って状態の振幅に相当する$c_{n\neq0}(s)$は少なくとも$O(T^{-1})$である。つまりm=0以外の全ての項が消えると考えられる。この条件下で$c_{n(\neq0)}(s)$は以下のように求めることが出来る。
-\begin{equation}\begin{split}
-    &c_{n(\neq0)}(s) = \frac{i}{T}(A_{n}(0)-exp\{iT(\phi_{n}(s)-\phi_{0}(s))\}A_{n}(s)) \label{keturon}
-\end{split} \end{equation}
-(ただし$(A_{n}(s)=\frac{\bra{\psi(s)}_{0}\pdv{H(s)}{s}\ket{\psi(s)}_{n}}{(E_{n}(s)-E_{0}(s))^{2}})$であるとする)
-ここで$c_{n}(s)$が$O(T^{-1})$であり、かつ$c_{0},exp\{iT(\phi_{n}(u)-\phi_{m}(u))$の絶対値はTのオーダーによらないため、$A_{n}(s)$が$O(T^{-1})$であることが要求される。sでの微分はtの微分に直すと$O(T^{-1})$をかける操作に相当するため、$\pdv{A_{n}(s)}{s}=O(T^{-2})$となる。従って十分大きいTにおいて、\eqref{keturon}をsで微分すると、確かに\eqref{keturonmae}に一致することがわかる。
-\end{proofbox}
-逆に、\eqref{keturon}において、任意のsについて$c_{n(\neq0)}(s)<<1$となることを、断熱定理の成立条件であると考えることが出来る。特に、$A_{n}(0)=0$とすると、最終的に断熱定理が成り立つ条件は以下のようになる。本論文で議論する横地場イジングモデルはこれを満たす。
-\begin{equation}\begin{split}
-    T>>\frac{max(\bra{\psi(s)}_{0}\pdv{H(s)}{s}\ket{\psi(s)}_{n})}{min(E_{n}(s)-E_{0}(s))^{2}}
-\end{split} \end{equation}
+これは、例えばIsingモデルのような系において、解析的に解ける場合に、断熱定理の結果を確認するために用いると便利である。
 
 \section{有限かつ周期的なIsingモデル}
 1+1d Ising-modelは、厳密に解けるという意味で、量子計算を行う際にしばしテストケースとして便利なことがある。この章では、量子計算の結果と比較するために、Isingモデルを厳密に解くことにする。\\
@@ -7133,7 +7429,701 @@ Jordan-Wigner変換を用いると、例えば横磁場イジングモデルな�
     十分ゆっくりな範囲内では、
 \end{enumerate}
 \subsubsection{IsingモデルにおけるKZ機構}
-\clearpage
+
+\section{量子計算のためのlatticeゲージ理論}
+この節では、量子計算の素粒子理論への応用を見据えて、lattice-fermion、及びゲージ理論の量子計算の載せ方について議論する。
+\subsection{連続空間における自由Dirac場}
+まず、空間$d$次元の自由Dirac場を考える。ハミルトニアンは以下のように記述される。
+\begin{align}
+H&=\int \dd^d x\,\Psi^\dagger(x)
+ \left(-\ii\sum_{j=1}^d\gamma^0\gamma^j\partial_j+m\gamma^0\right)\Psi(x).
+\end{align}
+ここで、$\alpha^j=\gamma^0\gamma^j$、$\beta=\gamma^0$とおく。
+\begin{defbox}{Diracハミルトニアンの行列}
+行列$\alpha^j,\beta$はエルミートであり、以下の反交換関係を満たす。
+\begin{align}
+\{\alpha^i,\alpha^j\}&=2\delta^{ij}\id,&
+\{\alpha^j,\beta\}&=0,&\beta^2&=\id.
+\end{align}
+故に、1粒子ハミルトニアンは$h(p)=\sum_j\alpha^j p_j+m\beta$である。
+\end{defbox}
+反交換関係を用いて二乗すると、異なる行列間の交差項は消える。従って、
+\begin{align}
+h(p)^2&=(p^2+m^2)\id,&
+E_\pm(p)&=\pm\sqrt{p^2+m^2}
+\end{align}
+が得られる。この関係が、格子化した理論の連続極限において再現したい分散関係である。
+
+\subsubsection{ナイーブな離散化}
+ハミルトニアン形式では時間を連続のままとし、空間のみを離散化する。格子間隔を$a$とし、格子点を$x=as$、$s\in\mathbb Z^d$と表す。以下、$x+\hat j$という添字は物理座標では$x+a\hat e_j$を意味する。
+\begin{defbox}{対称差分による離散化}
+空間微分を以下の差分に置き換える。
+\begin{align}
+\partial_j\Psi(x)\longrightarrow
+\Delta_j\Psi_x\equiv\frac{\Psi_{x+\hat j}-\Psi_{x-\hat j}}{2a}.
+\end{align}
+この置き換えにより得られるフェルミオンを、ナイーブフェルミオンと呼ぶ。格子場に$a^{d/2}$を吸収して規格化すると、
+\begin{align}
+H_{\nv}
+&=-\frac{\ii}{2a}\sum_{x,j}
+ \left(\Psi_x^\dagger\alpha^j\Psi_{x+\hat j}
+       -\Psi_{x+\hat j}^\dagger\alpha^j\Psi_x\right)
+ +m\sum_x\Psi_x^\dagger\beta\Psi_x
+\label{eq:naive}
+\end{align}
+である。
+\end{defbox}
+有限体積では、各方向に$L_j$個の格子点を置き、周期境界条件を課す。全格子点数を$N=\prod_jL_j$とすると、Fourier変換は以下のように書ける。
+\begin{align}
+\Psi_x&=\frac{1}{\sqrt N}\sum_p\Psi_p\ee^{\ii p\cdot x},&
+\ee^{\ii p_j aL_j}&=1,&
+p_j a&=\frac{2\pi n_j}{L_j}.
+\end{align}
+ただし、運動量は逆格子ベクトル$2\pi/a$だけ異なるものを同一視する。従って、第1ブリルアンゾーンから代表元を一つずつ選ぶ。
+\begin{align}
+n_j\in
+\begin{cases}
+\{-L_j/2,\ldots,L_j/2-1\},&L_j\text{が偶数},\\
+\{-(L_j-1)/2,\ldots,(L_j-1)/2\},&L_j\text{が奇数}.
+\end{cases}
+\end{align}
+偶数の場合には$-\pi\leq p_ja<\pi$となる。ゾーンの両端は同じ運動量を表すため、二重には数えない。
+
+\begin{center}
+\begin{tikzpicture}[scale=.85]
+\draw (0,0)--(6,0);
+\foreach \x/\s in {0/0,1.5/1,3/2,4.5/3,6/0}
+{\fill (\x,0) circle(2pt); \node[below] at(\x,0){$\s$};}
+\draw[-{Stealth}] (5.9,.2) to[bend right=28] node[above]{周期境界条件} (.1,.2);
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{分散関係とダブラー}
+Fourier変換を用いると、差分演算子は$\Delta_j\mapsto\ii\sin(p_ja)/a$となる。故に、ナイーブフェルミオンの1粒子ハミルトニアンは以下である。
+\begin{align}
+h_{\nv}(p)&=\frac1a\sum_j\alpha^j\sin(p_ja)+m\beta,\\
+h_{\nv}(p)^2&=\left[\frac1{a^2}\sum_j\sin^2(p_ja)+m^2\right]\id.
+\end{align}
+\begin{resultbox}{格子上の分散関係}
+\begin{align}
+E_\pm(p)=\pm\sqrt{\frac1{a^2}\sum_j\sin^2(p_ja)+m^2}.
+\label{eq:disp-naive}
+\end{align}
+\end{resultbox}
+$p_ja\simeq0$では$\sin(p_ja)\simeq p_ja$となるため、連続理論の分散関係が再現される。しかし、$p_ja\simeq\pi$でも$\sin(p_ja)$は小さい。つまり、ブリルアンゾーンの端にも、原点付近と同様の低エネルギーモードが存在する。
+\begin{problembox}{ダブラー問題}
+$d$次元空間では、各方向について$p_ja=0,\pi$という二つの選択肢がある。従って、低エネルギーモードの枝は$2^d$個存在し、原点の枝以外に$2^d-1$個の余分な自由度が現れる。この余分な自由度をダブラーと呼ぶ。
+\end{problembox}
+ここで、端点$\pi$は$-\pi$と同一視される。従って、両端を別々のモードとして数えるわけではない。また、有限格子では端点そのものが許されるかどうかは格子点数に依存するが、連続極限における余分な枝の存在は変わらない。
+
+\subsection{Wilsonフェルミオン}
+ダブラーにのみ大きな質量を与えることで、連続極限に残るフェルミオンの数を減らす。そのためのWilson項を導入し、利点及びカイラル対称性に対する影響を説明する。
+
+\subsubsection{運動量依存の質量}
+原点付近のモードを変えず、ゾーンの端付近のモードにのみギャップを開けることを考える。そのためには、原点では消え、端では大きくなる関数を質量項に加えればよい。
+\begin{defbox}{Wilson項}
+無次元のWilsonパラメータ$r$を用い、1粒子ハミルトニアンに以下の項を加える。
+\begin{align}
+h_W(p)&=\frac r a\beta\sum_j[1-\cos(p_ja)],\\
+m_W(p)&=m+\frac r a\sum_j[1-\cos(p_ja)].
+\end{align}
+この時、$h_{\nv}(p)+h_W(p)$で記述される格子フェルミオンをWilsonフェルミオンと呼ぶ。
+\end{defbox}
+\begin{resultbox}{Wilsonフェルミオンの分散関係}
+\begin{align}
+E_\pm^W(p)=\pm\sqrt{\frac1{a^2}\sum_j\sin^2(p_ja)+m_W(p)^2}.
+\end{align}
+\end{resultbox}
+$p_ja\simeq0$でTaylor展開すると、
+\begin{align}
+\frac r a[1-\cos(p_ja)]&=\frac{ra}{2}p_j^2+O(a^3p_j^4)
+\end{align}
+となり、固定した物理的運動量に対して$a\to0$で消える。一方、$\nu$個の成分がゾーンの端にあるモードの質量は、
+\begin{align}
+m_W=m+\frac{2r\nu}{a}\qquad(\nu=1,\ldots,d)
+\end{align}
+となる。故に、ダブラーは連続極限で重くなり、低エネルギーの理論から分離される。
+
+\subsubsection{実空間表示とカイラル対称性}
+Wilson項は実空間では格子Laplacianに比例する。
+\begin{align}
+H_W&=-\frac{ra}{2}\sum_x\Psi_x^\dagger\beta\,\nabla_{\mathrm{lat}}^2\Psi_x,\\
+\nabla_{\mathrm{lat}}^2\Psi_x
+&=\sum_j\frac{\Psi_{x+\hat j}+\Psi_{x-\hat j}-2\Psi_x}{a^2}.
+\end{align}
+従って、近接格子点間の結合として局所的に記述できる。
+\begin{remarkbox}
+Wilson項は運動量に依存した質量項である。そのため、質量ゼロの連続理論が持つカイラル対称性を、有限格子間隔で明示的に破る。ダブラーを重くすることと、カイラル対称性を保つことの間に、ここで一つの問題が現れる。
+\end{remarkbox}
+
+% 原ノート pp.10--22
+\subsection{Staggeredフェルミオン}
+スピノル成分を格子点に分散させることで、各格子点の自由度を減らす。1次元及び2次元の例を通じ、スピンとフレーバーがどのように復元されるかを確認する。
+
+
+\subsubsection{スピン対角化}
+スピノルの位置依存の基底変換を考える。$x=as$として、
+\begin{align}
+\Gamma_x&=(\alpha^1)^{s_1}\cdots(\alpha^d)^{s_d},&
+\Psi_x&=\Gamma_x\widehat\chi_x
+\end{align}
+と定義する。
+\begin{resultbox}{位置依存の符号因子}
+\begin{align}
+\Gamma_x^\dagger\alpha^j\Gamma_{x+\hat j}
+ &=\eta_j(x)\id,&
+\eta_j(x)&=(-1)^{s_1+\cdots+s_{j-1}},\\
+\Gamma_x^\dagger\beta\Gamma_x&=\epsilon(x)\beta,&
+\epsilon(x)&=(-1)^{s_1+\cdots+s_d}.
+\end{align}
+特に$j=1$では$\eta_1=1$である。
+\end{resultbox}
+\begin{proofbox}
+$\alpha^j$を$\Gamma_x$の積の中で移動させると、$j$より前に置かれた$\alpha^i$との反交換から符号が生じる。また、$\beta$は全ての$\alpha^j$と反交換するため、$\Gamma_x^\dagger\beta\Gamma_x$には全方向の指数の和に応じた符号が現れる。
+\end{proofbox}
+故に、ハミルトニアンは以下のように書き直される。
+\begin{align}
+H_{\nv}
+={}&-\frac{\ii}{2a}\sum_{x,j}\eta_j(x)
+\left(\widehat\chi_x^\dagger\widehat\chi_{x+\hat j}
+-\widehat\chi_{x+\hat j}^\dagger\widehat\chi_x\right)
++m\sum_x\epsilon(x)\widehat\chi_x^\dagger\beta\widehat\chi_x.
+\end{align}
+運動項がスピノル添字について対角化されたことが重要である。さらに、位置に依存しない変換で$\beta=\operatorname{diag}(+1,\ldots,+1,-1,\ldots,-1)$としておく。この時、$\beta=+1$に属する成分から一つを残し、独立に重複した成分を取り除く。
+\begin{defbox}{Staggeredハミルトニアン}
+各格子点に1成分のフェルミオン$\chi_x$を置き、以下で定義する。
+\begin{align}
+H_{\st}
+={}&-\frac{\ii}{2a}\sum_{x,j}\eta_j(x)
+\left(\chi_x^\dagger\chi_{x+\hat j}
+-\chi_{x+\hat j}^\dagger\chi_x\right)
++m\sum_x\epsilon(x)\chi_x^\dagger\chi_x.
+\label{eq:stag}
+\end{align}
+\end{defbox}
+連続理論におけるスピノル成分は、各格子点に明示的に置く代わりに、隣接する複数のサイトへ分散される。故に、粗い格子の一つのセルをまとめて見ると、スピノル及びフレーバーの自由度を再構成できる。
+\begin{remarkbox}
+原ノートのstaggered部分では運動項が$+\ii/(2a)$で書かれている。本稿では冒頭の$-\ii\alpha^j\partial_j$との整合性を保つため、全体を$-\ii/(2a)$に統一する。逆向きの規約では、運動量に奇な項の符号が反転する。分散関係及び自由度の数は変わらない。
+\end{remarkbox}
+
+\subsubsection{分散関係と自由度の数}
+1粒子演算子は以下である。
+\begin{align}
+h_{\st}&=-\ii\sum_j\eta_j(x)\Delta_j+m\epsilon(x),&
+\Delta_j\chi_x&=\frac{\chi_{x+\hat j}-\chi_{x-\hat j}}{2a}.
+\end{align}
+位置依存の符号因子を含めて二乗すると、異なる方向の交差項及び質量との交差項が消え、
+\begin{align}
+(h_{\st}^2\chi)_x
+=m^2\chi_x-\sum_j
+\frac{\chi_{x+2\hat j}+\chi_{x-2\hat j}-2\chi_x}{4a^2}
+\end{align}
+を得る。従って、
+\begin{align}
+E_\pm(p)=\pm\sqrt{m^2+\frac1{a^2}\sum_j\sin^2(p_ja)}
+\end{align}
+である。二乗した演算子は間隔$2a$の格子を結ぶため、セルの運動量は縮小したゾーン$-\pi/(2a)\leq p_j<\pi/(2a)$から選べる。ただし、セル内の自由度を同時に保持する必要がある。
+
+\begin{resultbox}{セル内自由度の解釈}
+$d$次元の$2^d$サイトからなるセルに含まれる自由度を、スピノル成分とフレーバーに分けると、以下となる。
+\begin{center}
+\begin{tabular}{c|c|c|c}
+空間次元$d$ & セル内自由度$2^d$ & スピノル成分数 & フレーバー数\\ \hline
+1 & 2 & 2 & 1\\
+2 & 4 & 2 & 2\\
+3 & 8 & 4 & 2
+\end{tabular}
+\end{center}
+ここで、$(d+1)$次元の最小Diracスピノルの成分数は$2^{\lfloor(d+1)/2\rfloor}$である。
+\end{resultbox}
+つまり、staggered化によりサイトごとのスピノル成分の重複は取り除かれるが、空間次元によっては複数のフレーバーが残る。
+
+\subsubsection{1次元の例}
+$d=1$では$\eta_1=1$、$\epsilon(x)=(-1)^n$である。従って、
+\begin{align}
+H_{\st}^{d=1}
+=-\frac{\ii}{2a}\sum_n(\chi_n^\dagger\chi_{n+1}
+-\chi_{n+1}^\dagger\chi_n)
++m\sum_n(-1)^n\chi_n^\dagger\chi_n.
+\end{align}
+偶数サイトと奇数サイトを一つのセルにまとめる。
+\begin{align}
+A_r&=\chi_{2r},&B_r&=\chi_{2r+1},&
+\Psi_r&=\begin{pmatrix}A_r\\B_r\end{pmatrix}.
+\end{align}
+\begin{center}
+\begin{tikzpicture}
+\foreach \r in {0,1,2}{
+\draw[goalred,rounded corners] (2*\r-.3,-.3) rectangle (2*\r+1.3,.35);
+\fill (2*\r,0) circle(2pt); \fill (2*\r+1,0) circle(2pt);
+}
+\draw (-.3,0)--(5.4,0);
+\node[below] at(0,-.35){$A_0$};\node[below] at(1,-.35){$B_0$};
+\node[below] at(2,-.35){$A_1$};\node[below] at(3,-.35){$B_1$};
+\node[below] at(4,-.35){$A_2$};\node[below] at(5,-.35){$B_2$};
+\end{tikzpicture}
+\end{center}
+$A_r,B_r$をセル座標$2ar$についてFourier変換すると、
+\begin{align}
+H_{\st}^{d=1}
+&=\sum_k\begin{pmatrix}A_k^\dagger&B_k^\dagger\end{pmatrix}
+h_1(k)\begin{pmatrix}A_k\\B_k\end{pmatrix},\\
+h_1(k)&=\begin{pmatrix}
+m&-\dfrac{\ii}{2a}(1-\ee^{-2\ii ka})\\
+\dfrac{\ii}{2a}(1-\ee^{2\ii ka})&-m
+\end{pmatrix}.
+\end{align}
+ここで$-\pi/(2a)\leq k<\pi/(2a)$である。また、
+\begin{align}
+U(k)&=\begin{pmatrix}1&0\\0&\ee^{-\ii ka}\end{pmatrix}
+\end{align}
+とおくと、基底変換により、
+\begin{align}
+\widetilde h_1(k)&=U(k)h_1(k)U^\dagger(k)
+=m\sigma_3+\frac{\sin(ka)}a\sigma_1
+\end{align}
+となる。故に、$ka\simeq0$において、1フレーバーの2成分Diracハミルトニアンが復元される。
+
+\subsubsection{2次元の例：スピンとフレーバー}
+$d=2$では、$2\times2$の4サイトを一つのセルにまとめる。
+\begin{align}
+\Phi_r&=\begin{pmatrix}A_r\\B_r\\C_r\\D_r\end{pmatrix}
+=\begin{pmatrix}
+\chi_{2r}\\\chi_{2r+\hat1}\\\chi_{2r+\hat2}\\
+\chi_{2r+\hat1+\hat2}
+\end{pmatrix}.
+\end{align}
+\begin{center}
+\begin{tikzpicture}[scale=1.1]
+\draw[goalred,rounded corners](-.3,-.4)rectangle(1.6,1.6);
+\draw (0,0)--(1.2,0)--(1.2,1.2)--(0,1.2)--cycle;
+\foreach \x/\y/\l in {0/0/A,1.2/0/B,0/1.2/C,1.2/1.2/D}
+{\fill(\x,\y)circle(2pt);\node[above right]at(\x,\y){$\l_r$};}
+\node at(3,.6){1セルに4成分};
+\end{tikzpicture}
+\end{center}
+セルのFourier変換を行うと、
+\begin{align}
+h_2(k)&=\begin{pmatrix}
+m&f_1&f_2&0\\
+f_1^*&-m&0&-f_2\\
+f_2^*&0&-m&f_1\\
+0&-f_2^*&f_1^*&m
+\end{pmatrix},\\
+f_j(k)&=-\frac{\ii}{2a}(1-\ee^{-2\ii k_ja})
+=\frac{\sin(k_ja)\cos(k_ja)}a-\frac{\ii\sin^2(k_ja)}a.
+\end{align}
+故に、$f_j=k_j+O(ak_j^2)$である。ここで、$(A,B)$及び$(C,D)$の内部に作用するPauli行列を$\lambda_i$、両ブロック間に作用するものを$\rho_i$と書く。低運動量で消えない部分は、
+\begin{align}
+h_2^{(0)}(k)=m\rho_3\otimes\lambda_3
++k_1\id\otimes\lambda_1+k_2\rho_1\otimes\lambda_3
+\end{align}
+となる。
+\begin{resultbox}{フレーバーを区別する演算子}
+$M=\rho_3\otimes\lambda_3$、$K_1=\id\otimes\lambda_1$、$K_2=\rho_1\otimes\lambda_3$とおくと、
+\begin{align}
+T\equiv\ii K_1K_2M=\rho_2\otimes\lambda_1,\qquad
+T^2=\id,\qquad[T,h_2^{(0)}]=0.
+\end{align}
+従って、$T=\pm1$の二つの部分空間に分けることができる。これが2フレーバーに対応する。
+\end{resultbox}
+この構造を明示するため、以下の正規化された基底を用いる。
+\begin{align}
+\Psi_r&=\frac1{\sqrt2}
+\begin{pmatrix}
+A_r+\ii D_r\\
+-C_r+\ii B_r\\
+-B_r+\ii C_r\\
+-D_r-\ii A_r
+\end{pmatrix}
+\equiv\begin{pmatrix}\psi_1\\\psi_2\\\psi_3\\\psi_4\end{pmatrix},&
+q_{f_1}&=\begin{pmatrix}\psi_1\\\psi_2\end{pmatrix},&
+q_{f_2}&=\begin{pmatrix}\psi_3\\\psi_4\end{pmatrix}.
+\end{align}
+各$q_f$内部のPauli行列を$\sigma_i$、フレーバー間のものを$\tau_i$とする。この時、
+\begin{align}
+\widetilde h_2(k)
+={}&m\tau_3\otimes\sigma_3
+-g_2\id\otimes\sigma_1+g_1\id\otimes\sigma_2\notag\\
+&-d_1\tau_2\otimes\sigma_3-d_2\tau_1\otimes\sigma_3.\label{eq:flavor}
+\end{align}
+\begin{align}
+g_j&=\frac{\sin(k_ja)\cos(k_ja)}a,&
+d_j&=\frac{\sin^2(k_ja)}a.
+\end{align}
+$g_j\simeq k_j$はフェルミオンの運動項を表す。一方、$d_j=O(ak_j^2)$は有限格子間隔による補正であり、特に$\tau_1,\tau_2$の項が二つのフレーバーを混合する。
+\begin{remarkbox}
+原ノートの基底ベクトルには正規化因子$1/\sqrt2$が省略されている。本稿では、正準反交換関係を保つユニタリー変換となるように、この因子を明示した。
+\end{remarkbox}
+実空間表示も確認しておく。セル上の並進を$S_j^\pm\Phi_r=\Phi_{r\pm\hat j}$とし、
+\begin{align}
+\mathcal D_j&=\frac{S_j^+-S_j^-}{4a},&
+\mathcal L_j&=\frac{2-S_j^+-S_j^-}{4a}
+\end{align}
+と定義すると、$f_j$に対応する演算子は$-\ii(\mathcal D_j+\mathcal L_j)$である。従って、Fourier変換前の行列は、
+\begin{align}
+h_{2,\mathrm{real}}=
+\begin{pmatrix}
+m&-\ii(\mathcal D_1+\mathcal L_1)&-\ii(\mathcal D_2+\mathcal L_2)&0\\
+-\ii(\mathcal D_1-\mathcal L_1)&-m&0&\ii(\mathcal D_2+\mathcal L_2)\\
+-\ii(\mathcal D_2-\mathcal L_2)&0&-m&-\ii(\mathcal D_1+\mathcal L_1)\\
+0&\ii(\mathcal D_2-\mathcal L_2)&-\ii(\mathcal D_1-\mathcal L_1)&m
+\end{pmatrix}.
+\end{align}
+ここでは$\mathcal D_j^\dagger=-\mathcal D_j$、$\mathcal L_j^\dagger=\mathcal L_j$である。連続極限の運動項と格子補正の区別は、実空間でも同様に行える。
+
+% 原ノート pp.23--25
+\subsection{ゲージ変数の導入}
+格子上の局所ゲージ変換に対して不変な相互作用を構成する。その際、ゲージ場はサイト間をつなぐリンクに置かれることを説明する。
+
+\subsubsection{連続理論からの動機}
+$U(1)$対称性を例とする。大域的な位相変換$\Psi\mapsto\ee^{\ii\theta}\Psi$を、位置に依存する$\theta(x)$を用いた局所変換へ拡張する。通常の微分では位相の微分が生じるため、共変微分を導入する。
+\begin{align}
+D_\mu&=\partial_\mu+\ii A_\mu,&
+\Psi'(x)&=\ee^{\ii\theta(x)}\Psi(x),&
+A'_\mu&=A_\mu-\partial_\mu\theta.
+\end{align}
+この時、$D'_\mu\Psi'=\ee^{\ii\theta}D_\mu\Psi$となる。ここでは電荷を$A_\mu$の定義に吸収している。
+
+\subsubsection{リンク変数}
+格子上の微分は隣接サイト間のホッピングとなる。しかし、単純なホッピング項は以下のように変換される。
+\begin{align}
+\Psi_x^\dagger\Psi_{x+\hat j}\longmapsto
+\Psi_x^\dagger\ee^{-\ii\theta_x+\ii\theta_{x+\hat j}}\Psi_{x+\hat j}.
+\end{align}
+従って、独立したサイトの位相を打ち消す自由度が必要である。
+\begin{defbox}{リンク変数とそのゲージ変換}
+サイト$x$から$x+\hat j$を結ぶ有向リンクに、
+\begin{align}
+U_{x,j}&=\ee^{\ii aA_j(x)}
+\end{align}
+を導入し、以下の変換則を課す。
+\begin{align}
+U_{x,j}\longmapsto
+\ee^{\ii\theta_x}U_{x,j}\ee^{-\ii\theta_{x+\hat j}}.
+\end{align}
+この時、$\Psi_x^\dagger U_{x,j}\Psi_{x+\hat j}$はゲージ不変である。
+\end{defbox}
+実際、リンクの両端に現れる位相因子は、物質場の位相因子と相殺する。また、逆向きのリンクには$U_{x,j}^\dagger$を対応させる。
+
+$U_{x,j}$を基本変数とすると、$A_j$は$2\pi/a$だけずれた値を同一視される。
+\begin{align}
+A_j\sim A_j+\frac{2\pi}a.
+\end{align}
+つまり、ゲージ自由度は円周上の変数となる。以後、このコンパクトな自由度を量子化する。
+
+% 原ノート pp.26--32
+\subsection{$U(1)$リンクの量子化と格子ゲージハミルトニアン}
+一つのリンクのHilbert空間を円周上の量子力学として記述する。さらに、電場項及びプラケットからなる磁場項を組み合わせて、格子ゲージ理論のハミルトニアンを構成する。
+
+\subsubsection{一つのリンクのHilbert空間}
+まず時間ゲージ$A_0=0$を採用する。連続理論の電気的な運動項は$\dot A_j^2/2$であり、形式的には$A_j$と電場が共役となる。しかし、角度のようなコンパクトな変数について、通常の座標と同じ大域的な交換関係を用いることには注意が必要である。
+\begin{defbox}{量子ローターの演算子}
+無次元の角度$\theta=aA_j$と、その共役電束$E$を用いる。リンクのHilbert空間は$L^2(S^1)$であり、
+\begin{align}
+(U\psi)(\theta)&=\ee^{\ii\theta}\psi(\theta),&
+(E\psi)(\theta)&=-\ii\frac{\dd}{\dd\theta}\psi(\theta),&
+[E,U]&=U
+\label{eq:rotor}
+\end{align}
+と定義する。ただし、$\psi(\theta+2\pi)=\psi(\theta)$とする。
+\end{defbox}
+以下、$E$は無次元の電束演算子を表す。格子間隔や結合定数による係数は、ハミルトニアンに明示する。
+\begin{resultbox}{角度表示と電束表示}
+角度固有状態を$\ket{\theta}$、電束固有状態を$\ket n$と書くと、
+\begin{align}
+U\ket\theta&=\ee^{\ii\theta}\ket\theta,&
+\ket\psi&=\int_0^{2\pi}\dd\theta\,\psi(\theta)\ket\theta,\\
+\braket{\theta}{n}&=\frac{\ee^{\ii n\theta}}{\sqrt{2\pi}},&
+E\ket n&=n\ket n,&n&\in\mathbb Z.
+\end{align}
+\end{resultbox}
+電束が整数となる理由は、波動関数の周期条件である。実際、$\ee^{\ii n(\theta+2\pi)}=\ee^{\ii n\theta}$であるためには、$n$は整数でなければならない。
+\begin{proofbox}
+交換関係より、
+\begin{align}
+E(U\ket n)&=UE\ket n+U\ket n=(n+1)U\ket n
+\end{align}
+となる。位相を適切に選ぶことで、
+\begin{align}
+U\ket n&=\ket{n+1},&U^\dagger\ket n&=\ket{n-1}
+\end{align}
+と書ける。つまり、$U$は電束を1単位増やす演算子である。
+\end{proofbox}
+また、角度方向の並進演算子を$T(\alpha)=\ee^{\ii\alpha E}$とおくと、
+\begin{align}
+T(\alpha)UT^\dagger(\alpha)&=\ee^{\ii\alpha}U,\\
+E^2&=\lim_{\alpha\to0}
+\frac{2-T(\alpha)-T^\dagger(\alpha)}{\alpha^2}
+\end{align}
+が成立する。角度表示では電気ハミルトニアンは$-\frac12\partial_\theta^2$に比例する。
+
+\subsubsection{プラケットと磁場}
+電場に対応する項は$E_\ell^2$で書ける。一方、磁場は連続理論において場の強さ$F_{ij}$に含まれる。格子上では、最小の閉じた経路に沿ってリンクを掛け合わせることで、その対応物を得る。
+\begin{defbox}{プラケット演算子}
+$(i,j)$平面のプラケット$p$について、
+\begin{align}
+U_p&=U_{x,i}U_{x+\hat i,j}U^\dagger_{x+\hat j,i}U^\dagger_{x,j}
+=\ee^{\ii\Phi_p},\\
+\Phi_p&=\oint_{\partial p}A\cdot\dd x
+=\int_p F
+\end{align}
+と定義する。$U(1)$の場合、これはプラケットを貫く磁束の指数である。
+\end{defbox}
+\begin{center}
+\begin{tikzpicture}[scale=1.3,>=Stealth]
+\draw[->] (0,0)--node[below]{$U_{x,i}$}(2,0);
+\draw[->] (2,0)--node[right]{$U_{x+\hat i,j}$}(2,1.6);
+\draw[->] (2,1.6)--node[above]{$U^\dagger_{x+\hat j,i}$}(0,1.6);
+\draw[->] (0,1.6)--node[left]{$U^\dagger_{x,j}$}(0,0);
+\node at(1,.8){$\Phi_p$};
+\end{tikzpicture}
+\end{center}
+滑らかな場に対して$\Phi_p=a^2F_{ij}+O(a^3)$である。従って、
+\begin{align}
+2-U_p-U_p^\dagger
+&=2(1-\cos\Phi_p)=\Phi_p^2+O(\Phi_p^4)
+\end{align}
+となり、主要項は$a^4F_{ij}^2$に対応する。局所ゲージ変換による位相は閉路上で相殺するため、プラケットはゲージ不変である。
+
+\subsubsection{Kogut--Susskindハミルトニアン}
+リンク全体のHilbert空間は、各リンクの$L^2(S^1)$のテンソル積である。これにサイト上の物質場を加え、以下のハミルトニアンを考える。
+\begin{defbox}{$U(1)$格子ゲージ理論}
+空間$d$次元で、
+\begin{align}
+H&=H_E+H_B+H_{\mathrm{matter}},\\
+H_E&=\frac{g^2}{2a^{d-2}}\sum_\ell E_\ell^2,\qquad
+H_B=\frac1{2g^2a^{4-d}}\sum_p(2-U_p-U_p^\dagger),\\
+H_{\mathrm{matter}}
+&=-\frac{\ii}{2a}\sum_{x,j}\eta_j(x)
+\left(\chi_x^\dagger U_{x,j}\chi_{x+\hat j}
+-\chi_{x+\hat j}^\dagger U_{x,j}^\dagger\chi_x\right)
++m\sum_x\epsilon(x)\chi_x^\dagger\chi_x.
+\label{eq:ks}
+\end{align}
+ここで$g$はゲージ結合であり、$p$は向きを一つ選んだ各プラケットを一度ずつ走る。
+\end{defbox}
+空間1次元では空間プラケットが存在しないため、磁場項は現れない。物質場の運動項は、自由場のホッピングにリンク変数を挿入したものである。
+
+% 原ノート p.33
+\subsubsection{Gauss則による制約}
+全Hilbert空間の任意の状態が物理的に許されるわけではない。電場の発散と電荷密度の関係を、状態に対する制約として課す。
+\begin{defbox}{Gauss則}
+各サイト$x$に対して、
+\begin{align}
+\widehat G_x&=\sum_{j=1}^d(E_{x,j}-E_{x-\hat j,j})-Q_x,\\
+Q_x&=\chi_x^\dagger\chi_x-\frac{1-\epsilon(x)}2+q_x^{\mathrm{ext}}
+\end{align}
+と定義する。物理的状態は、
+\begin{align}
+\widehat G_x\ket{\mathrm{phys}}=0
+\end{align}
+を満たす状態である。$q_x^{\mathrm{ext}}$は外部の静的電荷を表す。
+\end{defbox}
+最初の和は、サイトから出る電束と入る電束の差であり、電場の発散の離散版である。staggered場の背景電荷は、奇数サイトを満たした基準状態の電荷がゼロとなる規約で選んだ。外部電荷を置く場合には、そのサイトにおける電束の出入りを対応して変更する必要がある。
+
+% 原ノート pp.34--38
+\subsection{有限次元によるゲージ自由度の近似}
+$U(1)$のリンクは無限次元のHilbert空間を持つ。量子計算に向けて有限次元化する二つの方法を説明し、有限群の場合のGauss則を構成する。
+
+\subsubsection{電束のカットオフ}
+最初の方法は、電束固有値に$-E_{\max}\leq n\leq E_{\max}$という上限を設けるものである。演算子も切り詰めた空間に射影する。
+\begin{align}
+U_{\mathrm{cut}}\ket n=
+\begin{cases}
+\ket{n+1},&n<E_{\max},\\
+0,&n=E_{\max}.
+\end{cases}
+\end{align}
+この場合、$U_{\mathrm{cut}}$はユニタリーではなくなる。例えば、最高電束状態をゼロへ写すため、$U_{\mathrm{cut}}^\dagger U_{\mathrm{cut}}\neq\id$である。
+\begin{remarkbox}
+ユニタリー性の喪失とゲージ対称性の喪失は区別する必要がある。上の射影では、有限次元でも$[E,U_{\mathrm{cut}}]=U_{\mathrm{cut}}$は成立する。従って、Gauss則と整合するように各項を射影すれば、局所$U(1)$対称性は保持できる。近似によって変わるのは、リンク演算子のユニタリーなローター代数である。
+\end{remarkbox}
+
+\subsubsection{$\mathbb Z_N$ゲージ理論による近似}
+二つ目の方法は、連続した円周を$N$個の点に置き換え、ゲージ群を$\mathbb Z_N$とするものである。$N\to\infty$で$U(1)$の近似を考える。
+\begin{defbox}{Clock演算子とshift演算子}
+$\omega=\ee^{2\pi\ii/N}$とし、$q=0,\ldots,N-1$に対して、
+\begin{align}
+Z\ket q&=\omega^q\ket q,&
+X\ket q&=\ket{q-1\pmod N}
+\end{align}
+と定義する。この規約では、
+\begin{align}
+XZ&=\omega ZX,&X^N&=Z^N=\id
+\end{align}
+が成立する。
+\end{defbox}
+$Z$はリンク変数$U$に対応し、$X$は角度の有限並進$T(2\pi/N)$に対応する。従って、
+\begin{align}
+E^2\longrightarrow E_N^2
+&=\frac{2-X-X^\dagger}{(2\pi/N)^2}
+=\frac{N^2}{4\pi^2}(2-X-X^\dagger).
+\end{align}
+これは小さな電束に対する近似である。実際、$X$の固有値$\ee^{2\pi\ii n/N}$に対し、$E_N^2$の固有値は$N^2\sin^2(\pi n/N)/\pi^2$であり、固定した$n$について$N\to\infty$で$n^2$に近づく。
+\begin{defbox}{有限群のゲージハミルトニアン}
+\begin{align}
+H_{\mathrm{gauge}}^{(N)}
+={}&\frac{g^2}{2a^{d-2}}\frac{N^2}{4\pi^2}
+ \sum_\ell(2-X_\ell-X_\ell^\dagger)\\
+&+\frac1{2g^2a^{4-d}}\sum_p(2-Z_p-Z_p^\dagger),\\
+Z_p&=\prod_{\ell\in\partial p}Z_\ell^{\delta_\ell},\qquad
+\delta_\ell=\begin{cases}+1,&\text{経路とリンクの向きが一致},\\-1,&\text{逆向き}.\end{cases}
+\end{align}
+物質場との結合では、式\eqref{eq:ks}の$U_{x,j}$を$Z_{x,j}$に置き換える。
+\end{defbox}
+
+\subsubsection{指数化されたGauss則}
+$\mathbb Z_N$理論では、電場の発散と電荷は$N$を法として一致すればよい。
+\begin{align}
+\sum_j(E_{x,j}-E_{x-\hat j,j})=Q_x\pmod N.
+\end{align}
+連続理論のGauss演算子を指数化し、
+\begin{align}
+\mathcal A_x
+&=\exp\left(\frac{2\pi\ii}N\widehat G_x\right)
+=\prod_jX_{x,j}X_{x-\hat j,j}^\dagger\,\omega^{-Q_x}
+\end{align}
+と書く。
+\begin{resultbox}{有限群の物理的状態}
+\begin{align}
+\mathcal A_x\ket{\mathrm{phys}}=\ket{\mathrm{phys}}
+\end{align}
+が、$\mathbb Z_N$におけるGauss則である。
+\end{resultbox}
+無限次元のローターの交換関係を、そのまま有限次元で厳密に実現するわけではない点に注意が必要である。
+
+% 原ノート pp.39--45
+\subsection{$(1+1)$次元$\mathbb Z_2$格子ゲージ理論と量子ビット表示}
+物質場を量子ビットへ写像し、Gauss則を用いて物質自由度を消去する。これにより、リンク上のスピンだけで表された局所ハミルトニアンを得る。
+
+\subsubsection{ハミルトニアンとGauss則}
+$N=2$ではリンクの演算子はPauli行列となる。以後、電束に対して対角な基底を用い、リンク$x=(x,x+1)$に対して、
+\begin{align}
+X_\ell^{\mathrm{clock}}&=\sigma_x^z,&
+Z_\ell^{\mathrm{clock}}&=\sigma_x^x
+\end{align}
+とする。物質場の局所的な位相を取り直し、ホッピング係数を実数$-J$と書く。
+\begin{defbox}{1次元$\mathbb Z_2$ゲージ理論}
+\begin{align}
+H={}&-h\sum_x\sigma_x^z
+-J\sum_x\left(\psi_x^\dagger\sigma_x^x\psi_{x+1}
++\psi_{x+1}^\dagger\sigma_x^x\psi_x\right)
++m\sum_x(-1)^x\psi_x^\dagger\psi_x.
+\label{eq:z2}
+\end{align}
+定数項は省略した。以下では外部電荷を置かず、開境界の鎖を考える。
+\end{defbox}
+物質場の占有数を$n_x=\psi_x^\dagger\psi_x$とする。前節と同じ背景電荷を採用すると、
+\begin{align}
+Q_x&=n_x-\frac{1-(-1)^x}{2},&
+\mathcal G_x&=(-1)^{Q_x}\sigma_{x-1}^z\sigma_x^z.
+\end{align}
+物理的状態は$\mathcal G_x\ket{\mathrm{phys}}=\ket{\mathrm{phys}}$を満たす。これは$U(1)$の場合の$\widehat G_x\ket{\mathrm{phys}}=0$を指数化したものであり、両者の演算子の記号は区別した。
+
+\subsubsection{Jordan--Wigner変換}
+フェルミオンFock空間にサイトの順序を定め、
+\begin{align}
+\ket{n_0,\ldots,n_{L-1}}
+=(\psi_0^\dagger)^{n_0}\cdots
+(\psi_{L-1}^\dagger)^{n_{L-1}}\ket{\mathrm{vac}}
+\end{align}
+と定義する。$S_x=\sum_{j<x}n_j$とおくと、消滅・生成演算子の作用は以下である。
+\begin{align}
+\psi_x\ket{\boldsymbol n}
+&=\begin{cases}
+(-1)^{S_x}\ket{\ldots,0_x,\ldots},&n_x=1,\\0,&n_x=0,
+\end{cases}\\
+\psi_x^\dagger\ket{\boldsymbol n}
+&=\begin{cases}
+(-1)^{S_x}\ket{\ldots,1_x,\ldots},&n_x=0,\\0,&n_x=1.
+\end{cases}
+\end{align}
+この占有数による符号を、Pauli $Z$の積で表す。
+\begin{defbox}{Jordan--Wigner変換}
+物質量子ビットのPauli演算子を$X_x,Y_x,Z_x$、$\sigma_x^\pm=(X_x\pm\ii Y_x)/2$と書く。リンク上の$\sigma_x^{x,z}$とは別の演算子である。この時、
+\begin{align}
+\psi_x&=\left(\prod_{j<x}Z_j\right)\sigma_x^+,&
+\psi_x^\dagger&=\left(\prod_{j<x}Z_j\right)\sigma_x^-,&
+n_x&=\frac{1-Z_x}{2}.
+\end{align}
+\end{defbox}
+ここでは$\ket0$を空、$\ket1$を占有状態とした。従って$\sigma^+\ket1=\ket0$、$\sigma^+\ket0=0$である。
+\begin{resultbox}{隣接ホッピングの量子ビット表示}
+\begin{align}
+\psi_{x+1}^\dagger\psi_x&=\sigma_{x+1}^-\sigma_x^+,\\
+\psi_x^\dagger\psi_{x+1}+\psi_{x+1}^\dagger\psi_x
+&=\frac12(X_xX_{x+1}+Y_xY_{x+1}).
+\end{align}
+\end{resultbox}
+\begin{proofbox}
+隣接サイトでは、二つのJordan--Wignerの列に含まれる$j<x$の$Z_j$が相殺する。残る$Z_x$も、$Z_x\sigma_x^+=\sigma_x^+$という関係により取り除ける。最後に$\sigma^\pm$を$X,Y$で展開すると上式を得る。
+\end{proofbox}
+高次元の格子でも、サイトを蛇行する経路などで一次元的に順序付ければ、この写像を定義できる。しかし、幾何学的に隣接するサイトが順序上も隣接するとは限らず、ホッピングに長い$Z$の列が残る。従って、一般には量子ビット上で局所的な相互作用にはならない。
+
+\subsubsection{物質とゲージ場を含むスピン表示}
+Jordan--Wigner変換後のハミルトニアンは以下のように書ける。
+\begin{align}
+H={}&-h\sum_x\sigma_x^z
+-\frac J2\sum_x\sigma_x^x(X_xX_{x+1}+Y_xY_{x+1})
++m\sum_x(-1)^x\frac{1-Z_x}{2}.
+\label{eq:matter-gauge-spin}
+\end{align}
+第一項はリンク上の電場、第二項は物質のホッピング及びリンク反転、第三項はstaggered質量に対応する。
+
+\subsubsection{Gauss則による物質場の消去}
+$\mathbb Z_2$では$(-1)^{n_x}=Z_x$である。また、背景電荷による位相は$(-1)^x$となるため、
+\begin{align}                                                                                       
+\mathcal G_x=(-1)^x Z_x\sigma_{x-1}^z\sigma_x^z.
+\end{align}
+従って、物理的部分空間では、
+\begin{align}
+Z_x&=(-1)^x\sigma_{x-1}^z\sigma_x^z,\label{eq:gauss-elim}\\
+n_x&=\frac{1-(-1)^x\sigma_{x-1}^z\sigma_x^z}{2}.
+\label{eq:n-elim}
+\end{align}
+リンクの電束配置が与えられれば、各サイトの物質占有数が決まる。開境界では両端の境界電束を固定しておく。
+
+\begin{proofbox}
+一つのホッピングが可能なのは$n_x\neq n_{x+1}$の場合に限られる。式\eqref{eq:gauss-elim}を用いると、
+\begin{align}
+Z_xZ_{x+1}&=-\sigma_{x-1}^z\sigma_{x+1}^z.
+\end{align}
+従って、ホッピング可能な状態への射影は、
+\begin{align}
+P_{\mathrm{hop},x}
+=\frac{1-Z_xZ_{x+1}}2
+=\frac{1+\sigma_{x-1}^z\sigma_{x+1}^z}{2}
+\label{eq:hop-proj}
+\end{align}
+となる。一方、リンク演算子$\sigma_x^x$は$\sigma_x^z$を反転させ、Gauss則により決まる$n_x,n_{x+1}$を同時に反転させる。ホッピング可能な部分空間では、これは物質を隣のサイトへ移す作用そのものである。故に、物理的基底をリンク配置で標識する写像の下で、
+\begin{align}
+\sigma_x^x
+(\psi_x^\dagger\psi_{x+1}+\psi_{x+1}^\dagger\psi_x)
+\longmapsto
+\sigma_x^x\,\frac{1+\sigma_{x-1}^z\sigma_{x+1}^z}{2}.
+\end{align}
+また、質量項は、
+\begin{align}
+m\sum_x(-1)^xn_x
+=\frac m2\sum_x(-1)^x
+-\frac m2\sum_x\sigma_{x-1}^z\sigma_x^z
+\end{align}
+である。第一項は定数なので省略できる。
+\end{proofbox}
+\begin{resultbox}{リンク自由度のみのハミルトニアン}
+外部電荷なし、前節のstaggered背景電荷、開境界及び固定した境界電束という条件の下で、
+\begin{align}
+H_{\mathrm{eff}}
+={}&-h\sum_x\sigma_x^z
+-\frac m2\sum_x\sigma_{x-1}^z\sigma_x^z
+-\frac J2\sum_x\sigma_x^x
+\left(1+\sigma_{x-1}^z\sigma_{x+1}^z\right).
+\label{eq:final}
+\end{align}
+ただし、ハミルトニアンには状態に依存しない定数を除いている。電場項及びホッピング項の和は動的なリンク、質量項の和は物質サイトについて取る。
+\end{resultbox}
+最後の項は、隣接する二つの外側リンクの電束が等しい時にのみ中央リンクを反転させる。この制約付きの反転が、元のフェルミオンのホッピングに対応する。周期境界では大域的な電束及びフェルミオンの境界条件を別途扱う必要がある。
 
 \bibliographystyle{utphys}
 \bibliography{ref}
